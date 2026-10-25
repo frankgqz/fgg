@@ -321,7 +321,7 @@
       }
     }
     function escapeHtml(s) {
-      return s.replace(/[&<>"']/g, (ch) => ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": ''' }[ch]));
+      const div = document.createElement('div'); div.textContent = s; return div.innerHTML;
     }
 
     $('likeBtn').addEventListener('click', async () => {
