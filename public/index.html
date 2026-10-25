@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FGG — Frank Gao, web developer</title>
-  <meta name="description" content="Small websites, built and looked after. Frank Gao, web developer in Melbourne. $200 to build, $200 a year to keep running.">
+  <meta name="description" content="Small websites, built and looked after. Frank Gao, web developer in Melbourne. $200 to build, $200 a year to keep running. Try the live demos — build your own quote.">
   <link rel="canonical" href="https://fgg.company/">
   <meta property="og:title" content="FGG — Frank Gao, web developer">
   <meta property="og:description" content="Small websites, built and looked after. $200 to build, $200 a year to keep running.">
@@ -16,10 +16,13 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+
   <header class="bar">
     <a class="wordmark" href="/">FGG</a>
+    <p class="quote-pill" id="quotePill">Build <b>$200</b> · Care $200/y</p>
     <nav>
-      <a href="#services">Services</a>
+      <a href="#quote">Quote</a>
       <a href="#work">Work</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -27,43 +30,143 @@
 
   <main>
     <section class="hero">
-      <h1>Websites, built and cared for.</h1>
+      <h1>Websites, built and cared&nbsp;for.</h1>
       <p class="lede">I'm Frank Gao, a web developer in Melbourne. I build small,
       fast websites for businesses — and look after them so you never have to
       think about it.</p>
       <p class="meta">$200 to build · $200 a year to keep running</p>
-      <a class="button" href="#contact">Contact</a>
+      <a class="button" href="#quote">Try it</a>
     </section>
 
-    <section id="services" class="band">
-      <h2>Services</h2>
-      <div class="cards">
-        <article class="card">
-          <h3>Build</h3>
-          <p class="price">$200</p>
-          <p>A small website, designed and built for you. Yours to keep.</p>
-          <ul>
-            <li>Design and build</li>
-            <li>Phone and desktop</li>
-            <li>Contact form</li>
-            <li>Domain and launch</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3>Care</h3>
-          <p class="price">$200 <span>/ year</span></p>
-          <p>Hosting, updates, and small changes — looked after all year.</p>
-          <ul>
-            <li>Hosting</li>
-            <li>Backups</li>
-            <li>Small edits</li>
-            <li>Always online</li>
-          </ul>
-        </article>
+    <!-- ============ THE QUOTE BUILDER ============ -->
+    <section id="quote" class="band">
+      <h2>Build your quote</h2>
+      <p class="note">Every switch below is a <b>live demo</b> — this page is the
+      example. Flip one on and watch what it does. (This builder is itself the
+      “math logic” feature: the price is calculated as you go.)</p>
+
+      <div class="features">
+        <label class="feature">
+          <input type="checkbox" id="fancy">
+          <span class="feature-head"><b>Fancy design</b><em>+$400</em></span>
+          <span class="feature-desc">Custom art direction — watch this whole
+          page transform.</span>
+        </label>
+        <label class="feature">
+          <input type="checkbox" id="math">
+          <span class="feature-head"><b>Math logic</b><em>+$250</em></span>
+          <span class="feature-desc">Quote estimators, calculators. Demo below.</span>
+        </label>
+        <label class="feature">
+          <input type="checkbox" id="db">
+          <span class="feature-head"><b>Data</b><em>+$200</em></span>
+          <span class="feature-desc">Timetables, listings, boards, match history.</span>
+        </label>
+        <label class="feature">
+          <input type="checkbox" id="cms">
+          <span class="feature-head"><b>Editing for you</b><em id="cmsPrice">+$200</em></span>
+          <span class="feature-desc">Change text, photos, prices yourself.</span>
+        </label>
+        <label class="feature">
+          <input type="checkbox" id="shop">
+          <span class="feature-head"><b>Online shop</b><em>+$800</em></span>
+          <span class="feature-desc">Products, photos, tags, payments. Editing
+          included.</span>
+        </label>
+        <label class="feature">
+          <input type="checkbox" id="login">
+          <span class="feature-head"><b>Login / private area</b><em>+$300</em></span>
+          <span class="feature-desc">Members area, client portal, bookings.</span>
+        </label>
+        <label class="feature">
+          <span class="feature-head"><b>Pages</b><em>$40 each over 5</em></span>
+          <input type="number" id="pages" min="1" max="30" value="5" class="pages-input">
+          <span class="feature-desc">Five pages included in the base build.</span>
+        </label>
       </div>
-      <p class="note">These are basic sites — no logins, no database, no online
-      shop. If you need one of those, ask anyway: online shops are in the
-      workshop now.</p>
+
+      <div class="total-row">
+        <p class="meta">One-off build</p>
+        <p class="total" id="buildTotal">$200</p>
+        <p class="meta">+ care $200/year (domain, hosting, backups, security,
+        SEO reports, small changes)</p>
+      </div>
+
+      <!-- ---- demo: math ---- -->
+      <div class="demo" id="demoMath" hidden>
+        <p class="demo-tag">Live demo · math logic</p>
+        <h3>What size AC?</h3>
+        <div class="calc">
+          <label>Room length <input type="number" id="roomL" value="5" min="1"> m</label>
+          <label>Room width <input type="number" id="roomW" value="4" min="1"> m</label>
+          <p class="calc-out" id="calcOut">≈ 3.0 kW — a large bedroom unit</p>
+        </div>
+      </div>
+
+      <!-- ---- demo: data ---- -->
+      <div class="demo" id="demoDb" hidden>
+        <p class="demo-tag">Live demo · data</p>
+        <h3>Timetable · listings · match history</h3>
+        <div class="tabs" id="dbTabs">
+          <button class="tab on" data-tab="tt">Timetable</button>
+          <button class="tab" data-tab="ls">Listings</button>
+          <button class="tab" data-tab="mh">Match history</button>
+        </div>
+        <div class="tab-pane on" data-pane="tt">
+          <table class="data-table">
+            <tr><th>Mon</th><td>9:00 Beginners</td><td>18:30 Social</td></tr>
+            <tr><th>Wed</th><td>9:00 Drills</td><td>18:30 Ladder</td></tr>
+            <tr><th>Fri</th><td>—</td><td>19:00 Match night</td></tr>
+            <tr><th>Sat</th><td>10:00 Open play</td><td>—</td></tr>
+          </table>
+        </div>
+        <div class="tab-pane" data-pane="ls">
+          <div class="mini-grid">
+            <div class="mini-card"><b>Studio room</b><span>$45 / hr</span></div>
+            <div class="mini-card"><b>Coach session</b><span>$60 / hr</span></div>
+            <div class="mini-card"><b>Open court</b><span>$12 / hr</span></div>
+          </div>
+        </div>
+        <div class="tab-pane" data-pane="mh">
+          <table class="data-table">
+            <tr><th>Date</th><th>Event</th><th>Result</th></tr>
+            <tr><td>12 Oct</td><td>Autumn Ladder</td><td class="win">win</td></tr>
+            <tr><td>28 Sep</td><td>Club Doubles</td><td class="loss">loss</td></tr>
+            <tr><td>14 Sep</td><td>Autumn Ladder</td><td class="win">win</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- ---- demo: cms ---- -->
+      <div class="demo" id="demoCms" hidden>
+        <p class="demo-tag">Live demo · editing for you</p>
+        <h3>Click any text below and type — that's the whole idea</h3>
+        <div class="cms-card">
+          <span class="cms-ribbon">you're editing</span>
+          <h4 contenteditable="true">Saturday Sourdough</h4>
+          <p class="cms-price" contenteditable="true">$12</p>
+          <p contenteditable="true">Slow-fermented, baked fresh every Saturday
+          morning. Limited loaves.</p>
+        </div>
+        <p class="note">Real version: a login screen, a dashboard, a photo
+        upload button. This is the spirit of it.</p>
+      </div>
+
+      <!-- ---- demo: shop ---- -->
+      <div class="demo" id="demoShop" hidden>
+        <p class="demo-tag">Live demo · online shop</p>
+        <h3>Shop</h3>
+        <div class="chips" id="shopChips"></div>
+        <div class="mini-grid" id="shopGrid">
+          <div class="mini-card product" data-tags="coffee hot"><b>Espresso</b><span>$4.50</span></div>
+          <div class="mini-card product" data-tags="coffee cold"><b>Cold Brew</b><span>$5.50</span></div>
+          <div class="mini-card product" data-tags="pastry"><b>Croissant</b><span>$4.00</span></div>
+          <div class="mini-card product" data-tags="bakery"><b>Sourdough Loaf</b><span>$12</span></div>
+          <div class="mini-card product" data-tags="tea hot"><b>Matcha Latte</b><span>$5.50</span></div>
+          <div class="mini-card product" data-tags="pastry chocolate"><b>Brownie</b><span>$4.50</span></div>
+        </div>
+        <p class="note" id="shopEmpty" hidden>Nothing in this tag yet.</p>
+      </div>
     </section>
 
     <section id="work" class="band">
@@ -89,5 +192,93 @@
   <footer>
     <p>FGG Pty Ltd · Melbourne</p>
   </footer>
+
+  <script>
+  (() => {
+    const $ = (id) => document.getElementById(id);
+    const PRICES = { fancy: 400, math: 250, db: 200, cms: 200, shop: 800, login: 300 };
+    const BASE = 200, INCLUDED_PAGES = 5, PAGE_PRICE = 40;
+
+    const boxes = ['fancy', 'math', 'db', 'cms', 'shop', 'login'].map($);
+    const demos = { fancy: null, math: $('demoMath'), db: $('demoDb'), cms: $('demoCms'), shop: $('demoShop'), login: null };
+    const pages = $('pages');
+
+    function money(n) { return '$' + n.toLocaleString('en-AU'); }
+
+    function update() {
+      // shop includes CMS
+      const shop = $('shop'), cms = $('cms');
+      if (shop.checked && !cms.checked) cms.checked = true;
+      cms.disabled = shop.checked;
+      $('cmsPrice').textContent = shop.checked ? 'included' : '+$200';
+
+      let total = BASE;
+      for (const b of boxes) if (b.checked && !(b.id === 'cms' && shop.checked)) total += PRICES[b.id];
+      const p = Math.max(1, parseInt(pages.value || '1', 10));
+      pages.value = p;
+      total += Math.max(0, p - INCLUDED_PAGES) * PAGE_PRICE;
+
+      $('buildTotal').textContent = money(total);
+      $('quotePill').innerHTML = 'Build <b>' + money(total) + '</b> · Care $200/y';
+
+      document.body.classList.toggle('fancy', $('fancy').checked);
+      for (const [key, el] of Object.entries(demos)) {
+        if (el) el.hidden = !$(key).checked;
+      }
+    }
+
+    for (const b of boxes) b.addEventListener('change', update);
+    pages.addEventListener('input', update);
+
+    // ---- math demo: AC sizing ----
+    function calc() {
+      const l = parseFloat($('roomL').value) || 0;
+      const w = parseFloat($('roomW').value) || 0;
+      const area = l * w;
+      const kw = Math.max(2, Math.round(area * 0.15 * 2) / 2);
+      const size = kw <= 2.5 ? 'a small bedroom unit' : kw <= 3.5 ? 'a large bedroom unit' : kw <= 5 ? 'a living-room unit' : 'a ducted or multi-head system';
+      $('calcOut').textContent = '≈ ' + kw.toFixed(1) + ' kW — ' + size;
+    }
+    $('roomL').addEventListener('input', calc);
+    $('roomW').addEventListener('input', calc);
+    calc();
+
+    // ---- data demo: tabs ----
+    $('dbTabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('.tab');
+      if (!btn) return;
+      for (const t of $('dbTabs').children) t.classList.toggle('on', t === btn);
+      for (const pane of document.querySelectorAll('.tab-pane'))
+        pane.classList.toggle('on', pane.dataset.pane === btn.dataset.tab);
+    });
+
+    // ---- shop demo: tag chips (client-side filtering — the whole catalog ships once) ----
+    const products = [...document.querySelectorAll('#shopGrid .product')];
+    const tags = [...new Set(products.flatMap(p => p.dataset.tags.split(' ')))].sort();
+    const chips = $('shopChips');
+    for (const tag of ['all', ...tags]) {
+      const c = document.createElement('button');
+      c.className = 'chip' + (tag === 'all' ? ' on' : '');
+      c.textContent = tag;
+      c.dataset.tag = tag;
+      chips.appendChild(c);
+    }
+    chips.addEventListener('click', (e) => {
+      const chip = e.target.closest('.chip');
+      if (!chip) return;
+      for (const c of chips.children) c.classList.toggle('on', c === chip);
+      const tag = chip.dataset.tag;
+      let shown = 0;
+      for (const p of products) {
+        const ok = tag === 'all' || p.dataset.tags.split(' ').includes(tag);
+        p.style.display = ok ? '' : 'none';
+        if (ok) shown++;
+      }
+      $('shopEmpty').hidden = shown > 0;
+    });
+
+    update();
+  })();
+  </script>
 </body>
 </html>
