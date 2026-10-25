@@ -505,13 +505,29 @@ body.fancy .bar {
   body.fancy .aurora i { animation: none; }
 }
 
-/* ============ bento quote grid ============ */
-.features.bento { grid-template-columns: repeat(4, 1fr); }
+/* ============ bento quote grid (compact tiles) ============ */
+.features.bento { grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(10.5rem, auto); }
 @media (max-width: 900px) { .features.bento { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .features.bento { grid-template-columns: 1fr; } }
-.feature.span2 { grid-column: span 2; }
-.feature.span4 { grid-column: 1 / -1; }
-@media (max-width: 560px) { .feature.span2, .feature.span4 { grid-column: auto; } }
+@media (max-width: 560px) { .features.bento { grid-template-columns: 1fr; grid-auto-rows: auto; } }
+.t11 { grid-column: span 1; grid-row: span 1; }
+.t21 { grid-column: span 2; grid-row: span 1; }
+.t22 { grid-column: span 2; grid-row: span 2; }
+@media (max-width: 900px) { .t11 { grid-column: span 1; } .t21, .t22 { grid-column: span 2; grid-row: auto; } }
+@media (max-width: 560px) { .t11, .t21, .t22 { grid-column: auto; grid-row: auto; } }
+.feature { display: flex; flex-direction: column; }
+.feature .feature-desc { margin-bottom: 0; }
+
+/* fluid-glass lens canvas */
+.lens {
+  width: 100%; height: 5.25rem; margin-top: 0.75rem;
+  border-radius: 12px; border: 1px solid var(--line); display: block;
+  background: linear-gradient(120deg, #5c58c8, #f9a1b8, #6bd1c7);
+}
+.fx { margin-top: 0.65rem; padding: 0.35rem 0.95rem; font-size: 0.85rem; align-self: flex-start; }
+
+/* pages stepper lives with the total */
+.pages-line { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.15rem; }
+.pages-line b { font-family: "Fraunces", Georgia, serif; font-weight: 600; }
 
 .mini-bento { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.55rem; margin-top: 0.85rem; }
 .mb {
@@ -521,12 +537,13 @@ body.fancy .bar {
 }
 .mb.wide { grid-column: 1 / -1; color: var(--accent); }
 
-.plain-ex { display: block; margin-top: 0.85rem; font-size: 0.92rem; color: var(--ink-soft); line-height: 1.75; }
+.plain-ex { display: block; margin-top: 0.6rem; font-size: 0.88rem; color: var(--ink-soft); line-height: 1.65; }
 
 .event-demo {
-  margin-top: 0.85rem; background: var(--paper); border: 1px solid var(--line);
-  border-radius: 14px; padding: 1rem 1.15rem; display: grid; gap: 0.35rem;
+  margin-top: 0.65rem; background: var(--paper); border: 1px solid var(--line);
+  border-radius: 12px; padding: 0.85rem 1rem; display: grid; gap: 0.25rem;
 }
+.event-demo .ex-hint { margin-top: 0.3rem; }
 .event-demo b { font-family: "Fraunces", Georgia, serif; font-size: 1.25rem; font-weight: 600; }
 .event-demo span { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
 
@@ -548,10 +565,12 @@ body.fancy .bar {
 .shop-slide h4 { font-family: "Fraunces", Georgia, serif; margin: 0 0 0.7rem; font-size: 1.15rem; }
 .shop-note { display: block; margin-top: 0.7rem; font-size: 0.85rem; color: var(--accent); font-weight: 600; }
 
-/* ============ the wall ============ */
-.wall-stats { display: flex; align-items: center; gap: 1.25rem; margin: 1.35rem 0 1.15rem; }
-.wall-form { display: grid; grid-template-columns: 1fr 2fr auto; gap: 0.75rem; align-items: center; margin-bottom: 1.5rem; }
-.avatar-row { grid-column: 1 / -1; display: flex; gap: 0.45rem; }
+/* ============ the wall (inside the database tile) ============ */
+.wall { margin-top: 0.75rem; display: flex; flex-direction: column; min-height: 0; }
+.wall-stats { display: flex; align-items: center; gap: 0.85rem; margin: 0 0 0.65rem; flex-wrap: wrap; }
+.wall-form { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.55rem; align-items: center; margin-bottom: 0.75rem; }
+.avatar-row { grid-column: 1 / -1; display: flex; gap: 0.35rem; }
+.button.small { padding: 0.55rem 1.15rem; font-size: 0.92rem; }
 .av {
   font-size: 1.15rem; background: var(--surface); border: 1px solid var(--line);
   border-radius: 50%; width: 2.45rem; height: 2.45rem; cursor: pointer;
@@ -561,36 +580,22 @@ body.fancy .bar {
   font: inherit; padding: 0.75rem 1.05rem; border: 1px solid var(--line);
   border-radius: 12px; background: var(--surface); color: var(--ink);
 }
+.wall-list { overflow-y: auto; max-height: 11rem; padding-right: 0.25rem; }
 .wall-item {
-  display: flex; gap: 0.95rem; background: var(--surface); border: 1px solid var(--line);
-  border-radius: 16px; padding: 1.05rem 1.25rem; margin-bottom: 0.75rem; box-shadow: var(--shadow);
+  display: flex; gap: 0.75rem; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 12px; padding: 0.75rem 0.95rem; margin-bottom: 0.55rem;
 }
-.av-big { font-size: 1.65rem; }
+.av-big { font-size: 1.35rem; }
 .wall-item p { margin: 0.15rem 0 0; color: var(--ink-soft); }
 @media (max-width: 640px) { .wall-form { grid-template-columns: 1fr; } }
 
-/* ============ one-shot fancy effects ============ */
+/* ============ one-shot fancy effects (liquid; the glass is the lens) ============ */
 body.fx-liquid {
   background: linear-gradient(120deg, #f2e6ff, #e6f7ff, #fff2e6, #f2e6ff);
   background-size: 320% 320%;
   animation: liquidBg 2.6s ease-in-out;
 }
 @keyframes liquidBg { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
-body.fx-glass .feature, body.fx-glass .card {
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(16px) saturate(1.5);
-  -webkit-backdrop-filter: blur(16px) saturate(1.5);
-}
-body.fx-chrome h1, body.fx-chrome h2, body.fx-chrome .total {
-  background: linear-gradient(180deg, #ffffff, #b9b4c6 42%, #5c5870 55%, #efeaf8 70%, #8d89a6);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-body.fx-bounce .feature, body.fx-bounce .card { animation: wobble 0.55s ease-in-out 4 alternate; }
-@keyframes wobble {
-  from { transform: rotate(-1.2deg) translateY(0); }
-  to { transform: rotate(1.2deg) translateY(-8px); }
-}
 @media (prefers-reduced-motion: reduce) {
   body.fx-liquid { animation: none; }
-  body.fx-bounce .feature, body.fx-bounce .card { animation: none; }
 }

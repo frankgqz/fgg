@@ -23,7 +23,7 @@
     <p class="quote-pill" id="quotePill">Build <b>$200</b> · Care $200/y</p>
     <nav>
       <a href="#quote">Quote</a>
-      <a href="#wall">Wall</a>
+      <a href="#work">Work</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
@@ -38,27 +38,72 @@
       <a class="button" href="#quote">Try it</a>
     </section>
 
-    <!-- ============ THE QUOTE BUILDER (bento) ============ -->
+    <!-- ============ THE QUOTE BUILDER (compact bento) ============ -->
     <section id="quote" class="band">
       <h2>Build your quote</h2>
-      <p class="note">Every card <b>is</b> its own example — this page is the demo.
+      <p class="note">Every tile <b>is</b> its own example — this page is the demo.
       Tick what you need; the price is calculated as you go.</p>
 
       <div class="features bento">
 
-        <label class="feature span2">
+        <label class="feature t11">
           <input type="checkbox" id="fancy">
           <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
           <span class="feature-desc">Custom art direction.</span>
-          <div class="fx-row" onclick="event.stopPropagation()">
-            <button class="fx" data-fx="liquid">liquid</button>
-            <button class="fx" data-fx="glass">glass</button>
-            <button class="fx" data-fx="chrome">chrome</button>
-            <button class="fx" data-fx="bounce">bounce</button>
+          <canvas id="lens" class="lens" onclick="event.stopPropagation()" title="hover me"></canvas>
+          <button class="fx" data-fx="liquid" onclick="event.stopPropagation()">liquid</button>
+        </label>
+
+        <label class="feature t11">
+          <input type="checkbox" id="cms">
+          <span class="feature-head"><b>Editing for you</b><em>+$100</em></span>
+          <div class="event-demo" onclick="event.stopPropagation()">
+            <b id="evName" contenteditable="true">Spring Showcase</b>
+            <span id="evDate" contenteditable="true">Sat 14 Nov</span>
+            <span id="evPrice" contenteditable="true">$15</span>
+            <i class="ex-hint">all three editable — and they stay</i>
           </div>
         </label>
 
-        <label class="feature span2">
+        <label class="feature t11">
+          <input type="checkbox" id="login">
+          <span class="feature-head"><b>Login</b><em>+$100</em></span>
+          <span class="feature-desc">Things that follow the customer.</span>
+          <div class="plain-ex">Order history · Gated content · Avatar</div>
+        </label>
+
+        <label class="feature t11">
+          <span class="feature-head"><b>Copywriting</b><em>by quote</em></span>
+          <span class="feature-desc">Words in your voice.</span>
+          <div class="plain-ex">About · Services · Products</div>
+        </label>
+
+        <label class="feature t22">
+          <input type="checkbox" id="db">
+          <span class="feature-head"><b>Database</b><em>+$100</em></span>
+          <span class="feature-desc">Persistent information. Listings · Search ·
+          Records · Comments & likes · Settings.</span>
+          <div class="wall" onclick="event.stopPropagation()">
+            <div class="wall-stats">
+              <button class="button yellow small" id="likeBtn">♥ <b id="likeCount">…</b></button>
+              <span class="meta"><b id="wallCount">…</b> comments — this wall lives in a real database</span>
+            </div>
+            <form class="wall-form" id="wallForm">
+              <div class="avatar-row" id="avatarRow">
+                <button type="button" class="av on" data-av="🙂">🙂</button>
+                <button type="button" class="av" data-av="🌟">🌟</button>
+                <button type="button" class="av" data-av="💃">💃</button>
+                <button type="button" class="av" data-av="🚀">🚀</button>
+              </div>
+              <input type="text" id="wallName" maxlength="24" placeholder="Your name" required>
+              <input type="text" id="wallBody" maxlength="280" placeholder="Say something nice…" required>
+              <button class="button small" type="submit">Send</button>
+            </form>
+            <div class="wall-list" id="wallList"><p class="note">Loading the wall…</p></div>
+          </div>
+        </label>
+
+        <label class="feature t21">
           <input type="checkbox" id="math">
           <span class="feature-head"><b>Logic</b><em>+$100</em></span>
           <span class="feature-desc">Math, Calculations. Quote estimators.
@@ -67,41 +112,11 @@
             <div class="mb">2 × 3</div>
             <div class="mb">USD → AUD</div>
             <div class="mb">EN / VI</div>
-            <div class="mb wide">this quote ↑ is the demo</div>
+            <div class="mb">this quote ↑ is the demo</div>
           </div>
         </label>
 
-        <label class="feature">
-          <input type="checkbox" id="cms">
-          <span class="feature-head"><b>Editing for you</b><em>+$100</em></span>
-          <span class="feature-desc">Change text, dates, prices yourself.</span>
-          <div class="event-demo" onclick="event.stopPropagation()">
-            <b id="evName" contenteditable="true">Spring Showcase</b>
-            <span id="evDate" contenteditable="true">Sat 14 Nov</span>
-            <span id="evPrice" contenteditable="true">$15</span>
-            <i class="ex-hint">all three editable — they snap back (real editing saves)</i>
-          </div>
-        </label>
-
-        <label class="feature span2">
-          <input type="checkbox" id="db">
-          <span class="feature-head"><b>Database</b><em>+$100</em></span>
-          <span class="feature-desc">Persistent information. Listings · Search ·
-          Records · Comments & likes · Settings.</span>
-          <span class="plain-ex">↓ the wall below is running on a real one</span>
-        </label>
-
-        <label class="feature">
-          <input type="checkbox" id="login">
-          <span class="feature-head"><b>Login / private area</b><em>+$100</em></span>
-          <span class="feature-desc">Things that follow the customer around.</span>
-          <div class="plain-ex">
-            Order history · Gated content · Avatar on the wall · Saved items ·
-            Continue watching
-          </div>
-        </label>
-
-        <label class="feature span4">
+        <label class="feature t21">
           <input type="checkbox" id="shop">
           <span class="feature-head"><b>Shop</b><em>+$200</em></span>
           <span class="feature-desc">Payment, products, photos, tags.</span>
@@ -132,67 +147,23 @@
                 </div>
                 <span class="shop-note">logins · gated content</span>
               </div>
-              <div class="shop-slide"><h4>Event tickets</h4>
-                <div class="mini-grid">
-                  <div class="mini-card"><b>Early bird</b><span>$25</span></div>
-                  <div class="mini-card"><b>General</b><span>$35</span></div>
-                  <div class="mini-card"><b>VIP table</b><span>$220</span></div>
-                </div>
-                <span class="shop-note">dates · tiers · capacity</span>
-              </div>
             </div>
             <button class="car-btn next" data-dir="1" aria-label="Next">›</button>
           </div>
         </label>
-
-        <label class="feature span2">
-          <span class="feature-head"><b>Copywriting</b><em>by quote</em></span>
-          <span class="feature-desc">Words for your pages, in your voice.</span>
-          <div class="plain-ex">About page · Service copy · Product blurbs</div>
-        </label>
-
-        <label class="feature span2">
-          <span class="feature-head"><b>Pages</b><em>$50 each over 5</em></span>
-          <input type="number" id="pages" min="1" max="30" value="5" class="pages-input">
-          <span class="feature-desc">Five pages included in the base build.</span>
-        </label>
       </div>
 
       <div class="total-row">
+        <div class="pages-line">
+          <b>Pages</b>
+          <input type="number" id="pages" min="1" max="30" value="5" class="pages-input">
+          <span class="meta">$50 each over 5 included</span>
+        </div>
         <p class="meta">One-off build</p>
         <p class="total" id="buildTotal">$200</p>
         <p class="meta">+ care $200/year (domain, hosting, backups, security,
         SEO reports, small changes)</p>
       </div>
-    </section>
-
-    <!-- ============ THE WALL (live database demo) ============ -->
-    <section id="wall" class="band">
-      <h2>The wall</h2>
-      <p class="note">Comments and likes, stored in a <b>real database</b> — the
-      numbers below live on after you close the tab. That's what “persistent”
-      means on the Database card.</p>
-
-      <div class="wall-stats">
-        <button class="button yellow" id="likeBtn">♥ <b id="likeCount">…</b> likes</button>
-        <span class="meta"><b id="wallCount">…</b> comments</span>
-      </div>
-
-      <form class="wall-form" id="wallForm">
-        <div class="avatar-row" id="avatarRow">
-          <button type="button" class="av on" data-av="🙂">🙂</button>
-          <button type="button" class="av" data-av="🌟">🌟</button>
-          <button type="button" class="av" data-av="💃">💃</button>
-          <button type="button" class="av" data-av="🚀">🚀</button>
-          <button type="button" class="av" data-av="🎨">🎨</button>
-          <button type="button" class="av" data-av="🦊">🦊</button>
-        </div>
-        <input type="text" id="wallName" maxlength="24" placeholder="Your name" required>
-        <input type="text" id="wallBody" maxlength="280" placeholder="Say something nice…" required>
-        <button class="button" type="submit">Send</button>
-      </form>
-
-      <div class="wall-list" id="wallList"><p class="note">Loading the wall…</p></div>
     </section>
 
     <section id="work" class="band">
@@ -263,7 +234,6 @@
 
     for (const b of boxes) b.addEventListener('change', update);
     pages.addEventListener('input', update);
-    // deselection cascades
     $('shop').addEventListener('change', () => {
       if (!$('shop').checked && !$('login').checked) $('db').checked = false;
       update();
@@ -273,28 +243,97 @@
       update();
     });
 
-    // ---- fancy effect buttons (one-shot, self-reverting) ----
+    // ---- liquid effect (one button) ----
     document.querySelectorAll('.fx').forEach((b) => b.addEventListener('click', () => {
-      const fx = b.dataset.fx;
-      document.body.classList.add('fx-' + fx);
-      setTimeout(() => document.body.classList.remove('fx-' + fx), 2600);
+      document.body.classList.add('fx-liquid');
+      setTimeout(() => document.body.classList.remove('fx-liquid'), 2600);
     }));
 
-    // ---- editing demo: 3 editable parts with snap-back ----
-    const originals = { evName: 'Spring Showcase', evDate: 'Sat 14 Nov', evPrice: '$15' };
-    let evTimer;
-    Object.keys(originals).forEach((id) => $(id).addEventListener('input', () => {
-      clearTimeout(evTimer);
-      evTimer = setTimeout(() => {
-        for (const [k, v] of Object.entries(originals)) $(k).textContent = v;
-      }, 2600);
-    }));
+    // ---- editing demo: 3 editable parts that STAY ----
+    // (contenteditable does the work; real editing = no snap-back)
 
     // ---- shop kind carousel ----
     document.querySelectorAll('.car-btn').forEach((b) => b.addEventListener('click', () => {
       const el = $('shopGrid');
       el.scrollBy({ left: Number(b.dataset.dir) * el.clientWidth * 0.85, behavior: 'smooth' });
     }));
+
+    // ---- fluid glass lens (WebGL, hover-only — like amanda.fassberg.se) ----
+    const lens = $('lens');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (lens && !reduced && lens.getContext('webgl')) {
+      const gl = lens.getContext('webgl');
+      const vs = gl.createShader(gl.VERTEX_SHADER);
+      gl.shaderSource(vs, 'attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }');
+      gl.compileShader(vs);
+      const fs = gl.createShader(gl.FRAGMENT_SHADER);
+      gl.shaderSource(fs, [
+        'precision highp float;',
+        'uniform vec2 u_res; uniform vec2 u_mouse; uniform float u_str;',
+        'vec3 field(vec2 uv) {',
+        '  vec3 a = vec3(0.36, 0.30, 0.82); vec3 b = vec3(0.98, 0.62, 0.72); vec3 c = vec3(0.42, 0.82, 0.78);',
+        '  float g = uv.x * 0.6 + uv.y * 0.4;',
+        '  vec3 col = mix(mix(a, b, smoothstep(0.0, 0.75, g)), c, smoothstep(0.45, 1.0, uv.y));',
+        '  col += 0.05 * sin(uv.x * 16.0 + uv.y * 11.0);',
+        '  return col;',
+        '}',
+        'void main() {',
+        '  vec2 uv = gl_FragCoord.xy / u_res;',
+        '  vec2 asp = vec2(u_res.x / u_res.y, 1.0);',
+        '  float d = distance(uv * asp, u_mouse * asp);',
+        '  float lens = smoothstep(0.34, 0.0, d);',
+        '  vec2 dir = normalize((uv - u_mouse) * asp + vec2(1e-5));',
+        '  float k = 0.10 * lens * u_str;',
+        '  float rC = field(uv + dir * k * 1.25).r;',
+        '  float gC = field(uv + dir * k * 1.00).g;',
+        '  float bC = field(uv + dir * k * 0.75).b;',
+        '  float shine = 0.22 * lens;',
+        '  gl_FragColor = vec4(rC + shine, gC + shine, bC + shine, 1.0);',
+        '}'
+      ].join('\n'));
+      gl.compileShader(fs);
+      const prog = gl.createProgram();
+      gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+      gl.useProgram(prog);
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, 'p');
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      const uRes = gl.getUniformLocation(prog, 'u_res');
+      const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+      const uStr = gl.getUniformLocation(prog, 'u_str');
+      let mx = 0.5, my = 0.5, tx = 0.5, ty = 0.5, strength = 0, target = 0, raf = 0;
+      function resize() {
+        const r = lens.getBoundingClientRect();
+        lens.width = Math.max(2, r.width * devicePixelRatio);
+        lens.height = Math.max(2, r.height * devicePixelRatio);
+        gl.viewport(0, 0, lens.width, lens.height);
+      }
+      function frame() {
+        mx += (tx - mx) * 0.12; my += (ty - my) * 0.12;
+        strength += (target - strength) * 0.08;
+        gl.uniform2f(uRes, lens.width, lens.height);
+        gl.uniform2f(uMouse, mx, 1.0 - my);
+        gl.uniform1f(uStr, strength);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        if (strength > 0.002 || target > 0) { raf = requestAnimationFrame(frame); }
+        else { strength = 0; raf = 0; }
+      }
+      lens.addEventListener('pointerenter', () => {
+        target = 1; resize(); if (!raf) raf = requestAnimationFrame(frame);
+      });
+      lens.addEventListener('pointermove', (e) => {
+        const r = lens.getBoundingClientRect();
+        tx = (e.clientX - r.left) / r.width; ty = (e.clientY - r.top) / r.height;
+        if (!raf) raf = requestAnimationFrame(frame);
+      });
+      lens.addEventListener('pointerleave', () => {
+        target = 0; if (!raf) raf = requestAnimationFrame(frame);
+      });
+      resize();
+    }
 
     // ---- the wall: likes + comments on a real database ----
     let avatar = '🙂';
@@ -305,6 +344,10 @@
       for (const a of $('avatarRow').children) a.classList.toggle('on', a === b);
     });
 
+    function escapeHtml(s) {
+      const div = document.createElement('div'); div.textContent = s; return div.innerHTML;
+    }
+
     async function loadWall() {
       try {
         const res = await fetch('/api/wall');
@@ -313,15 +356,12 @@
         $('wallCount').textContent = data.comments.length;
         $('wallList').innerHTML = data.comments.length
           ? data.comments.map((c) => `
-            <div class="wall-item"><span class="av-big">${c.avatar}</span>
+            <div class="wall-item"><span class="av-big">${escapeHtml(c.avatar)}</span>
             <div><b>${escapeHtml(c.name)}</b><p>${escapeHtml(c.body)}</p></div></div>`).join('')
           : '<p class="note">No comments yet — be the first.</p>';
       } catch {
-        $('wallList').innerHTML = '<p class="note">The wall needs its database — see AGENTS.md setup.</p>';
+        $('wallList').innerHTML = '<p class="note">The wall needs its database — run setup-d1.ps1.</p>';
       }
-    }
-    function escapeHtml(s) {
-      const div = document.createElement('div'); div.textContent = s; return div.innerHTML;
     }
 
     $('likeBtn').addEventListener('click', async () => {

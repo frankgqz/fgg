@@ -8,4 +8,5 @@ directory = "./public"
 [[d1_databases]]
 binding = "DB"
 database_name = "fgg-db"
-database_id = "PASTE-ID-FROM-wrangler-d1-create-here"
+database_id = "44b03801-3a7b-4d5e-9090-3884bc9bb9a5"
+
