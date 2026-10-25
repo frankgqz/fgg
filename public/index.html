@@ -54,14 +54,14 @@
         <label class="feature">
           <input type="checkbox" id="math">
           <span class="feature-head"><b>Math logic</b><em>+$100</em></span>
-          <span class="feature-desc">Calculations, Quote estimators. What Aircon
-          size should I get?</span>
+          <span class="feature-desc">Calculations, Quote estimators (like this one).
+          What size Aircon should I get?</span>
         </label>
         <label class="feature">
           <input type="checkbox" id="db">
           <span class="feature-head"><b>Database</b><em>+$200</em></span>
-          <span class="feature-desc">Persistent information. Timetables, listings,
-          match history.</span>
+          <span class="feature-desc">Persistent information. Listings, search,
+          comments and likes, settings, game history.</span>
         </label>
         <label class="feature">
           <input type="checkbox" id="cms">
@@ -70,18 +70,17 @@
         </label>
         <label class="feature">
           <input type="checkbox" id="shop">
-          <span class="feature-head"><b>Online shop</b><em>+$800</em></span>
-          <span class="feature-desc">Products, photos, tags, payments. Editing
-          included.</span>
+          <span class="feature-head"><b>Online shop</b><em>+$200</em></span>
+          <span class="feature-desc">Products, photos, tags, payments.</span>
         </label>
         <label class="feature">
           <input type="checkbox" id="login">
-          <span class="feature-head"><b>Login / private area</b><em>+$300</em></span>
-          <span class="feature-desc">Members area, client portal, bookings. Requires
-          database.</span>
+          <span class="feature-head"><b>Login / private area</b><em>+$100</em></span>
+          <span class="feature-desc">User preferences, avatar, saved items, past orders,
+          gated content, continue watching.</span>
         </label>
         <label class="feature">
-          <span class="feature-head"><b>Pages</b><em>$40 each over 5</em></span>
+          <span class="feature-head"><b>Pages</b><em>$50 each over 5</em></span>
           <input type="number" id="pages" min="1" max="30" value="5" class="pages-input">
           <span class="feature-desc">Five pages included in the base build.</span>
         </label>
@@ -202,8 +201,8 @@
   <script>
   (() => {
     const $ = (id) => document.getElementById(id);
-    const PRICES = { fancy: 200, math: 100, db: 200, cms: 200, shop: 800, login: 300 };
-    const BASE = 200, INCLUDED_PAGES = 5, PAGE_PRICE = 40;
+    const PRICES = { fancy: 200, math: 100, db: 200, cms: 200, shop: 200, login: 100 };
+    const BASE = 200, INCLUDED_PAGES = 5, PAGE_PRICE = 50;
 
     const boxes = ['fancy', 'math', 'db', 'cms', 'shop', 'login'].map($);
     const demos = { fancy: null, math: $('demoMath'), db: $('demoDb'), cms: $('demoCms'), shop: $('demoShop'), login: null };
@@ -212,12 +211,10 @@
     function money(n) { return '$' + n.toLocaleString('en-AU'); }
 
     function update() {
-      // dependencies: shop -> CMS + database; login -> database
-      const shop = $('shop'), cms = $('cms'), db = $('db'), login = $('login');
+      // dependency: shop -> editing (a shop nobody can update is a museum)
+      const shop = $('shop'), cms = $('cms');
       if (shop.checked && !cms.checked) cms.checked = true;
-      if ((shop.checked || login.checked) && !db.checked) db.checked = true;
       cms.disabled = shop.checked;
-      db.disabled = shop.checked || login.checked;
       $('cmsPrice').textContent = shop.checked ? 'included' : '+$200';
 
       let total = BASE;
@@ -237,12 +234,9 @@
 
     for (const b of boxes) b.addEventListener('change', update);
     pages.addEventListener('input', update);
-    // deselection cascades
+    // deselection cascade
     $('shop').addEventListener('change', () => {
-      if (!$('shop').checked) { $('cms').checked = false; $('db').checked = $('login').checked; update(); }
-    });
-    $('login').addEventListener('change', () => {
-      if (!$('login').checked) { $('db').checked = $('shop').checked; update(); }
+      if (!$('shop').checked) { $('cms').checked = false; update(); }
     });
     // shop carousel arrows
     document.querySelectorAll('.car-btn').forEach((b) => b.addEventListener('click', () => {
