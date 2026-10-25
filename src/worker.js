@@ -1,0 +1,56 @@
+// FGG worker: static assets first, plus a tiny D1-backed wall API.
+const json = (data, status = 200) =>
+  new Response(JSON.stringify(data), {
+    status,
+    headers: { "content-type": "application/json", "cache-control": "no-store" },
+  });
+
+const AVATARS = ["🙂", "🌟", "💃", "🚀", "🎨", "🦊"];
+
+let dbReady = null;
+function ensureDb(env) {
+  if (!dbReady) {
+    dbReady = (async () => {
+      await env.DB.exec("CREATE TABLE IF NOT EXISTS wall (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, avatar TEXT NOT NULL DEFAULT '🙂', body TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')))");
+      await env.DB.exec("CREATE TABLE IF NOT EXISTS likes (id INTEGER PRIMARY KEY CHECK (id = 1), n INTEGER NOT NULL DEFAULT 0)");
+      await env.DB.exec("INSERT OR IGNORE INTO likes (id, n) VALUES (1, 0)");
+    })();
+  }
+  return dbReady;
+}
+
+export default {
+  async fetch(req, env) {
+    const url = new URL(req.url);
+    try {
+      if (url.pathname === "/api/wall" && req.method === "GET") {
+        await ensureDb(env);
+        const likes = (await env.DB.prepare("SELECT n FROM likes WHERE id = 1").first())?.n ?? 0;
+        const { results } = await env.DB.prepare(
+          "SELECT name, avatar, body, created_at FROM wall ORDER BY id DESC LIMIT 50"
+        ).all();
+        return json({ likes, comments: results });
+      }
+      if (url.pathname === "/api/wall" && req.method === "POST") {
+        await ensureDb(env);
+        const { name = "", body = "", avatar = "🙂" } = await req.json().catch(() => ({}));
+        const n = String(name).trim().slice(0, 24);
+        const b = String(body).trim().slice(0, 280);
+        if (!n || !b) return json({ error: "name and body required" }, 400);
+        await env.DB.prepare("INSERT INTO wall (name, avatar, body) VALUES (?, ?, ?)")
+          .bind(n, AVATARS.includes(avatar) ? avatar : "🙂", b)
+          .run();
+        return json({ ok: true }, 201);
+      }
+      if (url.pathname === "/api/like" && req.method === "POST") {
+        await ensureDb(env);
+        await env.DB.prepare("UPDATE likes SET n = n + 1 WHERE id = 1").run();
+        const likes = (await env.DB.prepare("SELECT n FROM likes WHERE id = 1").first())?.n ?? 0;
+        return json({ likes });
+      }
+      return env.ASSETS.fetch(req);
+    } catch (err) {
+      return json({ error: String(err) }, 500);
+    }
+  },
+};

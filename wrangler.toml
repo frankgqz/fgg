@@ -1,5 +1,11 @@
 name = "fgg"
 compatibility_date = "2025-11-01"
+main = "src/worker.js"
 
 [assets]
 directory = "./public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "fgg-db"
+database_id = "PASTE-ID-FROM-wrangler-d1-create-here"

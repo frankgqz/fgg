@@ -504,3 +504,93 @@ body.fancy .bar {
   .button, .feature, .demo { transition: none; }
   body.fancy .aurora i { animation: none; }
 }
+
+/* ============ bento quote grid ============ */
+.features.bento { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 900px) { .features.bento { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .features.bento { grid-template-columns: 1fr; } }
+.feature.span2 { grid-column: span 2; }
+.feature.span4 { grid-column: 1 / -1; }
+@media (max-width: 560px) { .feature.span2, .feature.span4 { grid-column: auto; } }
+
+.mini-bento { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.55rem; margin-top: 0.85rem; }
+.mb {
+  background: var(--paper); border: 1px solid var(--line); border-radius: 12px;
+  padding: 0.55rem 0.9rem; font-size: 0.88rem; font-weight: 600;
+  color: var(--ink-soft); font-variant-numeric: tabular-nums;
+}
+.mb.wide { grid-column: 1 / -1; color: var(--accent); }
+
+.plain-ex { display: block; margin-top: 0.85rem; font-size: 0.92rem; color: var(--ink-soft); line-height: 1.75; }
+
+.event-demo {
+  margin-top: 0.85rem; background: var(--paper); border: 1px solid var(--line);
+  border-radius: 14px; padding: 1rem 1.15rem; display: grid; gap: 0.35rem;
+}
+.event-demo b { font-family: "Fraunces", Georgia, serif; font-size: 1.25rem; font-weight: 600; }
+.event-demo span { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.fx-row { display: flex; gap: 0.55rem; flex-wrap: wrap; margin-top: 0.95rem; }
+.fx {
+  font: inherit; font-size: 0.92rem; font-weight: 600; padding: 0.55rem 1.25rem;
+  border-radius: 999px; border: 1px solid var(--line); background: var(--surface);
+  color: var(--ink); cursor: pointer; box-shadow: var(--shadow);
+  transition: transform 140ms cubic-bezier(.2,.8,.3,1.3);
+}
+.fx:hover { transform: translateY(-2px) rotate(-1deg); }
+
+.shop-kinds { position: relative; margin-top: 0.95rem; }
+.shop-slide {
+  flex: 0 0 min(20rem, 78vw); scroll-snap-align: start;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 16px;
+  padding: 1.15rem 1.25rem;
+}
+.shop-slide h4 { font-family: "Fraunces", Georgia, serif; margin: 0 0 0.7rem; font-size: 1.15rem; }
+.shop-note { display: block; margin-top: 0.7rem; font-size: 0.85rem; color: var(--accent); font-weight: 600; }
+
+/* ============ the wall ============ */
+.wall-stats { display: flex; align-items: center; gap: 1.25rem; margin: 1.35rem 0 1.15rem; }
+.wall-form { display: grid; grid-template-columns: 1fr 2fr auto; gap: 0.75rem; align-items: center; margin-bottom: 1.5rem; }
+.avatar-row { grid-column: 1 / -1; display: flex; gap: 0.45rem; }
+.av {
+  font-size: 1.15rem; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 50%; width: 2.45rem; height: 2.45rem; cursor: pointer;
+}
+.av.on { border: 2px solid var(--accent); transform: scale(1.12); }
+.wall-form input {
+  font: inherit; padding: 0.75rem 1.05rem; border: 1px solid var(--line);
+  border-radius: 12px; background: var(--surface); color: var(--ink);
+}
+.wall-item {
+  display: flex; gap: 0.95rem; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 16px; padding: 1.05rem 1.25rem; margin-bottom: 0.75rem; box-shadow: var(--shadow);
+}
+.av-big { font-size: 1.65rem; }
+.wall-item p { margin: 0.15rem 0 0; color: var(--ink-soft); }
+@media (max-width: 640px) { .wall-form { grid-template-columns: 1fr; } }
+
+/* ============ one-shot fancy effects ============ */
+body.fx-liquid {
+  background: linear-gradient(120deg, #f2e6ff, #e6f7ff, #fff2e6, #f2e6ff);
+  background-size: 320% 320%;
+  animation: liquidBg 2.6s ease-in-out;
+}
+@keyframes liquidBg { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+body.fx-glass .feature, body.fx-glass .card {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+}
+body.fx-chrome h1, body.fx-chrome h2, body.fx-chrome .total {
+  background: linear-gradient(180deg, #ffffff, #b9b4c6 42%, #5c5870 55%, #efeaf8 70%, #8d89a6);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+body.fx-bounce .feature, body.fx-bounce .card { animation: wobble 0.55s ease-in-out 4 alternate; }
+@keyframes wobble {
+  from { transform: rotate(-1.2deg) translateY(0); }
+  to { transform: rotate(1.2deg) translateY(-8px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.fx-liquid { animation: none; }
+  body.fx-bounce .feature, body.fx-bounce .card { animation: none; }
+}

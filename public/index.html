@@ -23,14 +23,14 @@
     <p class="quote-pill" id="quotePill">Build <b>$200</b> · Care $200/y</p>
     <nav>
       <a href="#quote">Quote</a>
-      <a href="#work">Work</a>
+      <a href="#wall">Wall</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
 
   <main>
     <section class="hero">
-      <h1>Websites, built and cared&nbsp;for.</h1>
+      <h1>Websites, built and cared for.</h1>
       <p class="lede">I'm Frank Gao, a web developer in Melbourne. I build small,
       fast websites for businesses — and look after them so you never have to
       think about it.</p>
@@ -38,113 +38,120 @@
       <a class="button" href="#quote">Try it</a>
     </section>
 
-    <!-- ============ THE QUOTE BUILDER ============ -->
+    <!-- ============ THE QUOTE BUILDER (bento) ============ -->
     <section id="quote" class="band">
       <h2>Build your quote</h2>
       <p class="note">Every card <b>is</b> its own example — this page is the demo.
       Tick what you need; the price is calculated as you go.</p>
 
-      <div class="features">
-        <label class="feature">
+      <div class="features bento">
+
+        <label class="feature span2">
           <input type="checkbox" id="fancy">
           <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
           <span class="feature-desc">Custom art direction.</span>
-          <span class="ex-strip">
-            <span class="ex swatch" style="background:#2f6f5e"></span>
-            <span class="ex swatch" style="background:#f0d27e"></span>
-            <span class="ex swatch" style="background:#6d89d8"></span>
-            <span class="ex">palettes</span>
-            <span class="ex">type</span>
-            <span class="ex">layout</span>
-          </span>
-        </label>
-
-        <label class="feature wide">
-          <input type="checkbox" id="math">
-          <span class="feature-head"><b>Logic</b><em>+$100</em></span>
-          <span class="feature-desc">Math, Calculations. Quote estimators.
-          Multilingual and currency toggles. e.g. What size Aircon should I buy?</span>
-          <div class="calc" onclick="event.stopPropagation()">
-            <label>Room <input type="number" id="roomL" value="5" min="1"> ×
-              <input type="number" id="roomW" value="4" min="1"> m</label>
-            <p class="calc-out" id="calcOut">≈ 3.0 kW — a large bedroom unit</p>
+          <div class="fx-row" onclick="event.stopPropagation()">
+            <button class="fx" data-fx="liquid">liquid</button>
+            <button class="fx" data-fx="glass">glass</button>
+            <button class="fx" data-fx="chrome">chrome</button>
+            <button class="fx" data-fx="bounce">bounce</button>
           </div>
         </label>
 
-        <label class="feature">
-          <input type="checkbox" id="db">
-          <span class="feature-head"><b>Database</b><em>+$100</em></span>
-          <span class="feature-desc">Persistent information.</span>
-          <span class="ex-strip">
-            <span class="ex">Listings</span>
-            <span class="ex">Search</span>
-            <span class="ex">Records</span>
-            <span class="ex">Comments &amp; likes</span>
-            <span class="ex">Settings</span>
-          </span>
+        <label class="feature span2">
+          <input type="checkbox" id="math">
+          <span class="feature-head"><b>Logic</b><em>+$100</em></span>
+          <span class="feature-desc">Math, Calculations. Quote estimators.
+          Multilingual and currency toggles.</span>
+          <div class="mini-bento" onclick="event.stopPropagation()">
+            <div class="mb">2 × 3</div>
+            <div class="mb">USD → AUD</div>
+            <div class="mb">EN / VI</div>
+            <div class="mb wide">this quote ↑ is the demo</div>
+          </div>
         </label>
 
         <label class="feature">
           <input type="checkbox" id="cms">
           <span class="feature-head"><b>Editing for you</b><em>+$100</em></span>
-          <span class="feature-desc">Change text, photos, prices yourself.</span>
-          <span class="ex-strip" onclick="event.stopPropagation()">
-            <span class="ex">text</span>
-            <span class="ex">photos</span>
-            <span class="ex">price <b id="demoPrice" contenteditable="true">$100</b>
-            <i class="ex-hint">← try it</i></span>
-          </span>
+          <span class="feature-desc">Change text, dates, prices yourself.</span>
+          <div class="event-demo" onclick="event.stopPropagation()">
+            <b id="evName" contenteditable="true">Spring Showcase</b>
+            <span id="evDate" contenteditable="true">Sat 14 Nov</span>
+            <span id="evPrice" contenteditable="true">$15</span>
+            <i class="ex-hint">all three editable — they snap back (real editing saves)</i>
+          </div>
         </label>
 
-        <label class="feature wide">
-          <input type="checkbox" id="shop">
-          <span class="feature-head"><b>Shop</b><em>+$200</em></span>
-          <span class="feature-desc">Payment, products, photos, tags.</span>
-          <div onclick="event.stopPropagation()">
-            <div class="chips" id="shopChips"></div>
-            <div class="carousel-wrap">
-              <button class="car-btn prev" data-dir="-1" aria-label="Previous">‹</button>
-              <div class="carousel" id="shopGrid">
-                <div class="mini-card product" data-tags="coffee hot"><b>Espresso</b><span>$4.50</span></div>
-                <div class="mini-card product" data-tags="coffee cold"><b>Cold Brew</b><span>$5.50</span></div>
-                <div class="mini-card product" data-tags="pastry"><b>Croissant</b><span>$4.00</span></div>
-                <div class="mini-card product" data-tags="bakery"><b>Sourdough Loaf</b><span>$12</span></div>
-                <div class="mini-card product" data-tags="tea hot"><b>Matcha Latte</b><span>$5.50</span></div>
-                <div class="mini-card product" data-tags="pastry chocolate"><b>Brownie</b><span>$4.50</span></div>
-              </div>
-              <button class="car-btn next" data-dir="1" aria-label="Next">›</button>
-            </div>
-            <p class="note" id="shopEmpty" hidden>Nothing in this tag yet.</p>
-          </div>
+        <label class="feature span2">
+          <input type="checkbox" id="db">
+          <span class="feature-head"><b>Database</b><em>+$100</em></span>
+          <span class="feature-desc">Persistent information. Listings · Search ·
+          Records · Comments & likes · Settings.</span>
+          <span class="plain-ex">↓ the wall below is running on a real one</span>
         </label>
 
         <label class="feature">
           <input type="checkbox" id="login">
           <span class="feature-head"><b>Login / private area</b><em>+$100</em></span>
-          <span class="feature-desc">Member areas and things that follow the
-          customer around.</span>
-          <span class="ex-strip">
-            <span class="ex">User preferences</span>
-            <span class="ex">Avatar</span>
-            <span class="ex">Saved items</span>
-            <span class="ex">Past orders</span>
-            <span class="ex">Gated content</span>
-            <span class="ex">Continue watching</span>
-          </span>
+          <span class="feature-desc">Things that follow the customer around.</span>
+          <div class="plain-ex">
+            Order history · Gated content · Avatar on the wall · Saved items ·
+            Continue watching
+          </div>
         </label>
 
-        <label class="feature">
-          <span class="feature-head"><b>Migration</b><em>by quote</em></span>
-          <span class="feature-desc">Moving an existing site across.</span>
-          <span class="ex-strip">
-            <span class="ex">Wix</span>
-            <span class="ex">WordPress</span>
-            <span class="ex">old sites</span>
-            <span class="ex">content rescue</span>
-          </span>
+        <label class="feature span4">
+          <input type="checkbox" id="shop">
+          <span class="feature-head"><b>Shop</b><em>+$200</em></span>
+          <span class="feature-desc">Payment, products, photos, tags.</span>
+          <div class="shop-kinds" onclick="event.stopPropagation()">
+            <button class="car-btn prev" data-dir="-1" aria-label="Previous">‹</button>
+            <div class="carousel" id="shopGrid">
+              <div class="shop-slide"><h4>Physical items</h4>
+                <div class="mini-grid">
+                  <div class="mini-card"><b>Espresso</b><span>$4.50</span></div>
+                  <div class="mini-card"><b>Croissant</b><span>$4.00</span></div>
+                  <div class="mini-card"><b>Beans 250g</b><span>$18</span></div>
+                </div>
+                <span class="shop-note">cart · photos · stock</span>
+              </div>
+              <div class="shop-slide"><h4>Services</h4>
+                <div class="mini-grid">
+                  <div class="mini-card"><b>Consult</b><span>$60 / hr</span></div>
+                  <div class="mini-card"><b>Class pass</b><span>$120</span></div>
+                  <div class="mini-card"><b>Clean</b><span>$90</span></div>
+                </div>
+                <span class="shop-note">bookings · time slots</span>
+              </div>
+              <div class="shop-slide"><h4>Digital courses</h4>
+                <div class="mini-grid">
+                  <div class="mini-card"><b>Lesson 1</b><span>free</span></div>
+                  <div class="mini-card"><b>Full course</b><span>$149</span></div>
+                  <div class="mini-card"><b>Members</b><span>$9 / mo</span></div>
+                </div>
+                <span class="shop-note">logins · gated content</span>
+              </div>
+              <div class="shop-slide"><h4>Event tickets</h4>
+                <div class="mini-grid">
+                  <div class="mini-card"><b>Early bird</b><span>$25</span></div>
+                  <div class="mini-card"><b>General</b><span>$35</span></div>
+                  <div class="mini-card"><b>VIP table</b><span>$220</span></div>
+                </div>
+                <span class="shop-note">dates · tiers · capacity</span>
+              </div>
+            </div>
+            <button class="car-btn next" data-dir="1" aria-label="Next">›</button>
+          </div>
         </label>
 
-        <label class="feature">
+        <label class="feature span2">
+          <span class="feature-head"><b>Copywriting</b><em>by quote</em></span>
+          <span class="feature-desc">Words for your pages, in your voice.</span>
+          <div class="plain-ex">About page · Service copy · Product blurbs</div>
+        </label>
+
+        <label class="feature span2">
           <span class="feature-head"><b>Pages</b><em>$50 each over 5</em></span>
           <input type="number" id="pages" min="1" max="30" value="5" class="pages-input">
           <span class="feature-desc">Five pages included in the base build.</span>
@@ -157,6 +164,35 @@
         <p class="meta">+ care $200/year (domain, hosting, backups, security,
         SEO reports, small changes)</p>
       </div>
+    </section>
+
+    <!-- ============ THE WALL (live database demo) ============ -->
+    <section id="wall" class="band">
+      <h2>The wall</h2>
+      <p class="note">Comments and likes, stored in a <b>real database</b> — the
+      numbers below live on after you close the tab. That's what “persistent”
+      means on the Database card.</p>
+
+      <div class="wall-stats">
+        <button class="button yellow" id="likeBtn">♥ <b id="likeCount">…</b> likes</button>
+        <span class="meta"><b id="wallCount">…</b> comments</span>
+      </div>
+
+      <form class="wall-form" id="wallForm">
+        <div class="avatar-row" id="avatarRow">
+          <button type="button" class="av on" data-av="🙂">🙂</button>
+          <button type="button" class="av" data-av="🌟">🌟</button>
+          <button type="button" class="av" data-av="💃">💃</button>
+          <button type="button" class="av" data-av="🚀">🚀</button>
+          <button type="button" class="av" data-av="🎨">🎨</button>
+          <button type="button" class="av" data-av="🦊">🦊</button>
+        </div>
+        <input type="text" id="wallName" maxlength="24" placeholder="Your name" required>
+        <input type="text" id="wallBody" maxlength="280" placeholder="Say something nice…" required>
+        <button class="button" type="submit">Send</button>
+      </form>
+
+      <div class="wall-list" id="wallList"><p class="note">Loading the wall…</p></div>
     </section>
 
     <section id="work" class="band">
@@ -195,19 +231,21 @@
     function money(n) { return '$' + n.toLocaleString('en-AU'); }
 
     function update() {
-      // dependency: shop -> database REQUIRED; editing + login RECOMMENDED
-      const shop = $('shop'), db = $('db');
-      if (shop.checked && !db.checked) db.checked = true;
-      db.disabled = shop.checked;
-      const TAGS = { db: 'required', cms: 'recommended', login: 'recommended' };
+      // dependencies: shop -> db required; login -> db required; shop recommends editing + login
+      const shop = $('shop'), db = $('db'), login = $('login');
+      const needDb = shop.checked || login.checked;
+      if (needDb && !db.checked) db.checked = true;
+      db.disabled = needDb;
       for (const id of ['db', 'cms', 'login']) {
         const el = $(id).closest('.feature');
-        el.classList.toggle('mandatory', id === 'db' && shop.checked);
-        el.classList.toggle('recommended', id !== 'db' && shop.checked);
+        const mandatory = id === 'db' && needDb;
+        const recommended = (id === 'cms' || id === 'login') && shop.checked;
+        el.classList.toggle('mandatory', mandatory);
+        el.classList.toggle('recommended', recommended);
         let tag = el.querySelector('.tag');
-        if (shop.checked) {
+        if (mandatory || recommended) {
           if (!tag) { tag = document.createElement('span'); tag.className = 'tag'; el.appendChild(tag); }
-          tag.textContent = TAGS[id];
+          tag.textContent = mandatory ? 'required' : 'recommended';
         } else if (tag) tag.remove();
       }
 
@@ -225,65 +263,91 @@
 
     for (const b of boxes) b.addEventListener('change', update);
     pages.addEventListener('input', update);
-    // deselection cascade
+    // deselection cascades
     $('shop').addEventListener('change', () => {
-      if (!$('shop').checked) { $('db').checked = false; update(); }
+      if (!$('shop').checked && !$('login').checked) $('db').checked = false;
+      update();
+    });
+    $('login').addEventListener('change', () => {
+      if (!$('login').checked && !$('shop').checked) $('db').checked = false;
+      update();
     });
 
-    // snap-back price demo
-    const priceBox = document.getElementById('demoPrice');
-    if (priceBox) {
-      let snapTimer;
-      priceBox.addEventListener('input', () => {
-        clearTimeout(snapTimer);
-        snapTimer = setTimeout(() => { priceBox.textContent = '$100'; }, 2200);
-      });
-    }
-
-    // shop carousel arrows
-    document.querySelectorAll('.car-btn').forEach((b) => b.addEventListener('click', () => {
-      const el = document.getElementById('shopGrid');
-      el.scrollBy({ left: Number(b.dataset.dir) * el.clientWidth * 0.8, behavior: 'smooth' });
+    // ---- fancy effect buttons (one-shot, self-reverting) ----
+    document.querySelectorAll('.fx').forEach((b) => b.addEventListener('click', () => {
+      const fx = b.dataset.fx;
+      document.body.classList.add('fx-' + fx);
+      setTimeout(() => document.body.classList.remove('fx-' + fx), 2600);
     }));
 
-    // ---- logic demo: AC sizing ----
-    function calc() {
-      const l = parseFloat($('roomL').value) || 0;
-      const w = parseFloat($('roomW').value) || 0;
-      const area = l * w;
-      const kw = Math.max(2, Math.round(area * 0.15 * 2) / 2);
-      const size = kw <= 2.5 ? 'a small bedroom unit' : kw <= 3.5 ? 'a large bedroom unit' : kw <= 5 ? 'a living-room unit' : 'a ducted or multi-head system';
-      $('calcOut').textContent = '≈ ' + kw.toFixed(1) + ' kW — ' + size;
-    }
-    $('roomL').addEventListener('input', calc);
-    $('roomW').addEventListener('input', calc);
-    calc();
+    // ---- editing demo: 3 editable parts with snap-back ----
+    const originals = { evName: 'Spring Showcase', evDate: 'Sat 14 Nov', evPrice: '$15' };
+    let evTimer;
+    Object.keys(originals).forEach((id) => $(id).addEventListener('input', () => {
+      clearTimeout(evTimer);
+      evTimer = setTimeout(() => {
+        for (const [k, v] of Object.entries(originals)) $(k).textContent = v;
+      }, 2600);
+    }));
 
-    // ---- shop demo: tag chips (client-side filtering — the whole catalog ships once) ----
-    const products = [...document.querySelectorAll('#shopGrid .product')];
-    const tags = [...new Set(products.flatMap(p => p.dataset.tags.split(' ')))].sort();
-    const chips = $('shopChips');
-    for (const tag of ['all', ...tags]) {
-      const c = document.createElement('button');
-      c.className = 'chip' + (tag === 'all' ? ' on' : '');
-      c.textContent = tag;
-      c.dataset.tag = tag;
-      chips.appendChild(c);
-    }
-    chips.addEventListener('click', (e) => {
-      const chip = e.target.closest('.chip');
-      if (!chip) return;
-      for (const c of chips.children) c.classList.toggle('on', c === chip);
-      const tag = chip.dataset.tag;
-      let shown = 0;
-      for (const p of products) {
-        const ok = tag === 'all' || p.dataset.tags.split(' ').includes(tag);
-        p.style.display = ok ? '' : 'none';
-        if (ok) shown++;
-      }
-      $('shopEmpty').hidden = shown > 0;
+    // ---- shop kind carousel ----
+    document.querySelectorAll('.car-btn').forEach((b) => b.addEventListener('click', () => {
+      const el = $('shopGrid');
+      el.scrollBy({ left: Number(b.dataset.dir) * el.clientWidth * 0.85, behavior: 'smooth' });
+    }));
+
+    // ---- the wall: likes + comments on a real database ----
+    let avatar = '🙂';
+    $('avatarRow').addEventListener('click', (e) => {
+      const b = e.target.closest('.av');
+      if (!b) return;
+      avatar = b.dataset.av;
+      for (const a of $('avatarRow').children) a.classList.toggle('on', a === b);
     });
 
+    async function loadWall() {
+      try {
+        const res = await fetch('/api/wall');
+        const data = await res.json();
+        $('likeCount').textContent = data.likes;
+        $('wallCount').textContent = data.comments.length;
+        $('wallList').innerHTML = data.comments.length
+          ? data.comments.map((c) => `
+            <div class="wall-item"><span class="av-big">${c.avatar}</span>
+            <div><b>${escapeHtml(c.name)}</b><p>${escapeHtml(c.body)}</p></div></div>`).join('')
+          : '<p class="note">No comments yet — be the first.</p>';
+      } catch {
+        $('wallList').innerHTML = '<p class="note">The wall needs its database — see AGENTS.md setup.</p>';
+      }
+    }
+    function escapeHtml(s) {
+      return s.replace(/[&<>"']/g, (ch) => ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": ''' }[ch]));
+    }
+
+    $('likeBtn').addEventListener('click', async () => {
+      try {
+        const res = await fetch('/api/like', { method: 'POST' });
+        $('likeCount').textContent = (await res.json()).likes;
+      } catch { /* wall offline */ }
+    });
+
+    $('wallForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = $('wallName').value.trim().slice(0, 24);
+      const body = $('wallBody').value.trim().slice(0, 280);
+      if (!name || !body) return;
+      try {
+        await fetch('/api/wall', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ name, body, avatar }),
+        });
+        $('wallBody').value = '';
+        loadWall();
+      } catch { /* wall offline */ }
+    });
+
+    loadWall();
     update();
   })();
   </script>
