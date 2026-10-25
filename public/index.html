@@ -48,19 +48,20 @@
       <div class="features">
         <label class="feature">
           <input type="checkbox" id="fancy">
-          <span class="feature-head"><b>Fancy design</b><em>+$400</em></span>
-          <span class="feature-desc">Custom art direction — watch this whole
-          page transform.</span>
+          <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
+          <span class="feature-desc">Custom art direction.</span>
         </label>
         <label class="feature">
           <input type="checkbox" id="math">
-          <span class="feature-head"><b>Math logic</b><em>+$250</em></span>
-          <span class="feature-desc">Quote estimators, calculators. Demo below.</span>
+          <span class="feature-head"><b>Math logic</b><em>+$100</em></span>
+          <span class="feature-desc">Calculations, Quote estimators. What Aircon
+          size should I get?</span>
         </label>
         <label class="feature">
           <input type="checkbox" id="db">
-          <span class="feature-head"><b>Data</b><em>+$200</em></span>
-          <span class="feature-desc">Timetables, listings, boards, match history.</span>
+          <span class="feature-head"><b>Database</b><em>+$200</em></span>
+          <span class="feature-desc">Persistent information. Timetables, listings,
+          match history.</span>
         </label>
         <label class="feature">
           <input type="checkbox" id="cms">
@@ -76,7 +77,8 @@
         <label class="feature">
           <input type="checkbox" id="login">
           <span class="feature-head"><b>Login / private area</b><em>+$300</em></span>
-          <span class="feature-desc">Members area, client portal, bookings.</span>
+          <span class="feature-desc">Members area, client portal, bookings. Requires
+          database.</span>
         </label>
         <label class="feature">
           <span class="feature-head"><b>Pages</b><em>$40 each over 5</em></span>
@@ -155,15 +157,19 @@
       <!-- ---- demo: shop ---- -->
       <div class="demo" id="demoShop" hidden>
         <p class="demo-tag">Live demo · online shop</p>
-        <h3>Shop</h3>
+        <h3>Shop examples</h3>
         <div class="chips" id="shopChips"></div>
-        <div class="mini-grid" id="shopGrid">
+        <div class="carousel-wrap">
+        <button class="car-btn prev" data-dir="-1" aria-label="Previous">‹</button>
+        <div class="carousel" id="shopGrid">
           <div class="mini-card product" data-tags="coffee hot"><b>Espresso</b><span>$4.50</span></div>
           <div class="mini-card product" data-tags="coffee cold"><b>Cold Brew</b><span>$5.50</span></div>
           <div class="mini-card product" data-tags="pastry"><b>Croissant</b><span>$4.00</span></div>
           <div class="mini-card product" data-tags="bakery"><b>Sourdough Loaf</b><span>$12</span></div>
           <div class="mini-card product" data-tags="tea hot"><b>Matcha Latte</b><span>$5.50</span></div>
           <div class="mini-card product" data-tags="pastry chocolate"><b>Brownie</b><span>$4.50</span></div>
+        </div>
+        <button class="car-btn next" data-dir="1" aria-label="Next">›</button>
         </div>
         <p class="note" id="shopEmpty" hidden>Nothing in this tag yet.</p>
       </div>
@@ -196,7 +202,7 @@
   <script>
   (() => {
     const $ = (id) => document.getElementById(id);
-    const PRICES = { fancy: 400, math: 250, db: 200, cms: 200, shop: 800, login: 300 };
+    const PRICES = { fancy: 200, math: 100, db: 200, cms: 200, shop: 800, login: 300 };
     const BASE = 200, INCLUDED_PAGES = 5, PAGE_PRICE = 40;
 
     const boxes = ['fancy', 'math', 'db', 'cms', 'shop', 'login'].map($);
@@ -206,10 +212,12 @@
     function money(n) { return '$' + n.toLocaleString('en-AU'); }
 
     function update() {
-      // shop includes CMS
-      const shop = $('shop'), cms = $('cms');
+      // dependencies: shop -> CMS + database; login -> database
+      const shop = $('shop'), cms = $('cms'), db = $('db'), login = $('login');
       if (shop.checked && !cms.checked) cms.checked = true;
+      if ((shop.checked || login.checked) && !db.checked) db.checked = true;
       cms.disabled = shop.checked;
+      db.disabled = shop.checked || login.checked;
       $('cmsPrice').textContent = shop.checked ? 'included' : '+$200';
 
       let total = BASE;
@@ -229,6 +237,18 @@
 
     for (const b of boxes) b.addEventListener('change', update);
     pages.addEventListener('input', update);
+    // deselection cascades
+    $('shop').addEventListener('change', () => {
+      if (!$('shop').checked) { $('cms').checked = false; $('db').checked = $('login').checked; update(); }
+    });
+    $('login').addEventListener('change', () => {
+      if (!$('login').checked) { $('db').checked = $('shop').checked; update(); }
+    });
+    // shop carousel arrows
+    document.querySelectorAll('.car-btn').forEach((b) => b.addEventListener('click', () => {
+      const el = document.getElementById('shopGrid');
+      el.scrollBy({ left: Number(b.dataset.dir) * el.clientWidth * 0.8, behavior: 'smooth' });
+    }));
 
     // ---- math demo: AC sizing ----
     function calc() {

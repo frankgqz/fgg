@@ -19,7 +19,7 @@ The page demos every pricing row by BEING it. Quote builder = live demos:
 Shop auto-selects CMS (shop includes editing). Total in header pill + big total.
 
 ## Pricing decisions (2026-10-25)
-base $200 · fancy +$400 · math +$250 · data +$200 · CMS +$200 · shop +$800 (incl CMS) · login +$300 · pages $40 over 5 · care $200/y.
+base $200 · fancy +$200 ("Custom art direction") · math +$100 · database +$200 ("Persistent information") · CMS +$200 · shop +$800 (incl CMS) · login +$300 (requires database) · pages $40 over 5 · care $200/y. Dependencies: shop => CMS+DB (deselecting shop drops both; DB stays if login on), login => DB. Shop demo = carousel of example products.
 "tags" not "categories" (Frank: same thing, prefers tag). Shop tier rule: shop INCLUDES CMS (a shop without editing is a museum); exception = fixed 1-product shop (~$500). Admin for shop template: Payload default (professional), Google Sheets opt-in.
 Full addon menu = Frank's private quoting tool; this page is the public face.
 

@@ -292,6 +292,23 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
   margin: 0.75rem 0;
 }
 
+.carousel-wrap { position: relative; }
+.carousel {
+  display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+  gap: 0.9rem; margin: 0.75rem 0; padding: 0.35rem 0 0.75rem;
+  scrollbar-width: none;
+}
+.carousel::-webkit-scrollbar { display: none; }
+.carousel .mini-card { flex: 0 0 min(11rem, 68vw); scroll-snap-align: start; }
+.car-btn {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+  width: 2.15rem; height: 2.15rem; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  font-size: 1.15rem; cursor: pointer;
+}
+.car-btn.prev { left: -0.45rem; }
+.car-btn.next { right: -0.45rem; }
+
 .mini-card {
   background: var(--paper);
   border: 1px solid var(--line);
