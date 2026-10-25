@@ -54,14 +54,14 @@
         <label class="feature">
           <input type="checkbox" id="math">
           <span class="feature-head"><b>Math logic</b><em>+$100</em></span>
-          <span class="feature-desc">Calculations, Quote estimators (like this one).
-          What size Aircon should I get?</span>
+          <span class="feature-desc">Calculations, Quote estimators. e.g. What size
+          Aircon should I buy?</span>
         </label>
         <label class="feature">
           <input type="checkbox" id="db">
-          <span class="feature-head"><b>Database</b><em>+$200</em></span>
+          <span class="feature-head"><b>Database</b><em>+$100</em></span>
           <span class="feature-desc">Persistent information. Listings, search,
-          comments and likes, settings, game history.</span>
+          records, comments and likes, settings.</span>
         </label>
         <label class="feature">
           <input type="checkbox" id="cms">
@@ -70,8 +70,8 @@
         </label>
         <label class="feature">
           <input type="checkbox" id="shop">
-          <span class="feature-head"><b>Online shop</b><em>+$200</em></span>
-          <span class="feature-desc">Products, photos, tags, payments.</span>
+          <span class="feature-head"><b>Shop</b><em>+$200</em></span>
+          <span class="feature-desc">Payment, products, photos, tags.</span>
         </label>
         <label class="feature">
           <input type="checkbox" id="login">
@@ -141,16 +141,13 @@
       <!-- ---- demo: cms ---- -->
       <div class="demo" id="demoCms" hidden>
         <p class="demo-tag">Live demo · editing for you</p>
-        <h3>Click any text below and type — that's the whole idea</h3>
+        <h3>Click the price and type — then watch it snap back</h3>
         <div class="cms-card">
           <span class="cms-ribbon">you're editing</span>
-          <h4 contenteditable="true">Saturday Sourdough</h4>
-          <p class="cms-price" contenteditable="true">$12</p>
-          <p contenteditable="true">Slow-fermented, baked fresh every Saturday
-          morning. Limited loaves.</p>
+          <p class="cms-price"><span id="demoPrice" contenteditable="true">$100</span></p>
+          <p>Try changing it. Without editing, the page forgets — and the price
+          returns to $100. Real editing saves what you type.</p>
         </div>
-        <p class="note">Real version: a login screen, a dashboard, a photo
-        upload button. This is the spirit of it.</p>
       </div>
 
       <!-- ---- demo: shop ---- -->
@@ -201,7 +198,7 @@
   <script>
   (() => {
     const $ = (id) => document.getElementById(id);
-    const PRICES = { fancy: 200, math: 100, db: 200, cms: 100, shop: 200, login: 100 };
+    const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 200, login: 100 };
     const BASE = 200, INCLUDED_PAGES = 5, PAGE_PRICE = 50;
 
     const boxes = ['fancy', 'math', 'db', 'cms', 'shop', 'login'].map($);
@@ -211,10 +208,21 @@
     function money(n) { return '$' + n.toLocaleString('en-AU'); }
 
     function update() {
-      // dependency: shop -> database (products are persistent listings)
+      // dependency: shop -> database REQUIRED; editing + login RECOMMENDED
       const shop = $('shop'), db = $('db');
       if (shop.checked && !db.checked) db.checked = true;
       db.disabled = shop.checked;
+      const TAGS = { db: 'required', cms: 'recommended', login: 'recommended' };
+      for (const id of ['db', 'cms', 'login']) {
+        const el = $(id).closest('.feature');
+        el.classList.toggle('mandatory', id === 'db' && shop.checked);
+        el.classList.toggle('recommended', id !== 'db' && shop.checked);
+        let tag = el.querySelector('.tag');
+        if (shop.checked) {
+          if (!tag) { tag = document.createElement('span'); tag.className = 'tag'; el.appendChild(tag); }
+          tag.textContent = TAGS[id];
+        } else if (tag) tag.remove();
+      }
 
       let total = BASE;
       for (const b of boxes) if (b.checked) total += PRICES[b.id];
@@ -237,6 +245,16 @@
     $('shop').addEventListener('change', () => {
       if (!$('shop').checked) { $('db').checked = false; update(); }
     });
+    // snap-back price demo
+    const priceBox = document.getElementById('demoPrice');
+    if (priceBox) {
+      let snapTimer;
+      priceBox.addEventListener('input', () => {
+        clearTimeout(snapTimer);
+        snapTimer = setTimeout(() => { priceBox.textContent = '$100'; }, 2200);
+      });
+    }
+
     // shop carousel arrows
     document.querySelectorAll('.car-btn').forEach((b) => b.addEventListener('click', () => {
       const el = document.getElementById('shopGrid');

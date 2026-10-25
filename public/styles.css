@@ -157,6 +157,15 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
 .feature:hover { transform: translateY(-2px); }
 .feature:has(input:checked) { border-color: var(--accent); }
 .feature:has(input:disabled) { opacity: 0.85; cursor: default; }
+.feature.mandatory { border-color: #d64545; }
+.feature.recommended { border-color: var(--accent); }
+.feature .tag {
+  display: block; width: fit-content; margin-top: 0.75rem;
+  font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+  font-weight: 700; padding: 0.12rem 0.65rem; border-radius: 999px;
+}
+.feature.mandatory .tag { background: #d64545; color: #fff; }
+.feature.recommended .tag { background: var(--accent); color: var(--accent-ink); }
 
 .feature input[type="checkbox"] {
   width: 1.15rem;

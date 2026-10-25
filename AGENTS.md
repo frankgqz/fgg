@@ -19,7 +19,7 @@ The page demos every pricing row by BEING it. Quote builder = live demos:
 Shop auto-selects CMS (shop includes editing). Total in header pill + big total.
 
 ## Pricing decisions (2026-10-25)
-base $200 · fancy +$200 · math +$100 · database +$200 · editing +$100 · shop +$200 · login +$100 · pages $50 ea over 5 · care $200/y. Model (2026-10-26 late): EVERY CHECKED ROW = its price (no bundled 'included'); dependencies only auto-check boxes. Only dependency: shop => database (products are persistent listings). Editing standalone. Gated content = login + payment link, NOT shop. Shop demo = carousel. Full shop stack = 200+200(+100 editing).
+base $200 · fancy +$200 · math +$100 · database +$100 · editing +$100 · shop +$200 · login +$100 · pages $50 ea over 5 · care $200/y. Shop => database REQUIRED (red 'required' tag) + editing/login RECOMMENDED (accent tags). Editing demo = snap-back price box (edits reset to $100 after 2.2s). Model (2026-10-26 late): EVERY CHECKED ROW = its price (no bundled 'included'); dependencies only auto-check boxes. Only dependency: shop => database (products are persistent listings). Editing standalone. Gated content = login + payment link, NOT shop. Shop demo = carousel. Full shop stack = 200+200(+100 editing).
 "tags" not "categories" (Frank: same thing, prefers tag). Shop tier rule: shop INCLUDES CMS (a shop without editing is a museum); exception = fixed 1-product shop (~$500). Admin for shop template: Payload default (professional), Google Sheets opt-in.
 Full addon menu = Frank's private quoting tool; this page is the public face.
 
