@@ -41,44 +41,109 @@
     <!-- ============ THE QUOTE BUILDER ============ -->
     <section id="quote" class="band">
       <h2>Build your quote</h2>
-      <p class="note">Every switch below is a <b>live demo</b> — this page is the
-      example. Flip one on and watch what it does. (This builder is itself the
-      “math logic” feature: the price is calculated as you go.)</p>
+      <p class="note">Every card <b>is</b> its own example — this page is the demo.
+      Tick what you need; the price is calculated as you go.</p>
 
       <div class="features">
         <label class="feature">
           <input type="checkbox" id="fancy">
           <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
           <span class="feature-desc">Custom art direction.</span>
+          <span class="ex-strip">
+            <span class="ex swatch" style="background:#2f6f5e"></span>
+            <span class="ex swatch" style="background:#f0d27e"></span>
+            <span class="ex swatch" style="background:#6d89d8"></span>
+            <span class="ex">palettes</span>
+            <span class="ex">type</span>
+            <span class="ex">layout</span>
+          </span>
         </label>
-        <label class="feature">
+
+        <label class="feature wide">
           <input type="checkbox" id="math">
-          <span class="feature-head"><b>Math logic</b><em>+$100</em></span>
-          <span class="feature-desc">Calculations, Quote estimators. e.g. What size
-          Aircon should I buy?</span>
+          <span class="feature-head"><b>Logic</b><em>+$100</em></span>
+          <span class="feature-desc">Math, Calculations. Quote estimators.
+          Multilingual and currency toggles. e.g. What size Aircon should I buy?</span>
+          <div class="calc" onclick="event.stopPropagation()">
+            <label>Room <input type="number" id="roomL" value="5" min="1"> ×
+              <input type="number" id="roomW" value="4" min="1"> m</label>
+            <p class="calc-out" id="calcOut">≈ 3.0 kW — a large bedroom unit</p>
+          </div>
         </label>
+
         <label class="feature">
           <input type="checkbox" id="db">
           <span class="feature-head"><b>Database</b><em>+$100</em></span>
-          <span class="feature-desc">Persistent information. Listings, search,
-          records, comments and likes, settings.</span>
+          <span class="feature-desc">Persistent information.</span>
+          <span class="ex-strip">
+            <span class="ex">Listings</span>
+            <span class="ex">Search</span>
+            <span class="ex">Records</span>
+            <span class="ex">Comments &amp; likes</span>
+            <span class="ex">Settings</span>
+          </span>
         </label>
+
         <label class="feature">
           <input type="checkbox" id="cms">
           <span class="feature-head"><b>Editing for you</b><em>+$100</em></span>
           <span class="feature-desc">Change text, photos, prices yourself.</span>
+          <span class="ex-strip" onclick="event.stopPropagation()">
+            <span class="ex">text</span>
+            <span class="ex">photos</span>
+            <span class="ex">price <b id="demoPrice" contenteditable="true">$100</b>
+            <i class="ex-hint">← try it</i></span>
+          </span>
         </label>
-        <label class="feature">
+
+        <label class="feature wide">
           <input type="checkbox" id="shop">
           <span class="feature-head"><b>Shop</b><em>+$200</em></span>
           <span class="feature-desc">Payment, products, photos, tags.</span>
+          <div onclick="event.stopPropagation()">
+            <div class="chips" id="shopChips"></div>
+            <div class="carousel-wrap">
+              <button class="car-btn prev" data-dir="-1" aria-label="Previous">‹</button>
+              <div class="carousel" id="shopGrid">
+                <div class="mini-card product" data-tags="coffee hot"><b>Espresso</b><span>$4.50</span></div>
+                <div class="mini-card product" data-tags="coffee cold"><b>Cold Brew</b><span>$5.50</span></div>
+                <div class="mini-card product" data-tags="pastry"><b>Croissant</b><span>$4.00</span></div>
+                <div class="mini-card product" data-tags="bakery"><b>Sourdough Loaf</b><span>$12</span></div>
+                <div class="mini-card product" data-tags="tea hot"><b>Matcha Latte</b><span>$5.50</span></div>
+                <div class="mini-card product" data-tags="pastry chocolate"><b>Brownie</b><span>$4.50</span></div>
+              </div>
+              <button class="car-btn next" data-dir="1" aria-label="Next">›</button>
+            </div>
+            <p class="note" id="shopEmpty" hidden>Nothing in this tag yet.</p>
+          </div>
         </label>
+
         <label class="feature">
           <input type="checkbox" id="login">
           <span class="feature-head"><b>Login / private area</b><em>+$100</em></span>
-          <span class="feature-desc">User preferences, avatar, saved items, past orders,
-          gated content, continue watching.</span>
+          <span class="feature-desc">Member areas and things that follow the
+          customer around.</span>
+          <span class="ex-strip">
+            <span class="ex">User preferences</span>
+            <span class="ex">Avatar</span>
+            <span class="ex">Saved items</span>
+            <span class="ex">Past orders</span>
+            <span class="ex">Gated content</span>
+            <span class="ex">Continue watching</span>
+          </span>
         </label>
+
+        <label class="feature">
+          <span class="feature-head"><b>Migration</b><em>by quote</em></span>
+          <span class="feature-desc">Moving an existing site across.</span>
+          <span class="ex-strip">
+            <span class="ex">Wix</span>
+            <span class="ex">WordPress</span>
+            <span class="ex">old sites</span>
+            <span class="ex">content rescue</span>
+          </span>
+        </label>
+
         <label class="feature">
           <span class="feature-head"><b>Pages</b><em>$50 each over 5</em></span>
           <input type="number" id="pages" min="1" max="30" value="5" class="pages-input">
@@ -91,83 +156,6 @@
         <p class="total" id="buildTotal">$200</p>
         <p class="meta">+ care $200/year (domain, hosting, backups, security,
         SEO reports, small changes)</p>
-      </div>
-
-      <!-- ---- demo: math ---- -->
-      <div class="demo" id="demoMath" hidden>
-        <p class="demo-tag">Live demo · math logic</p>
-        <h3>What size AC?</h3>
-        <div class="calc">
-          <label>Room length <input type="number" id="roomL" value="5" min="1"> m</label>
-          <label>Room width <input type="number" id="roomW" value="4" min="1"> m</label>
-          <p class="calc-out" id="calcOut">≈ 3.0 kW — a large bedroom unit</p>
-        </div>
-      </div>
-
-      <!-- ---- demo: data ---- -->
-      <div class="demo" id="demoDb" hidden>
-        <p class="demo-tag">Live demo · data</p>
-        <h3>Timetable · listings · match history</h3>
-        <div class="tabs" id="dbTabs">
-          <button class="tab on" data-tab="tt">Timetable</button>
-          <button class="tab" data-tab="ls">Listings</button>
-          <button class="tab" data-tab="mh">Match history</button>
-        </div>
-        <div class="tab-pane on" data-pane="tt">
-          <table class="data-table">
-            <tr><th>Mon</th><td>9:00 Beginners</td><td>18:30 Social</td></tr>
-            <tr><th>Wed</th><td>9:00 Drills</td><td>18:30 Ladder</td></tr>
-            <tr><th>Fri</th><td>—</td><td>19:00 Match night</td></tr>
-            <tr><th>Sat</th><td>10:00 Open play</td><td>—</td></tr>
-          </table>
-        </div>
-        <div class="tab-pane" data-pane="ls">
-          <div class="mini-grid">
-            <div class="mini-card"><b>Studio room</b><span>$45 / hr</span></div>
-            <div class="mini-card"><b>Coach session</b><span>$60 / hr</span></div>
-            <div class="mini-card"><b>Open court</b><span>$12 / hr</span></div>
-          </div>
-        </div>
-        <div class="tab-pane" data-pane="mh">
-          <table class="data-table">
-            <tr><th>Date</th><th>Event</th><th>Result</th></tr>
-            <tr><td>12 Oct</td><td>Autumn Ladder</td><td class="win">win</td></tr>
-            <tr><td>28 Sep</td><td>Club Doubles</td><td class="loss">loss</td></tr>
-            <tr><td>14 Sep</td><td>Autumn Ladder</td><td class="win">win</td></tr>
-          </table>
-        </div>
-      </div>
-
-      <!-- ---- demo: cms ---- -->
-      <div class="demo" id="demoCms" hidden>
-        <p class="demo-tag">Live demo · editing for you</p>
-        <h3>Click the price and type — then watch it snap back</h3>
-        <div class="cms-card">
-          <span class="cms-ribbon">you're editing</span>
-          <p class="cms-price"><span id="demoPrice" contenteditable="true">$100</span></p>
-          <p>Try changing it. Without editing, the page forgets — and the price
-          returns to $100. Real editing saves what you type.</p>
-        </div>
-      </div>
-
-      <!-- ---- demo: shop ---- -->
-      <div class="demo" id="demoShop" hidden>
-        <p class="demo-tag">Live demo · online shop</p>
-        <h3>Shop examples</h3>
-        <div class="chips" id="shopChips"></div>
-        <div class="carousel-wrap">
-        <button class="car-btn prev" data-dir="-1" aria-label="Previous">‹</button>
-        <div class="carousel" id="shopGrid">
-          <div class="mini-card product" data-tags="coffee hot"><b>Espresso</b><span>$4.50</span></div>
-          <div class="mini-card product" data-tags="coffee cold"><b>Cold Brew</b><span>$5.50</span></div>
-          <div class="mini-card product" data-tags="pastry"><b>Croissant</b><span>$4.00</span></div>
-          <div class="mini-card product" data-tags="bakery"><b>Sourdough Loaf</b><span>$12</span></div>
-          <div class="mini-card product" data-tags="tea hot"><b>Matcha Latte</b><span>$5.50</span></div>
-          <div class="mini-card product" data-tags="pastry chocolate"><b>Brownie</b><span>$4.50</span></div>
-        </div>
-        <button class="car-btn next" data-dir="1" aria-label="Next">›</button>
-        </div>
-        <p class="note" id="shopEmpty" hidden>Nothing in this tag yet.</p>
       </div>
     </section>
 
@@ -202,7 +190,6 @@
     const BASE = 200, INCLUDED_PAGES = 5, PAGE_PRICE = 50;
 
     const boxes = ['fancy', 'math', 'db', 'cms', 'shop', 'login'].map($);
-    const demos = { fancy: null, math: $('demoMath'), db: $('demoDb'), cms: $('demoCms'), shop: $('demoShop'), login: null };
     const pages = $('pages');
 
     function money(n) { return '$' + n.toLocaleString('en-AU'); }
@@ -234,9 +221,6 @@
       $('quotePill').innerHTML = 'Build <b>' + money(total) + '</b> · Care $200/y';
 
       document.body.classList.toggle('fancy', $('fancy').checked);
-      for (const [key, el] of Object.entries(demos)) {
-        if (el) el.hidden = !$(key).checked;
-      }
     }
 
     for (const b of boxes) b.addEventListener('change', update);
@@ -245,6 +229,7 @@
     $('shop').addEventListener('change', () => {
       if (!$('shop').checked) { $('db').checked = false; update(); }
     });
+
     // snap-back price demo
     const priceBox = document.getElementById('demoPrice');
     if (priceBox) {
@@ -261,7 +246,7 @@
       el.scrollBy({ left: Number(b.dataset.dir) * el.clientWidth * 0.8, behavior: 'smooth' });
     }));
 
-    // ---- math demo: AC sizing ----
+    // ---- logic demo: AC sizing ----
     function calc() {
       const l = parseFloat($('roomL').value) || 0;
       const w = parseFloat($('roomW').value) || 0;
@@ -273,15 +258,6 @@
     $('roomL').addEventListener('input', calc);
     $('roomW').addEventListener('input', calc);
     calc();
-
-    // ---- data demo: tabs ----
-    $('dbTabs').addEventListener('click', (e) => {
-      const btn = e.target.closest('.tab');
-      if (!btn) return;
-      for (const t of $('dbTabs').children) t.classList.toggle('on', t === btn);
-      for (const pane of document.querySelectorAll('.tab-pane'))
-        pane.classList.toggle('on', pane.dataset.pane === btn.dataset.tab);
-    });
 
     // ---- shop demo: tag chips (client-side filtering — the whole catalog ships once) ----
     const products = [...document.querySelectorAll('#shopGrid .product')];

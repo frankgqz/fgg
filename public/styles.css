@@ -189,6 +189,25 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
   font-size: 0.95rem;
 }
 
+/* in-card example strips — the demo IS the panel */
+.ex-strip {
+  display: flex; gap: 0.5rem; overflow-x: auto; scrollbar-width: none;
+  margin-top: 0.85rem; padding-bottom: 0.25rem;
+}
+.ex-strip::-webkit-scrollbar { display: none; }
+.ex {
+  flex: none; display: inline-flex; align-items: center; gap: 0.45rem;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 999px;
+  padding: 0.28rem 0.85rem; font-size: 0.86rem; color: var(--ink-soft);
+  font-weight: 500; white-space: nowrap;
+}
+.ex.swatch { width: 1.55rem; height: 1.55rem; padding: 0; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--line); }
+.ex-hint { font-style: normal; font-size: 0.78rem; opacity: 0.65; }
+#demoPrice { cursor: text; border-bottom: 2px dashed var(--accent); min-width: 3.25rem; display: inline-block; }
+.feature.wide { grid-column: 1 / -1; }
+@media (min-width: 640px) {
+  .feature.wide { grid-column: span 2; }
+}
 .feature-desc {
   display: block;
   font-size: 0.9rem;
