@@ -13,21 +13,6 @@
     0 12px 28px rgba(31, 36, 33, 0.10);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #16181a;
-    --surface: #1e2224;
-    --ink: #e8e6e1;
-    --ink-soft: #a8aca7;
-    --accent: #7fbfa9;
-    --accent-ink: #16181a;
-    --line: rgba(232, 230, 225, 0.12);
-    --shadow:
-      0 1px 2px rgba(0, 0, 0, 0.35),
-      0 4px 10px rgba(0, 0, 0, 0.35),
-      0 12px 28px rgba(0, 0, 0, 0.40);
-  }
-}
 
 * { box-sizing: border-box; }
 
@@ -868,3 +853,18 @@ h3 { font-size: var(--fs-h5); }
 
 /* emoji rings need room inside the scroll row */
 .avatar-row { padding: 0.45rem; }
+
+/* one look, guaranteed: every button IS Get a quote */
+.button, .button.small, .button.yellow, .wall-form .button {
+  border: 0;
+  border-radius: 999px;
+  background-color: var(--accent);
+  background-image: linear-gradient(168deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.05));
+  color: var(--accent-ink);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.10), 0 8px 24px -6px rgba(20, 20, 40, 0.18);
+}
+.button.small { padding: 0.55rem 1.15rem; font-size: 0.95rem; }
+
+/* default-included panels (Revisions, Pages) hold their highlight */
+.feature.default-on { cursor: default; }
+.feature.default-on .rev-row { cursor: auto; }
