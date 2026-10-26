@@ -1119,3 +1119,6 @@ html.fancy .price-widget .button {
 .event-demo { overflow-y: auto; }
 .event-demo:has(.demo-img:not([hidden])) { height: auto; }
 .demo-img { max-height: 6.5rem; }
+
+/* showcase upload button: smaller */
+.upload-btn { padding: 0.34rem 0.72rem; font-size: 0.9rem; }
