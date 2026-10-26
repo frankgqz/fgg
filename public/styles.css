@@ -1063,3 +1063,14 @@ body.fancy .upload-btn:active, body.fancy .av:active, body.fancy .cal-day:active
   transform: scale(0.93); transition-duration: 80ms;
 }
 body.fancy .car-btn:active { transform: translateY(-50%) scale(0.93); transition-duration: 80ms; }
+
+/* mobile: Login stacks right after Database */
+@media (max-width: 900px) {
+  .features.bento > [data-feature="math"] { order: 1; }
+  .features.bento > [data-feature="fancy"] { order: 2; }
+  .features.bento > [data-feature="cms"] { order: 3; }
+  .features.bento > [data-feature="db"] { order: 4; }
+  .features.bento > [data-feature="login"] { order: 5; }
+  .features.bento > [data-feature="shop"] { order: 6; }
+  .pw-line { white-space: nowrap; }
+}

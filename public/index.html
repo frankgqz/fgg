@@ -25,7 +25,7 @@
 
   <aside class="price-widget">
     <p class="pw-line">Build <b id="pwTotal">$200</b></p>
-    <p class="pw-line care">Care $200 / year</p>
+    <p class="pw-line care">Care $200/y</p>
     <a class="button small" href="#contact">Contact</a>
   </aside>
 
@@ -83,7 +83,7 @@
 
         <div class="feature t11" data-feature="fancy">
           <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
-          <span class="feature-desc">Custom design direction, 1 more revision included.</span>
+          <span class="feature-desc">Custom design direction, +1 revision.</span>
           <div class="piano-panel" id="pianoPanel" onclick="event.stopPropagation()" hidden>
             <canvas id="piano3d"></canvas>
             <div class="piano-display" id="pianoDisplay">♪ First Love</div>
@@ -109,8 +109,7 @@
 
         <div class="feature t11" data-feature="login">
           <span class="feature-head"><b>Login</b><em>+$100</em></span>
-          <span class="feature-desc">Things that follow the customer.</span>
-          <div class="plain-ex">Order history · Gated content · Avatar</div>
+          <div class="plain-ex">Order history · Gated content · User Information</div>
           <div class="login-demo" onclick="event.stopPropagation()">
             <button class="button small" id="loginSim" type="button">Log In</button>
           </div>
@@ -160,6 +159,12 @@
                 </div>
                 <span class="shop-note">tags · photos · stock</span>
               </div>
+              <div class="shop-slide course-theme">
+                <h4>Digital courses</h4>
+                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 1</b><i class="bar"><i class="fill f1"></i></i></div><i class="bought">purchased</i></div>
+                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 2</b><i class="bar"><i class="fill f2"></i></i></div></div>
+                <span class="shop-note">logins · progress · gated content</span>
+              </div>
               <div class="shop-slide cal-theme">
                 <h4>Services</h4>
                 <div class="cal-row">
@@ -171,12 +176,6 @@
                 <div class="slot-row"><b>10:00</b><span>Consult · 60 min</span><i class="book">book</i></div>
                 <div class="slot-row"><b>14:30</b><span>Class pass</span><i class="book">book</i></div>
                 <span class="shop-note">calendar · time slots · bookings</span>
-              </div>
-              <div class="shop-slide course-theme">
-                <h4>Digital courses</h4>
-                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 1</b><i class="bar"><i class="fill f1"></i></i></div><i class="bought">purchased</i></div>
-                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 2</b><i class="bar"><i class="fill f2"></i></i></div></div>
-                <span class="shop-note">logins · progress · gated content</span>
               </div>
             </div>
             <button class="car-btn next" data-dir="1" aria-label="Next">›</button>
@@ -614,7 +613,7 @@
       "Logic": "Tính toán",
       "Math, Calculations. Quote estimators. Multilingual toggles.": "Toán, Tính toán. Ước tính báo giá. Chuyển đổi đa ngôn ngữ.",
       "Fancy design": "Thiết kế cao cấp",
-      "Custom design direction, 1 more revision included.": "Định hướng thiết kế riêng, kèm thêm 1 buổi hiệu chỉnh.",
+      "Custom design direction, +1 revision.": "Định hướng thiết kế riêng, +1 buổi hiệu chỉnh.",
       "Editing": "Chỉnh sửa",
       "Web portal or linked spreadsheet.": "Cổng web hoặc bảng tính liên kết.",
       "Showcase": "Sự kiện",
@@ -623,7 +622,7 @@
       "(edit me)": "(chỉnh sửa tôi)",
       "Login": "Đăng nhập",
       "Things that follow the customer.": "Những thứ đi theo khách hàng.",
-      "Order history · Gated content · Avatar": "Lịch sử đơn hàng · Nội dung riêng · Ảnh đại diện",
+      "Order history · Gated content · User Information": "Lịch sử đơn hàng · Nội dung riêng · Thông tin người dùng",
       "Log In": "Đăng nhập",
       "Log Out": "Đăng xuất",
       "Payment": "Thanh toán",
@@ -658,7 +657,7 @@
       "Contact": "Liên hệ",
       "Contact me to discuss your business, and what you want in the site. We can talk about what's possible, the process, timelines, and what works for your situation.": "Liên hệ tôi để trao đổi về doanh nghiệp của bạn và điều bạn muốn có trên website. Chúng ta có thể bàn về điều khả thi, quy trình, thời gian, và điều phù hợp với hoàn cảnh của bạn.",
       "Build": "Xây dựng",
-      "Care $200 / year": "Chăm sóc $200 / năm",
+      "Care $200/y": "Chăm sóc $200/năm",
       "Get a quote": "Nhận báo giá",
       "Hobby projects": "Dự án sở thích",
       "Apps · experiments · games": "Ứng dụng · thử nghiệm · trò chơi",
@@ -738,6 +737,18 @@
         k.position.set(-1.5 + (i + 1) * w, 0.385, -0.02);
         piano.add(k);
       }
+      // left control panel with a blue display (lights when playing)
+      const panelBlock = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.34, 0.42),
+        new THREE.MeshStandardMaterial({ color: 0x241d33, metalness: 0.45, roughness: 0.38 }));
+      panelBlock.position.set(-1.12, 0.38, -0.31);
+      piano.add(panelBlock);
+      const screenMat = new THREE.MeshStandardMaterial({
+        color: 0x0a1428, emissive: 0x2f7fff, emissiveIntensity: 0.08,
+        metalness: 0.2, roughness: 0.35,
+      });
+      const screen = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.02, 0.24), screenMat);
+      screen.position.set(-1.12, 0.56, -0.30);
+      piano.add(screen);
       scene.add(piano);
 
       const fit = () => {
@@ -753,6 +764,8 @@
       const loop = (t) => {
         piano.rotation.y = Math.sin(t * 0.00035) * 0.38;
         piano.position.y = Math.sin(t * 0.0006) * 0.05;
+        const playing = $('pianoPanel').classList.contains('playing');
+        screenMat.emissiveIntensity += ((playing ? 1.15 : 0.08) - screenMat.emissiveIntensity) * 0.08;
         renderer.render(scene, camera);
         if (!reduce) requestAnimationFrame(loop);
       };
