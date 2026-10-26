@@ -562,7 +562,8 @@
         $('wallList').innerHTML = data.comments.length
           ? data.comments.map((c) => `
             <div class="wall-item"><span class="av-big">${escapeHtml(c.avatar)}</span>
-            <div><b>${escapeHtml(c.name)}</b><p>${escapeHtml(c.body)}</p></div></div>`).join('')
+            <div class="wall-text"><b>${escapeHtml(c.name)}</b><p>${escapeHtml(c.body)}</p></div>
+            <button class="wall-del" type="button" data-id="${c.id}" title="delete">×</button></div>`).join('')
           : '<p class="note">No comments yet — be the first.</p>';
         void $('wallList').offsetWidth;
         $('wallList').classList.add('fade-in');
@@ -575,6 +576,19 @@
       try {
         const res = await fetch('/api/like', { method: 'POST' });
         $('likeCount').textContent = (await res.json()).likes;
+      } catch { /* wall offline */ }
+    });
+
+    $('wallList').addEventListener('click', async (e) => {
+      const b = e.target.closest('.wall-del');
+      if (!b) return;
+      try {
+        await fetch('/api/delete', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ id: Number(b.dataset.id) }),
+        });
+        loadWall();
       } catch { /* wall offline */ }
     });
 

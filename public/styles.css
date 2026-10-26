@@ -1040,7 +1040,7 @@ html.fancy #evDate { color: #6fdccf; }
 /* mini frames sit at the bottom of their tiles (fancy + editing balance) */
 .feature[data-feature="fancy"], .feature[data-feature="cms"] { display: flex; flex-direction: column; }
 .feature[data-feature="fancy"] .piano-panel,
-.feature[data-feature="cms"] .event-demo { margin-top: auto; }
+.feature[data-feature="cms"] .event-demo { margin-top: 0.9rem; margin-bottom: auto; }
 
 /* buttons: slightly smaller across the board */
 .button { padding: 0.65rem 1.5rem; font-size: 0.95rem; }
@@ -1073,4 +1073,19 @@ body.fancy .car-btn:active { transform: translateY(-50%) scale(0.93); transition
   .features.bento > [data-feature="login"] { order: 5; }
   .features.bento > [data-feature="shop"] { order: 6; }
   .pw-line { white-space: nowrap; }
+}
+
+/* wall comment delete (anyone) */
+.wall-item { align-items: flex-start; }
+.wall-text { flex: 1; min-width: 0; }
+.wall-del {
+  border: 0; background: transparent; color: var(--ink-soft);
+  width: 1.7rem; height: 1.7rem; border-radius: 50%; cursor: pointer;
+  font-size: 1.05rem; line-height: 1; flex-shrink: 0;
+}
+.wall-del:hover { color: #c2495e; background: rgba(194, 73, 94, 0.10); }
+
+/* mobile: more gap above the showcase box, less empty space below the text */
+@media (max-width: 900px) {
+  .feature[data-feature="cms"] .event-demo { margin-top: 1.35rem; height: auto; }
 }

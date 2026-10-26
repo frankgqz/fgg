@@ -27,7 +27,7 @@ export default {
         await ensureDb(env);
         const likes = (await env.DB.prepare("SELECT n FROM likes WHERE id = 1").first())?.n ?? 0;
         const { results } = await env.DB.prepare(
-          "SELECT name, avatar, body, created_at FROM wall ORDER BY id DESC LIMIT 50"
+          "SELECT id, name, avatar, body, created_at FROM wall ORDER BY id DESC LIMIT 50"
         ).all();
         return json({ likes, comments: results });
       }
@@ -41,6 +41,14 @@ export default {
           .bind(n, AVATARS.includes(avatar) ? avatar : "🙂", b)
           .run();
         return json({ ok: true }, 201);
+      }
+      if (url.pathname === "/api/delete" && req.method === "POST") {
+        await ensureDb(env);
+        const { id } = await req.json().catch(() => ({}));
+        const n = Number(id);
+        if (!Number.isInteger(n)) return json({ error: "id required" }, 400);
+        await env.DB.prepare("DELETE FROM wall WHERE id = ?").bind(n).run();
+        return json({ ok: true });
       }
       if (url.pathname === "/api/like" && req.method === "POST") {
         await ensureDb(env);
