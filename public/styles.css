@@ -1157,3 +1157,7 @@ body.logged-in .booked-slot .booked { display: inline-block; }
 
 /* editing: a bit more air between the text and the panel */
 .feature[data-feature="cms"] .feature-desc { margin-bottom: 1.25rem; }
+
+/* required nudge: visible only when a deselect is refused */
+.feature .tag { display: none; }
+.feature .tag.show { display: block; }
