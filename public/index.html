@@ -52,7 +52,7 @@
 
   <main>
     <section class="hero">
-      <h1>Websites, built and cared for.</h1>
+      <h1>Websites, build and care.</h1>
       <p class="lede">I'm Frank Gao, a web developer in Melbourne. I build websites and apps for businesses.</p>
       <a class="button" href="#quote">Try it</a>
     </section>
@@ -64,12 +64,12 @@
 
         <div class="feature locked">
           <span class="feature-head"><b>Standard</b><em>$200</em></span>
-          <div class="plain-ex">Custom design · Media · Gallery · Draft + Revision process · Receiving emails · Desktop and Mobile optimized · Fast & secure · Form · Dynamic page elements · UI polish · Favicon</div>
+          <div class="plain-ex">Custom design · Media · Gallery · Draft + Revision process · Receiving emails · Desktop and Mobile optimized · Fast & secure · SEO setup · Form · Dynamic page elements · UI polish · Favicon</div>
         </div>
 
         <div class="feature locked">
           <span class="feature-head"><b>Care</b><em>$200 / y</em></span>
-          <div class="plain-ex">Domain · Hosting · Backups · Security · SEO · Quarterly Traffic Reports · Code access · Yearly revision</div>
+          <div class="plain-ex">Domain · Hosting · Backups · Security · Quarterly Traffic Reports · Code access · Yearly revision</div>
         </div>
 
         <div class="feature selected default-on">
@@ -138,7 +138,7 @@
 
         <div class="feature t22" data-feature="db">
           <span class="feature-head"><b>Database</b><em>+$100</em></span>
-          <span class="feature-desc">Persistent information. Submissions · Listings · Bookings · Inventory · Search · Records · Comments & likes · Match History · Settings.</span>
+          <span class="feature-desc">Persistent info. Submissions · Listings · RSVPs · Inventory · Search · Match History · Comments · Settings.</span>
           <div class="wall" onclick="event.stopPropagation()">
             <div class="wall-top">
               <div class="avatar-row" id="avatarRow">
@@ -242,7 +242,7 @@
   </main>
 
   <footer>
-    <p>FGG Pty Ltd · Melbourne</p>
+    <p>FGG Pty Ltd · Melbourne · ACN 647590369</p>
   </footer>
 
   <div class="work-detail" id="workDetail" hidden>
@@ -329,6 +329,7 @@
 
       setTotal(total);
       $('revCount').textContent = state.fancy ? 3 : 2;
+      syncLogin();
 
       document.body.classList.toggle('fancy', state.fancy);
       document.documentElement.classList.toggle('fancy', state.fancy);
@@ -423,12 +424,17 @@
       reader.readAsDataURL(file);
     });
 
-    // ---- simulated login (touches the wall + the shop) ----
+    // ---- login state follows the Login panel: click logs in, deselect logs out ----
     let loggedIn = false;
-    $('loginSim').addEventListener('click', () => {
-      loggedIn = !loggedIn;
+    function syncLogin() {
+      if (loggedIn === state.login) return;
+      loggedIn = state.login;
       document.body.classList.toggle('logged-in', loggedIn);
       $('loginSim').textContent = loggedIn ? t('Log Out') : t('Log In');
+    }
+    $('loginSim').addEventListener('click', () => {
+      state.login = !state.login;
+      update();
     });
 
     // ---- shop kind carousel ----
@@ -585,7 +591,7 @@
           ? data.comments.map((c) => `
             <div class="wall-item"><span class="av-big">${escapeHtml(c.avatar)}</span>
             <div class="wall-text"><b>${escapeHtml(c.name)}</b><p>${escapeHtml(c.body)}</p></div>
-            <button class="wall-del" type="button" data-id="${c.id}" title="delete">×</button></div>`).join('')
+            <button class="wall-del" type="button" data-id="${c.id}" title="delete">delete</button></div>`).join('')
           : '<p class="note">No comments yet — be the first.</p>';
         void $('wallList').offsetWidth;
         $('wallList').classList.add('fade-in');
@@ -632,14 +638,14 @@
 
     // ---- language toggle (EN / VI) ----
     const VI = {
-      "Websites, built and cared for.": "Website được dựng nên và chăm chút.",
+      "Websites, build and care.": "Website: dựng và chăm sóc.",
       "I'm Frank Gao, a web developer in Melbourne. I build websites and apps for businesses.": "Tôi là Frank Gao, lập trình viên web tại Melbourne. Tôi làm website và ứng dụng cho doanh nghiệp.",
       "Try it": "Dùng thử",
       "Build your package": "Tạo báo giá",
       "Standard": "Tiêu chuẩn",
-      "Custom design · Media · Gallery · Draft + Revision process · Receiving emails · Desktop and Mobile optimized · Fast & secure · Form · Dynamic page elements · UI polish · Favicon": "Thiết kế riêng · Media · Thư viện ảnh · Quy trình nháp + hiệu chỉnh · Nhận email · Tối ưu máy tính & điện thoại · Nhanh & bảo mật · Form · Thành phần động · Tinh chỉnh giao diện · Favicon",
+      "Custom design · Media · Gallery · Draft + Revision process · Receiving emails · Desktop and Mobile optimized · Fast & secure · SEO setup · Form · Dynamic page elements · UI polish · Favicon": "Thiết kế riêng · Media · Thư viện ảnh · Quy trình nháp + hiệu chỉnh · Nhận email · Tối ưu máy tính & điện thoại · Nhanh & bảo mật · SEO setup · Form · Thành phần động · Tinh chỉnh giao diện · Favicon",
       "Care": "Chăm sóc",
-      "Domain · Hosting · Backups · Security · SEO · Quarterly Traffic Reports · Code access · Yearly revision": "Tên miền · Hosting · Sao lưu · Bảo mật · SEO · Báo cáo lưu lượng hằng quý · Mã nguồn · Hiệu chỉnh hằng năm",
+      "Domain · Hosting · Backups · Security · Quarterly Traffic Reports · Code access · Yearly revision": "Tên miền · Hosting · Sao lưu · Bảo mật · Báo cáo lưu lượng hằng quý · Mã nguồn · Hiệu chỉnh hằng năm",
       "Revision": "Hiệu chỉnh",
       "sessions included, draft edit design process. ~60-90 mins a session.": "buổi bao gồm, quy trình nháp – sửa – thiết kế. ~60–90 phút mỗi buổi.",
       "sessions": "buổi",
@@ -682,7 +688,7 @@
       "purchased": "đã mua",
       "logins · progress · gated content": "đăng nhập · tiến độ · nội dung riêng",
       "Database": "Cơ sở dữ liệu",
-      "Persistent information. Submissions · Listings · Bookings · Inventory · Search · Records · Comments & likes · Match History · Settings.": "Dữ liệu lưu trữ. Đơn gửi · Danh sách · Đặt chỗ · Tồn kho · Tìm kiếm · Hồ sơ · Bình luận & lượt thích · Lịch sử đấu · Cài đặt.",
+      "Persistent info. Submissions · Listings · RSVPs · Inventory · Search · Match History · Comments · Settings.": "Dữ liệu lưu trữ. Đơn gửi · Danh sách · RSVPs · Tồn kho · Tìm kiếm · Lịch sử đấu · Bình luận · Cài đặt.",
       "🌟 signed in": "🌟 đã đăng nhập",
       "Send": "Gửi",
       "comments": "bình luận",
