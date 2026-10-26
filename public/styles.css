@@ -643,7 +643,7 @@ body.logged-in .bought { display: inline-block; }
 .fill { transition: width 500ms ease; }
 .fill.f1 { width: 70%; }
 .fill.f2 { width: 25%; }
-body.logged-in .fill.f1 { width: 95%; }
+body.logged-in .fill.f1 { width: 100%; }
 body.logged-in .fill.f2 { width: 60%; }
 
 /* mobile: one panel per row, price follows as a footer */
@@ -1155,3 +1155,9 @@ html.fancy :focus-visible { outline-color: var(--accent); }
 /* price widget: contact + start a project */
 .pw-actions { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
 .pw-actions .button { flex: 1; text-align: center; }
+
+/* pages stepper input uses the page font */
+.pages-input { font: inherit; font-variant-numeric: tabular-nums; }
+
+/* editable fields show a typing cursor (desktop signal; the (click) hint covers phones) */
+.feature [contenteditable] { cursor: text; }
