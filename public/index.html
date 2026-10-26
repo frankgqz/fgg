@@ -373,7 +373,7 @@
       setTimeout(() => tile.classList.remove('sweeping'), 750);
     }));
 
-    // ---- upload demo: pick an image, kept in localStorage ----
+    // ---- upload demo: pick an image, session-only preview ----
     const demoImg = $('demoImg');
     $('uploadBtn').addEventListener('click', () => $('demoImgInput').click());
     $('demoImgInput').addEventListener('change', () => {
