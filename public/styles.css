@@ -30,7 +30,7 @@ body {
 }
 
 h1, h2, h3, h4 {
-  font-family: "Newsreader", Georgia, serif;
+  font-family: "Figtree", "Inter", sans-serif;
   font-weight: 600;
   line-height: 1.15;
   margin: 0 0 0.5rem;
@@ -61,7 +61,7 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
 }
 
 .wordmark {
-  font-family: "Newsreader", Georgia, serif;
+  font-family: "Figtree", "Inter", sans-serif;
   font-weight: 600;
   font-size: 1.35rem;
   letter-spacing: 0.02em;
@@ -218,7 +218,7 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
 }
 
 .total {
-  font-family: "Newsreader", Georgia, serif;
+  font-family: "Figtree", "Inter", sans-serif;
   font-size: clamp(2.25rem, 5vw, 3rem);
   margin: 0.15rem 0;
   font-variant-numeric: tabular-nums;
@@ -258,7 +258,7 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
 }
 
 .calc-out {
-  font-family: "Newsreader", Georgia, serif;
+  font-family: "Figtree", "Inter", sans-serif;
   font-size: 1.25rem;
   margin: 0.5rem 0 0;
 }
@@ -377,7 +377,7 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
 }
 
 .cms-price {
-  font-family: "Newsreader", Georgia, serif;
+  font-family: "Figtree", "Inter", sans-serif;
   font-size: 1.45rem;
   margin: 0.25rem 0 0.5rem;
 }
@@ -455,7 +455,7 @@ body.fancy h2,
 body.fancy h3,
 body.fancy .wordmark,
 body.fancy .total {
-  background: linear-gradient(180deg, #ffffff 0%, #cfc9e6 36%, #6f6a8c 52%, #efeaf8 66%, #9c93c0 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #d8d2ee 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -516,7 +516,7 @@ body.fancy .bar {
 
 /* pages stepper lives with the total */
 .pages-line { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.15rem; }
-.pages-line b { font-family: "Newsreader", Georgia, serif; font-weight: 600; }
+.pages-line b { font-family: "Figtree", "Inter", sans-serif; font-weight: 600; }
 
 .mini-bento { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.55rem; margin-top: 0.85rem; }
 .mb {
@@ -533,7 +533,7 @@ body.fancy .bar {
   border-radius: 12px; padding: 0.7rem 0.9rem; display: grid; gap: 0.15rem;
 }
 .event-demo .ex-hint { margin-top: 0.3rem; }
-.event-demo b { font-family: "Newsreader", Georgia, serif; font-size: 1.25rem; font-weight: 600; }
+.event-demo b { font-family: "Figtree", "Inter", sans-serif; font-size: 1.25rem; font-weight: 600; }
 .event-demo span { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
 
 .fx-row { display: flex; gap: 0.55rem; flex-wrap: wrap; margin-top: 0.95rem; }
@@ -551,7 +551,7 @@ body.fancy .bar {
   background: var(--paper); border: 1px solid var(--line); border-radius: 16px;
   padding: 1.15rem 1.25rem;
 }
-.shop-slide h4 { font-family: "Newsreader", Georgia, serif; margin: 0 0 0.7rem; font-size: 1.15rem; }
+.shop-slide h4 { font-family: "Figtree", "Inter", sans-serif; margin: 0 0 0.7rem; font-size: 1.15rem; }
 .shop-note { display: block; margin-top: 0.7rem; font-size: 0.85rem; color: var(--accent); font-weight: 600; }
 
 /* ============ the wall (inside the database tile) ============ */
@@ -649,7 +649,7 @@ body.fancy .bar {
   text-align: right;
 }
 .pw-line { margin: 0; font-size: 0.95rem; color: var(--ink-soft); }
-.pw-line b { color: var(--ink); font-family: "Newsreader", Georgia, serif; font-size: 1.45rem; }
+.pw-line b { color: var(--ink); font-family: "Figtree", "Inter", sans-serif; font-size: 1.45rem; }
 .pw-line.care { font-size: 0.85rem; }
 .price-widget .button { margin-top: 0.35rem; justify-self: end; }
 
