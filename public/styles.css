@@ -871,7 +871,7 @@ h3 { font-size: var(--fs-h5); }
 
 /* ============ top row: the three included panels ============ */
 .top-row {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem; margin-bottom: 1rem;
 }
 .top-row .feature { grid-column: auto; grid-row: auto; }
@@ -897,4 +897,17 @@ body.modal-open { overflow: hidden; }
 ::view-transition-old(work-hero), ::view-transition-new(work-hero) {
   animation-duration: 380ms;
   animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* fancy: let the aurora shading show again (body must not cover it) */
+body.fancy { background: transparent; }
+
+/* editing demo: more color */
+.event-demo {
+  background: linear-gradient(135deg, #efe7ff, #ffe8f1, #e2f6f3);
+  border-color: rgba(120, 90, 200, 0.25);
+}
+html.fancy .event-demo {
+  background: linear-gradient(135deg, rgba(127, 92, 255, 0.28), rgba(255, 92, 138, 0.20), rgba(38, 208, 201, 0.20));
+  border-color: rgba(255, 255, 255, 0.14);
 }

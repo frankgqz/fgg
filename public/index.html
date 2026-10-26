@@ -41,17 +41,17 @@
 
         <div class="feature locked">
           <span class="feature-head"><b>Standard build</b><em>$200</em></span>
-          <span class="feature-desc">Every site starts here.</span>
           <div class="plain-ex">Custom design · Draft + revision process · Yearly update · Domain</div>
         </div>
 
 
 
+
         <div class="feature locked">
           <span class="feature-head"><b>Yearly care</b><em>$200 / y</em></span>
-          <span class="feature-desc">Always on.</span>
           <div class="plain-ex">Domain · Hosting · Backups · Security · SEO reports · Small changes</div>
         </div>
+
 
 
 
@@ -71,7 +71,42 @@
 
       <div class="features bento">
 
-        <div class="feature t21" data-feature="math">
+
+        <div class="feature selected default-on">
+          <span class="feature-head"><b>Pages</b><em>$50 over 5</em></span>
+          <div class="rev-row" onclick="event.stopPropagation()">
+            <button class="rev-btn" id="pagesMinus" type="button">−</button>
+            <input type="number" id="pages" min="1" max="30" value="1" class="pages-input">
+            <button class="rev-btn" id="pagesPlus" type="button">+</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section id="work" class="band">
+      <h2>Work</h2>
+      <div class="work-panels">
+        <article class="card work-card">
+          <h3>GG Agency</h3>
+          <p class="meta">Livestreaming agency · Melbourne</p>
+          <p>A fast, modern site for Australia's largest Bigo agency — gallery,
+          live prices, and a contact form, all editable by the team.</p>
+          <p><a href="https://ggagency.com.au">ggagency.com.au</a></p>
+        </article>
+        <article class="card work-card">
+          <h3>Lumi Dance Studio</h3>
+          <p class="meta">Dance studio · Deer Park</p>
+          <p>A bright, playful class site — full timetable, packages, and
+          tap-to-copy payment details, made phone-first.</p>
+          <p><a href="https://lumidance.frankgqz.workers.dev">lumidance.com.au</a></p>
+        </article>
+
+      </div>
+
+      <div class="features bento">
+
+        <div class="feature t11" data-feature="math">
           <span class="feature-head"><b>Logic</b><em>+$100</em></span>
           <span class="feature-desc">Math, Calculations. Quote estimators.
           Multilingual and currency toggles.</span>
@@ -79,31 +114,44 @@
 
 
 
+
         <div class="feature t11" data-feature="fancy">
           <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
           <span class="feature-desc">Custom art direction.</span>
-          <canvas id="lens" class="lens" onclick="event.stopPropagation()" title="hover me"></canvas>
-          <button class="fx" data-fx="sweep" onclick="event.stopPropagation()">shine</button>
         </div>
+
 
 
 
         <div class="feature t11" data-feature="cms">
           <span class="feature-head"><b>Editing</b><em>+$100</em></span>
-          <span class="feature-desc">A portal allowing editing.</span>
+          <span class="feature-desc">Web portal or spreadsheet.</span>
           <div class="event-demo" onclick="event.stopPropagation()">
             <div class="demo-head">
               <div class="demo-titles">
-                <b id="evName" contenteditable="true">Weekend Event</b>
+                <b id="evName" contenteditable="true">Showcase</b>
                 <span id="evDate" contenteditable="true">Sat 14 Nov</span>
               </div>
               <button class="upload-btn" id="uploadBtn" type="button" title="choose an image">↑</button>
             </div>
-            <p class="ev-text" id="evText" contenteditable="true">Tickets $0</p>
+            <p class="ev-text" id="evText" contenteditable="true">Weekend Event, Tickets $0</p>
             <img id="demoImg" class="demo-img" alt="" hidden>
             <i class="ex-hint">(edit me)</i>
           </div>
         </div>
+
+
+
+
+        <div class="feature t11" data-feature="login">
+          <span class="feature-head"><b>Login</b><em>+$100</em></span>
+          <span class="feature-desc">Things that follow the customer.</span>
+          <div class="plain-ex">Order history · Gated content · Avatar</div>
+          <div class="login-demo" onclick="event.stopPropagation()">
+            <button class="button small" id="loginSim" type="button">Log in</button>
+          </div>
+        </div>
+
 
 
 
@@ -132,6 +180,7 @@
             <div class="wall-list" id="wallList"><p class="note">Loading the wall…</p></div>
           </div>
         </div>
+
 
 
 
@@ -177,47 +226,6 @@
           </div>
         </div>
 
-
-        <div class="feature t21" data-feature="login">
-          <span class="feature-head"><b>Login</b><em>+$100</em></span>
-          <span class="feature-desc">Things that follow the customer.</span>
-          <div class="plain-ex">Order history · Gated content · Avatar</div>
-          <div class="login-demo" onclick="event.stopPropagation()">
-            <button class="button small" id="loginSim" type="button">Log in</button>
-          </div>
-        </div>
-
-
-
-        <div class="feature t21 selected default-on">
-          <span class="feature-head"><b>Pages</b><em>$50 over 5</em></span>
-          <div class="rev-row" onclick="event.stopPropagation()">
-            <button class="rev-btn" id="pagesMinus" type="button">−</button>
-            <input type="number" id="pages" min="1" max="30" value="1" class="pages-input">
-            <button class="rev-btn" id="pagesPlus" type="button">+</button>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-    <section id="work" class="band">
-      <h2>Work</h2>
-      <div class="work-panels">
-        <article class="card work-card">
-          <h3>GG Agency</h3>
-          <p class="meta">Livestreaming agency · Melbourne</p>
-          <p>A fast, modern site for Australia's largest Bigo agency — gallery,
-          live prices, and a contact form, all editable by the team.</p>
-          <p><a href="https://ggagency.com.au">ggagency.com.au</a></p>
-        </article>
-        <article class="card work-card">
-          <h3>Lumi Dance Studio</h3>
-          <p class="meta">Dance studio · Deer Park</p>
-          <p>A bright, playful class site — full timetable, packages, and
-          tap-to-copy payment details, made phone-first.</p>
-          <p><a href="https://lumidance.frankgqz.workers.dev">lumidance.com.au</a></p>
-        </article>
 
       </div>
     </section>
