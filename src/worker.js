@@ -13,6 +13,7 @@ function ensureDb(env) {
     dbReady = (async () => {
       await env.DB.exec("CREATE TABLE IF NOT EXISTS wall (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, avatar TEXT NOT NULL DEFAULT '🙂', body TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')))");
       await env.DB.exec("CREATE TABLE IF NOT EXISTS likes (id INTEGER PRIMARY KEY CHECK (id = 1), n INTEGER NOT NULL DEFAULT 0)");
+      await env.DB.exec("CREATE TABLE IF NOT EXISTS submissions (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, business TEXT NOT NULL, answers TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')))");
       await env.DB.exec("INSERT OR IGNORE INTO likes (id, n) VALUES (1, 0)");
     })();
   }
@@ -55,6 +56,43 @@ export default {
         await env.DB.prepare("UPDATE likes SET n = n + 1 WHERE id = 1").run();
         const likes = (await env.DB.prepare("SELECT n FROM likes WHERE id = 1").first())?.n ?? 0;
         return json({ likes });
+      }
+      if (url.pathname === "/intake" || url.pathname === "/intake/") {
+        return env.ASSETS.fetch(new Request(new URL("/intake.html", url.origin), req));
+      }
+      if (url.pathname === "/api/intake" && req.method === "POST") {
+        await ensureDb(env);
+        const d = await req.json().catch(() => ({}));
+        const website = String(d.website || "");
+        const elapsed = Number(d.elapsed) || 0;
+        if (website || (elapsed && elapsed < 2500)) return json({ ok: true }); // honeypot + time trap
+        const name = String(d.name || "").trim().slice(0, 120);
+        const email = String(d.email || "").trim().slice(0, 200);
+        const business = String(d.business || "").trim().slice(0, 200);
+        if (!name || !email || !business) return json({ error: "name, business and email required" }, 400);
+        const record = { answers: d.answers || {}, quote: String(d.quote || "") };
+        const answers = JSON.stringify(record);
+        await env.DB.prepare("INSERT INTO submissions (name, email, business, answers) VALUES (?, ?, ?, ?)")
+          .bind(name, email, business, answers).run();
+        let emailed = false;
+        if (env.RESEND_API_KEY) {
+          try {
+            const body = name + " (" + email + ") \u2014 " + business + "\n\n" + JSON.stringify(record, null, 2);
+            const r = await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { "content-type": "application/json", authorization: "Bearer " + env.RESEND_API_KEY },
+              body: JSON.stringify({
+                from: "FGG Intake <intake@frankg.com.au>",
+                to: ["frank@frankg.com.au"],
+                reply_to: email,
+                subject: "New intake \u2014 " + business,
+                text: body,
+              }),
+            });
+            emailed = r.ok;
+          } catch {}
+        }
+        return json({ ok: true, emailed });
       }
       return env.ASSETS.fetch(req);
     } catch (err) {

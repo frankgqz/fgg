@@ -1151,3 +1151,7 @@ html.fancy :focus-visible { outline-color: var(--accent); }
 
 /* work subtext stays on one line */
 .work-card .meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* price widget: contact + start a project */
+.pw-actions { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
+.pw-actions .button { flex: 1; text-align: center; }

@@ -47,7 +47,10 @@
   <aside class="price-widget">
     <p class="pw-line">Build <b id="pwTotal">$200</b></p>
     <p class="pw-line care">Care $200/y</p>
-    <a class="button small" href="#contact">Contact</a>
+    <div class="pw-actions">
+      <a class="button small" href="#contact">Contact</a>
+      <a class="button small" id="pwStart" href="/intake">Start</a>
+    </div>
   </aside>
 
   <main>
@@ -306,6 +309,7 @@
       requestAnimationFrame(step);
     }
 
+    const FEATURE_LABELS = { fancy: 'Fancy', math: 'Logic', cms: 'Editing', db: 'Database', shop: 'Payment', login: 'Login' };
     function update() {
       // dependencies: shop or login -> database required; shop recommends editing + login
       const needDb = state.shop || state.login;
@@ -329,6 +333,12 @@
       setTotal(total);
       $('revCount').textContent = state.fancy ? 3 : 2;
       syncLogin();
+      const picked = Object.keys(state).filter((k) => state[k] && FEATURE_LABELS[k]).map((k) => FEATURE_LABELS[k]);
+      picked.push(revSessions + ' revisions');
+      if (p > 1) picked.push(p + ' pages');
+      const q = new URLSearchParams({ f: picked.join(', '), total: String(total) });
+      const startEl = $('pwStart');
+      if (startEl) startEl.href = '/intake?' + q.toString();
 
       document.body.classList.toggle('fancy', state.fancy);
       document.documentElement.classList.toggle('fancy', state.fancy);
@@ -679,6 +689,7 @@
       "book": "đặt",
       "booked": "đã đặt",
       "included": "bao gồm",
+      "Start": "Bắt đầu",
       "Couldn't load the wall just now — refresh to try again.": "Không tải được bảng tin — tải lại trang để thử lại.",
       "calendar · time slots · bookings": "lịch · khung giờ · đặt chỗ",
       "Digital courses": "Khóa học số",

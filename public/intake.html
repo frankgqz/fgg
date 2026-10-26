@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Start a project — FGG</title>
+  <meta name="description" content="Tell me about your business and what the site needs to do. Answer as much as you like — or just what feels right.">
+  <link rel="canonical" href="https://frankg.com.au/intake">
+  <meta property="og:title" content="Start a project — FGG">
+  <meta property="og:description" content="Tell me about your business and what the site needs to do.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://frankg.com.au/intake">
+  <meta property="og:image" content="https://frankg.com.au/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .intake { max-width: 40rem; margin: 0 auto; padding: 2.5rem 1.25rem 6rem; }
+    .intake .back { display: inline-block; margin-bottom: 1.75rem; font-size: 0.92rem; color: var(--ink-soft); text-decoration: none; }
+    .intake h1 { margin-bottom: 0.75rem; }
+    .lede { color: var(--ink-soft); margin-bottom: 2rem; }
+
+    /* quote handoff from the builder */
+    .quote-summary { border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.15rem; margin-bottom: 2rem; background: var(--surface); }
+    .qs-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin: 0 0 0.55rem; }
+    .qs-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+    .qs-chips .qs-chip { font-size: 0.85rem; font-weight: 600; padding: 0.25rem 0.85rem; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); }
+    .qs-total { margin: 0.75rem 0 0; font-size: 0.95rem; color: var(--ink-soft); }
+    .qs-total b { color: var(--ink); }
+
+    /* steps */
+    .steps-dots { display: flex; gap: 0.5rem; list-style: none; margin: 0 0 1.5rem; padding: 0; }
+    .steps-dots li { width: 0.5rem; height: 0.5rem; border-radius: 999px; background: var(--line); transition: background 200ms ease; }
+    .steps-dots li.on { background: var(--accent); }
+    .step { display: none; }
+    .step.on { display: block; animation: stepIn 260ms ease; }
+    @keyframes stepIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .step h2 { margin-bottom: 1.15rem; }
+
+    /* fields */
+    .field { display: block; margin-bottom: 1.35rem; font-size: 0.95rem; font-weight: 600; }
+    .field small { display: block; font-weight: 400; color: var(--ink-soft); font-size: 0.82rem; margin-top: 0.3rem; }
+    .field input, .field textarea {
+      width: 100%; margin-top: 0.45rem; padding: 0.65rem 0.85rem;
+      border: 1.5px solid var(--line); border-radius: 10px; background: var(--surface);
+      font: inherit; font-weight: 400; color: var(--ink);
+    }
+    .field textarea { min-height: 5.5rem; resize: vertical; }
+    .field input:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .chips-field { border: 0; padding: 0; margin: 0 0 1.35rem; }
+    .chips-field legend { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.55rem; padding: 0; }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .chip {
+      font: inherit; font-size: 0.88rem; font-weight: 600; cursor: pointer;
+      padding: 0.42rem 0.95rem; border-radius: 999px;
+      background: var(--surface); border: 1.5px solid var(--line); color: var(--ink-soft);
+      transition: transform 140ms cubic-bezier(.2,1.4,.4,1), background 140ms ease, color 140ms ease, border-color 140ms ease;
+    }
+    .chip:hover { border-color: var(--ink-soft); color: var(--ink); }
+    .chip:active { transform: scale(0.95); }
+    .chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+    .chip.emoji { font-size: 1.15rem; padding: 0.35rem 0.7rem; }
+
+    /* spectrum rows */
+    .spectrum { display: flex; gap: 0.5rem; margin-bottom: 0.7rem; }
+    .spectrum .chip { flex: 1; text-align: center; }
+
+    .go-deeper { border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.15rem; margin: 1.75rem 0; background: var(--surface); }
+    .go-deeper summary { cursor: pointer; font-weight: 600; font-size: 0.95rem; }
+    .go-deeper .inner { margin-top: 1.25rem; }
+
+    .step-nav { display: flex; gap: 0.75rem; align-items: center; margin-top: 1.75rem; }
+    .back-link { background: none; border: 0; font: inherit; font-size: 0.92rem; color: var(--ink-soft); cursor: pointer; padding: 0.5rem 0.25rem; }
+
+    /* honeypot */
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+    .done { text-align: left; border: 1px solid var(--line); border-radius: 16px; padding: 2rem; background: var(--surface); }
+    .done h2 { margin-bottom: 0.5rem; }
+
+    @media (prefers-reduced-motion: reduce) { .step.on { animation: none; } }
+  </style>
+</head>
+<body>
+  <main class="intake">
+    <a class="back" href="/">&larr; FGG</a>
+    <h1>Start a project</h1>
+    <p class="lede">Know what you want? Tell me as much detail as you like — it really helps me. Not sure yet? Just answer what feels right.</p>
+
+    <div class="quote-summary" id="quoteSummary" hidden>
+      <p class="qs-label">From your quote</p>
+      <div class="qs-chips" id="qsChips"></div>
+      <p class="qs-total" id="qsTotal"></p>
+    </div>
+
+    <ol class="steps-dots" id="dots"><li class="on"></li><li></li><li></li></ol>
+
+    <form id="intakeForm" novalidate>
+      <section class="step on" data-step="0">
+        <h2>You &amp; your business</h2>
+        <label class="field">Your name *<input name="name" autocomplete="name" required></label>
+        <label class="field">Business name *<input name="business" autocomplete="organization" required></label>
+        <label class="field">Email *<input type="email" name="email" autocomplete="email" required><small>I'll read this properly and reply here.</small></label>
+        <label class="field">What does the business do? (one line)<input name="about" maxlength="160"></label>
+        <fieldset class="chips-field">
+          <legend>Site language</legend>
+          <div class="chips" data-name="languages" data-multi="1">
+            <button type="button" class="chip">English</button>
+            <button type="button" class="chip">Tiếng Việt</button>
+            <button type="button" class="chip">Both</button>
+          </div>
+        </fieldset>
+        <fieldset class="chips-field">
+          <legend>How did you find me?</legend>
+          <div class="chips" data-name="source">
+            <button type="button" class="chip">Google</button>
+            <button type="button" class="chip">Facebook</button>
+            <button type="button" class="chip">Instagram</button>
+            <button type="button" class="chip">A friend</button>
+            <button type="button" class="chip">Just found you</button>
+          </div>
+        </fieldset>
+        <div class="step-nav">
+          <button type="button" class="button small" data-next>Next</button>
+        </div>
+      </section>
+
+      <section class="step" data-step="1">
+        <h2>The feel</h2>
+        <fieldset class="chips-field">
+          <legend>What should people do on the site?</legend>
+          <div class="chips" data-name="actions" data-multi="1">
+            <button type="button" class="chip">Call you</button>
+            <button type="button" class="chip">Book</button>
+            <button type="button" class="chip">Come in</button>
+            <button type="button" class="chip">Buy online</button>
+            <button type="button" class="chip">Message you</button>
+            <button type="button" class="chip">Read about you</button>
+          </div>
+        </fieldset>
+        <fieldset class="chips-field">
+          <legend>What should it feel like?</legend>
+          <div class="chips" data-name="feel" data-multi="1">
+            <button type="button" class="chip">Friendly</button>
+            <button type="button" class="chip">Professional</button>
+            <button type="button" class="chip">Playful</button>
+            <button type="button" class="chip">Calm</button>
+            <button type="button" class="chip">Bold</button>
+            <button type="button" class="chip">Warm</button>
+            <button type="button" class="chip">Luxe</button>
+            <button type="button" class="chip">Simple</button>
+            <button type="button" class="chip">Energetic</button>
+            <button type="button" class="chip">Trustworthy</button>
+          </div>
+        </fieldset>
+        <fieldset class="chips-field">
+          <legend>Pick emojis that fit your business</legend>
+          <div class="chips" data-name="emojis" data-multi="1">
+            <button type="button" class="chip emoji">🌸</button>
+            <button type="button" class="chip emoji">☕</button>
+            <button type="button" class="chip emoji">🍰</button>
+            <button type="button" class="chip emoji">🛍️</button>
+            <button type="button" class="chip emoji">💇</button>
+            <button type="button" class="chip emoji">🍜</button>
+            <button type="button" class="chip emoji">🧁</button>
+            <button type="button" class="chip emoji">🌿</button>
+            <button type="button" class="chip emoji">⚡</button>
+            <button type="button" class="chip emoji">🎵</button>
+            <button type="button" class="chip emoji">💪</button>
+            <button type="button" class="chip emoji">📸</button>
+            <button type="button" class="chip emoji">🎨</button>
+            <button type="button" class="chip emoji">🏠</button>
+            <button type="button" class="chip emoji">✨</button>
+            <button type="button" class="chip emoji">🚗</button>
+          </div>
+        </fieldset>
+        <label class="field">What should it NOT feel like?<input name="notfeel" maxlength="160"></label>
+        <fieldset class="chips-field">
+          <legend>Have photos &amp; logo?</legend>
+          <div class="chips" data-name="photos">
+            <button type="button" class="chip">Have some</button>
+            <button type="button" class="chip">Not yet</button>
+            <button type="button" class="chip">Have everything</button>
+          </div>
+        </fieldset>
+        <label class="field">Where are they? (links — Drive, Instagram, anywhere)<input name="assets" maxlength="300"></label>
+        <fieldset class="chips-field">
+          <legend>When does this need to be live?</legend>
+          <div class="chips" data-name="liveby">
+            <button type="button" class="chip">This month</button>
+            <button type="button" class="chip">Next month</button>
+            <button type="button" class="chip">Whenever</button>
+            <button type="button" class="chip">There's a date</button>
+          </div>
+        </fieldset>
+        <div class="step-nav">
+          <button type="button" class="back-link" data-back>Back</button>
+          <button type="button" class="button small" data-next>Next</button>
+        </div>
+      </section>
+
+      <section class="step" data-step="2">
+        <h2>Details</h2>
+        <label class="field">3 things you love — website, menu, shop sign, anything<textarea name="love" maxlength="2000"></textarea></label>
+        <label class="field">1 you'd avoid<textarea name="hate" maxlength="1000"></textarea></label>
+        <fieldset class="chips-field">
+          <legend>Pages &amp; structure</legend>
+          <div class="chips" data-name="pages">
+            <button type="button" class="chip">One page</button>
+            <button type="button" class="chip">A few pages</button>
+            <button type="button" class="chip">Menu-style</button>
+            <button type="button" class="chip">Not sure</button>
+          </div>
+        </fieldset>
+        <fieldset class="chips-field">
+          <legend>Layout preference</legend>
+          <div class="chips" data-name="layout">
+            <button type="button" class="chip">Big photos</button>
+            <button type="button" class="chip">Lots of info</button>
+            <button type="button" class="chip">Balanced</button>
+            <button type="button" class="chip">You decide</button>
+          </div>
+        </fieldset>
+
+        <details class="go-deeper">
+          <summary>Go deeper (optional)</summary>
+          <div class="inner">
+            <fieldset class="chips-field">
+              <legend>Light or dark?</legend>
+              <div class="chips" data-name="spectrum_lightdark">
+                <button type="button" class="chip">Light</button>
+                <button type="button" class="chip">In between</button>
+                <button type="button" class="chip">Dark</button>
+              </div>
+            </fieldset>
+            <fieldset class="chips-field">
+              <legend>Vibrant or monochrome?</legend>
+              <div class="chips" data-name="spectrum_vibrantmono">
+                <button type="button" class="chip">Vibrant</button>
+                <button type="button" class="chip">In between</button>
+                <button type="button" class="chip">Monochrome</button>
+              </div>
+            </fieldset>
+            <fieldset class="chips-field">
+              <legend>Warm or cool?</legend>
+              <div class="chips" data-name="spectrum_warmcool">
+                <button type="button" class="chip">Warm</button>
+                <button type="button" class="chip">In between</button>
+                <button type="button" class="chip">Cool</button>
+              </div>
+            </fieldset>
+            <fieldset class="chips-field">
+              <legend>Quiet or loud?</legend>
+              <div class="chips" data-name="spectrum_quietloud">
+                <button type="button" class="chip">Quiet</button>
+                <button type="button" class="chip">In between</button>
+                <button type="button" class="chip">Loud</button>
+              </div>
+            </fieldset>
+            <fieldset class="chips-field">
+              <legend>Modern or classic?</legend>
+              <div class="chips" data-name="spectrum_modernclassic">
+                <button type="button" class="chip">Modern</button>
+                <button type="button" class="chip">In between</button>
+                <button type="button" class="chip">Classic</button>
+              </div>
+            </fieldset>
+            <fieldset class="chips-field">
+              <legend>Plain or detailed?</legend>
+              <div class="chips" data-name="spectrum_plaindetailed">
+                <button type="button" class="chip">Plain</button>
+                <button type="button" class="chip">In between</button>
+                <button type="button" class="chip">Detailed</button>
+              </div>
+            </fieldset>
+            <fieldset class="chips-field">
+              <legend>Flair or professional?</legend>
+              <div class="chips" data-name="spectrum_flairpro">
+                <button type="button" class="chip">Flair</button>
+                <button type="button" class="chip">In between</button>
+                <button type="button" class="chip">Professional</button>
+              </div>
+            </fieldset>
+            <fieldset class="chips-field">
+              <legend>Friendly or authority?</legend>
+              <div class="chips" data-name="spectrum_friendlyauth">
+                <button type="button" class="chip">Friendly</button>
+                <button type="button" class="chip">In between</button>
+                <button type="button" class="chip">Authority</button>
+              </div>
+            </fieldset>
+            <label class="field">What does your business do better than anyone nearby?<input name="better" maxlength="300"></label>
+            <label class="field">What do your customers want?<input name="customers" maxlength="300"></label>
+            <label class="field">Anything in your own words you want included?<textarea name="ownwords" maxlength="2000"></textarea></label>
+            <label class="field">What should people think or feel after visiting?<input name="afterthought" maxlength="300"></label>
+            <label class="field">Got colors already? (sign, uniforms, Instagram, packaging — photo or link)<input name="colors" maxlength="300"></label>
+            <label class="field">Existing website or socials?<input name="socials" maxlength="300"></label>
+          </div>
+        </details>
+
+        <label class="field">Anything else? Any questions for me?<textarea name="anything" maxlength="2000"></textarea></label>
+
+        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <div class="step-nav">
+          <button type="button" class="back-link" data-back>Back</button>
+          <button type="submit" class="button" id="sendBtn">Send it</button>
+        </div>
+      </section>
+    </form>
+
+    <div class="done" id="done" hidden>
+      <h2>Got it — it's in.</h2>
+      <p>Thanks. I'll read it properly and reply to <b id="doneEmail"></b> within a day.</p>
+      <a class="button small" href="/">&larr; Back to FGG</a>
+    </div>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const loadedAt = Date.now();
+
+    // quote handoff from the builder
+    (function () {
+      const q = new URLSearchParams(location.search);
+      const f = (q.get('f') || '').split(',').map((x) => x.trim()).filter(Boolean);
+      if (!f.length) return;
+      $('quoteSummary').hidden = false;
+      $('qsChips').innerHTML = f.map((x) => '<span class="qs-chip">' + x.replace(/[<>&]/g, '') + '</span>').join('');
+      const total = q.get('total');
+      $('qsTotal').innerHTML = total ? 'Build estimate: <b>$' + total.replace(/[^0-9]/g, '') + '</b> · Care $200/y' : '';
+    })();
+
+    // step navigation
+    const steps = [...document.querySelectorAll('.step')];
+    const dots = [...document.querySelectorAll('#dots li')];
+    let cur = 0;
+    function show(i) {
+      cur = Math.max(0, Math.min(steps.length - 1, i));
+      steps.forEach((s, k) => s.classList.toggle('on', k === cur));
+      dots.forEach((d, k) => d.classList.toggle('on', k <= cur));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      save();
+    }
+    function validateStep() {
+      const need = ['name', 'business', 'email'];
+      for (const n of need) {
+        const el = document.querySelector('[name="' + n + '"]');
+        if (!el.value.trim()) {
+          show(0);
+          el.focus();
+          el.style.borderColor = '#c2495e';
+          return false;
+        }
+        el.style.borderColor = '';
+      }
+      return true;
+    }
+    document.querySelectorAll('[data-next]').forEach((b) => b.addEventListener('click', () => { if (validateStep()) show(cur + 1); }));
+    document.querySelectorAll('[data-back]').forEach((b) => b.addEventListener('click', () => show(cur - 1)));
+
+    // chips
+    document.querySelectorAll('.chips').forEach((group) => {
+      const multi = group.dataset.multi === '1';
+      group.addEventListener('click', (e) => {
+        const chip = e.target.closest('.chip');
+        if (!chip) return;
+        if (multi) chip.classList.toggle('on');
+        else {
+          const was = chip.classList.contains('on');
+          group.querySelectorAll('.chip').forEach((c) => c.classList.remove('on'));
+          if (!was) chip.classList.add('on');
+        }
+        save();
+      });
+    });
+
+    // collect + draft save
+    function collect() {
+      const answers = {};
+      document.querySelectorAll('input[name], textarea[name]').forEach((el) => {
+        if (el.name !== 'website') answers[el.name] = el.value.trim();
+      });
+      document.querySelectorAll('.chips').forEach((group) => {
+        const on = [...group.querySelectorAll('.chip.on')].map((c) => c.textContent.trim());
+        if (on.length) answers[group.dataset.name] = on;
+      });
+      return answers;
+    }
+    function save() {
+      try { localStorage.setItem('fgg-intake', JSON.stringify({ step: cur, answers: collect() })); } catch {}
+    }
+    (function restore() {
+      try {
+        const d = JSON.parse(localStorage.getItem('fgg-intake') || 'null');
+        if (!d) return;
+        Object.entries(d.answers || {}).forEach(([k, v]) => {
+          const el = document.querySelector('[name="' + k + '"]');
+          if (el && typeof v === 'string') el.value = v;
+        });
+        document.querySelectorAll('.chips').forEach((group) => {
+          const sel = (d.answers || {})[group.dataset.name];
+          if (!Array.isArray(sel)) return;
+          group.querySelectorAll('.chip').forEach((c) => c.classList.toggle('on', sel.includes(c.textContent.trim())));
+        });
+        if (d.step) show(d.step);
+      } catch {}
+    })();
+    document.querySelectorAll('input[name], textarea[name]').forEach((el) => el.addEventListener('input', save));
+
+    // submit -> D1 + a ping to Frank
+    $('intakeForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validateStep()) return;
+      const btn = $('sendBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      try {
+        const r = await fetch('/api/intake', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            name: document.querySelector('[name="name"]').value.trim(),
+            business: document.querySelector('[name="business"]').value.trim(),
+            email: document.querySelector('[name="email"]').value.trim(),
+            answers: collect(),
+            quote: location.search,
+            elapsed: Date.now() - loadedAt,
+            website: document.querySelector('[name="website"]').value,
+          }),
+        });
+        if (!r.ok) throw new Error('bad status');
+        $('intakeForm').hidden = true;
+        $('dots').hidden = true;
+        $('doneEmail').textContent = document.querySelector('[name="email"]').value.trim();
+        $('done').hidden = false;
+        try { localStorage.removeItem('fgg-intake'); } catch {}
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch {
+        btn.disabled = false;
+        btn.textContent = 'Send it';
+        alert('Something went wrong sending it — please try again, or just email me: frank@frankg.com.au');
+      }
+    });
+  </script>
+</body>
+</html>
