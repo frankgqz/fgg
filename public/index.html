@@ -42,7 +42,7 @@
         <div class="feature t21 locked">
           <span class="feature-head"><b>Standard build</b><em>$200</em></span>
           <span class="feature-desc">Every site starts here.</span>
-          <div class="plain-ex">Email · Form · Media · Dynamic components</div>
+          <div class="plain-ex">Email · Form · Media · Dynamic components · Micro-interactions</div>
           <span class="tag">included</span>
         </div>
 
@@ -126,7 +126,7 @@
 
         <div class="feature t22" data-feature="shop">
           <span class="feature-head"><b>Shop</b><em>+$200</em></span>
-          <span class="feature-desc">Payment, products, photos, tags.</span>
+          <span class="feature-desc">Payment, saved cards, products, photos, tags.</span>
           <div class="shop-kinds" onclick="event.stopPropagation()">
             <button class="car-btn prev" data-dir="-1" aria-label="Previous">‹</button>
             <div class="carousel" id="shopGrid">
@@ -241,6 +241,41 @@
 
     function money(n) { return '$' + n.toLocaleString('en-AU'); }
 
+    // ---- the standard motion layer (100-200ms) ----
+    document.body.classList.add('motion');
+    const haptic = (ms = 6) => { try { navigator.vibrate && navigator.vibrate(ms); } catch { /* unsupported */ } };
+    document.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.rev-btn, .car-btn, .av, .book, .cal-day, .upload-btn, .fx, .feature[data-feature], .button')) haptic(6);
+    }, { passive: true });
+
+    const tiles = [...document.querySelectorAll('.feature')];
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        for (const en of entries) {
+          if (!en.isIntersecting) continue;
+          en.target.style.transitionDelay = (tiles.indexOf(en.target) % 4) * 70 + 'ms';
+          en.target.classList.add('in');
+          io.unobserve(en.target);
+        }
+      }, { threshold: 0.12 });
+      tiles.forEach((t) => io.observe(t));
+    } else {
+      tiles.forEach((t) => t.classList.add('in'));
+    }
+
+    let shownTotal = 200;
+    function setTotal(value) {
+      const from = shownTotal, t0 = performance.now();
+      shownTotal = value;
+      const step = (now) => {
+        const k = Math.min(1, (now - t0) / 320);
+        const e = 1 - Math.pow(1 - k, 3);
+        $('pwTotal').textContent = money(Math.round(from + (value - from) * e));
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
     function update() {
       // dependencies: shop or login -> database required; shop recommends editing + login
       const needDb = state.shop || state.login;
@@ -267,7 +302,7 @@
       total += Math.max(0, p - INCLUDED_PAGES) * PAGE_PRICE;
       total += Math.max(0, revSessions - (state.fancy ? 4 : 3)) * 50;
 
-      $('pwTotal').textContent = money(total);
+      setTotal(total);
       $('revCount').textContent = state.fancy ? 4 : 3;
 
       document.body.classList.toggle('fancy', state.fancy);
@@ -461,16 +496,20 @@
     }
 
     async function loadWall() {
+      $('wallList').innerHTML = '<div class="wall-skel"><div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div></div>';
       try {
         const res = await fetch('/api/wall');
         const data = await res.json();
         $('likeCount').textContent = data.likes;
         $('wallCount').textContent = data.comments.length;
+        $('wallList').classList.remove('fade-in');
         $('wallList').innerHTML = data.comments.length
           ? data.comments.map((c) => `
             <div class="wall-item"><span class="av-big">${escapeHtml(c.avatar)}</span>
             <div><b>${escapeHtml(c.name)}</b><p>${escapeHtml(c.body)}</p></div></div>`).join('')
           : '<p class="note">No comments yet — be the first.</p>';
+        void $('wallList').offsetWidth;
+        $('wallList').classList.add('fade-in');
       } catch {
         $('wallList').innerHTML = '<p class="note">The wall needs its database — run setup-d1.ps1.</p>';
       }
