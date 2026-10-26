@@ -972,3 +972,11 @@ body.fancy .feature.locked {
   }
   body.fancy .feature.auto { box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.9), 0 0 18px rgba(251, 191, 36, 0.4), 0 10px 30px rgba(10, 8, 24, 0.55); }
 }
+
+/* language toggle: fixed top-right */
+.lang-toggle { position: fixed; top: 1rem; right: 1.15rem; z-index: 260; }
+
+/* paragraph text: one size everywhere */
+.lede, .card p, .work-detail-card p, .feature-desc, .ev-text, .wall-item p {
+  font-size: 1rem; line-height: 1.65;
+}

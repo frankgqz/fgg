@@ -18,6 +18,8 @@
 <body>
   <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
 
+  <button class="button small lang-toggle" id="langToggle" type="button">VI</button>
+
   <aside class="price-widget">
     <p class="pw-line">Build <b id="pwTotal">$200</b></p>
     <p class="pw-line care">Care $200 / year</p>
@@ -34,9 +36,6 @@
     <!-- ============ THE QUOTE BUILDER (compact bento) ============ -->
     <section id="quote" class="band">
       <h2>Build your quote</h2>
-      <p class="note">Every tile <b>is</b> its own example — this page is the demo.
-      Tap what you need; the price is calculated as you go.</p>
-
       <div class="top-row">
 
         <div class="feature locked">
@@ -86,7 +85,7 @@
 
         <div class="feature t11" data-feature="cms">
           <span class="feature-head"><b>Editing</b><em>+$100</em></span>
-          <span class="feature-desc">Web portal or spreadsheet.</span>
+          <span class="feature-desc">Web portal or linked spreadsheet.</span>
           <div class="event-demo" onclick="event.stopPropagation()">
             <div class="demo-head">
               <div class="demo-titles">
@@ -138,7 +137,7 @@
 
         <div class="feature t22" data-feature="shop">
           <span class="feature-head"><b>Payment</b><em>+$200</em></span>
-          <span class="feature-desc">Payment, saved cards, products, photos, tags.</span>
+          <span class="feature-desc">Stripe, saved cards, products, photos, tags.</span>
           <div class="shop-kinds" onclick="event.stopPropagation()">
             <button class="car-btn prev" data-dir="-1" aria-label="Previous">‹</button>
             <div class="carousel" id="shopGrid">
@@ -297,7 +296,7 @@
         let tag = el.querySelector('.tag');
         if (mandatory) {
           if (!tag) { tag = document.createElement('span'); tag.className = 'tag'; el.appendChild(tag); }
-          tag.textContent = 'required';
+          tag.textContent = t(state.shop ? 'required for Payment' : 'required for Login');
         } else if (tag) tag.remove();
       }
 
@@ -392,7 +391,7 @@
     $('loginSim').addEventListener('click', () => {
       loggedIn = !loggedIn;
       document.body.classList.toggle('logged-in', loggedIn);
-      $('loginSim').textContent = loggedIn ? 'Log Out' : 'Log In';
+      $('loginSim').textContent = loggedIn ? t('Log Out') : t('Log In');
     });
 
     // ---- shop kind carousel ----
@@ -551,6 +550,101 @@
         loadWall();
       } catch { /* wall offline */ }
     });
+
+    // ---- language toggle (EN / VI) ----
+    const VI = {
+      "Websites, built and cared for.": "Website được dựng nên và chăm chút.",
+      "I'm Frank Gao, a web developer in Melbourne. I build websites and apps for businesses.": "Tôi là Frank Gao, lập trình viên web tại Melbourne. Tôi làm website và ứng dụng cho doanh nghiệp.",
+      "Try it": "Dùng thử",
+      "Build your quote": "Tạo báo giá",
+      "Standard": "Tiêu chuẩn",
+      "Custom design · Draft + revision process · Domain · Emails": "Thiết kế riêng · Quy trình nháp + hiệu chỉnh · Tên miền · Email",
+      "Yearly care": "Chăm sóc hằng năm",
+      "Domain · Hosting · Backups · Security · SEO reports · Yearly revision": "Tên miền · Hosting · Sao lưu · Bảo mật · Báo cáo SEO · Hiệu chỉnh hằng năm",
+      "Revision": "Hiệu chỉnh",
+      "sessions included, draft edit design process. ~60-90 mins a session.": "buổi bao gồm, quy trình nháp – sửa – thiết kế. ~60–90 phút mỗi buổi.",
+      "sessions": "buổi",
+      "Pages": "Trang",
+      "$50 over 5": "$50 vượt 5 trang",
+      "$200 / y": "$200 / năm",
+      "Logic": "Tính toán",
+      "Math, Calculations. Quote estimators. Multilingual toggles.": "Toán, Tính toán. Ước tính báo giá. Chuyển đổi đa ngôn ngữ.",
+      "Fancy design": "Thiết kế cao cấp",
+      "Custom design direction, 1 more revision included.": "Định hướng thiết kế riêng, kèm thêm 1 buổi hiệu chỉnh.",
+      "Editing": "Chỉnh sửa",
+      "Web portal or linked spreadsheet.": "Cổng web hoặc bảng tính liên kết.",
+      "Showcase": "Sự kiện",
+      "Sat 14 Nov": "Th 7, 14/11",
+      "Weekend Event, Tickets $0": "Sự kiện cuối tuần. Vé $0",
+      "(edit me)": "(chỉnh sửa tôi)",
+      "Login": "Đăng nhập",
+      "Things that follow the customer.": "Những thứ đi theo khách hàng.",
+      "Order history · Gated content · Avatar": "Lịch sử đơn hàng · Nội dung riêng · Ảnh đại diện",
+      "Log In": "Đăng nhập",
+      "Log Out": "Đăng xuất",
+      "Payment": "Thanh toán",
+      "Stripe, saved cards, products, photos, tags.": "Stripe, thẻ đã lưu, sản phẩm, ảnh, thẻ phân loại.",
+      "Physical items": "Hàng hóa",
+      "pastry": "bánh ngọt",
+      "coffee": "cà phê",
+      "beans": "hạt cà phê",
+      "tags · photos · stock": "thẻ · ảnh · tồn kho",
+      "Services": "Dịch vụ",
+      "Consult · 60 min": "Tư vấn · 60 phút",
+      "Class pass": "Vé lớp học",
+      "book": "đặt",
+      "calendar · time slots · bookings": "lịch · khung giờ · đặt chỗ",
+      "Digital courses": "Khóa học số",
+      "Lesson 1": "Bài 1",
+      "Lesson 2": "Bài 2",
+      "purchased": "đã mua",
+      "logins · progress · gated content": "đăng nhập · tiến độ · nội dung riêng",
+      "Database": "Cơ sở dữ liệu",
+      "Persistent information. Listings · Search · Records · Comments & likes · Settings.": "Dữ liệu lưu trữ. Danh sách · Tìm kiếm · Hồ sơ · Bình luận & lượt thích · Cài đặt.",
+      "🌟 signed in": "🌟 đã đăng nhập",
+      "Send": "Gửi",
+      "comments": "bình luận",
+      "Loading the wall…": "Đang tải bảng…",
+      "No comments yet — be the first.": "Chưa có bình luận — hãy là người đầu tiên.",
+      "Work": "Dự án",
+      "Livestreaming agency · Melbourne": "Agency livestream · Melbourne",
+      "A fast, modern site for Australia's largest Bigo agency — gallery, live prices, and a contact form, all editable by the team.": "Website nhanh, hiện đại cho agency Bigo lớn nhất Úc — thư viện ảnh, bảng giá trực tiếp, form liên hệ — đội ngũ tự chỉnh sửa được tất cả.",
+      "Dance studio · Deer Park": "Studio nhảy · Deer Park",
+      "A bright, playful class site — full timetable, packages, and tap-to-copy payment details, made phone-first.": "Website lớp học tươi sáng, vui nhộn — thời khóa biểu đầy đủ, gói học, thông tin thanh toán chạm để sao chép — thiết kế cho điện thoại trước.",
+      "Contact": "Liên hệ",
+      "Contact me to discuss your business, and what you want in the site. We can talk about what's possible, the process, timelines, and what works for your situation.": "Liên hệ tôi để trao đổi về doanh nghiệp của bạn và điều bạn muốn có trên website. Chúng ta có thể bàn về điều khả thi, quy trình, thời gian, và điều phù hợp với hoàn cảnh của bạn.",
+      "Build": "Xây dựng",
+      "Care $200 / year": "Chăm sóc $200 / năm",
+      "Get a quote": "Nhận báo giá",
+      "close": "đóng",
+      "required for Payment": "cần cho Thanh toán",
+      "required for Login": "cần cho Đăng nhập",
+      "Your name": "Tên của bạn",
+      "express yourself": "bày tỏ đi"
+};
+    const t = (en) => (lang === 'vi' && VI[en]) ? VI[en] : en;
+    let lang = 'en';
+    const savedText = new Map();
+    function setLang(next) {
+      lang = next;
+      document.documentElement.lang = next;
+      $('langToggle').textContent = next === 'vi' ? 'EN' : 'VI';
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      for (const n of nodes) {
+        if (n.parentElement.closest('script, style')) continue;
+        if (!savedText.has(n)) savedText.set(n, n.nodeValue);
+        const key = savedText.get(n).replace(/\s+/g, ' ').trim();
+        n.nodeValue = (next === 'vi' && VI[key]) ? VI[key] : savedText.get(n);
+      }
+      for (const el of document.querySelectorAll('[placeholder]')) {
+        if (!el.dataset.enPh) el.dataset.enPh = el.placeholder;
+        el.placeholder = (next === 'vi' && VI[el.dataset.enPh]) ? VI[el.dataset.enPh] : el.dataset.enPh;
+      }
+      update();
+    }
+    $('langToggle').addEventListener('click', () => setLang(lang === 'vi' ? 'en' : 'vi'));
 
     // ---- work panels: shared-element open (View Transitions + FLIP fallback) ----
     const workDetail = $('workDetail');
