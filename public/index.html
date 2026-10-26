@@ -48,7 +48,7 @@
 
         <div class="feature locked">
           <span class="feature-head"><b>Yearly care</b><em>$200 / y</em></span>
-          <div class="plain-ex">Domain · Hosting · Backups · Security · SEO reports · Yearly revision</div>
+          <div class="plain-ex">Domain · Hosting · Backups · Security · SEO reports · Code access · Yearly revision</div>
         </div>
 
         <div class="feature selected default-on">
@@ -194,22 +194,17 @@
         <article class="card work-card">
           <h3>GG Agency</h3>
           <p class="meta">Livestreaming agency · Melbourne</p>
-          <p>A fast, modern site for Australia's largest Bigo agency — gallery,
-          live prices, and a contact form, all editable by the team.</p>
           <p><a href="https://ggagency.com.au">ggagency.com.au</a></p>
         </article>
 
         <article class="card work-card">
-          <h3>Personal hobby projects</h3>
+          <h3>Hobby projects</h3>
           <p class="meta">Apps · experiments · games</p>
-          <p>Tools and experiments built for the joy of it — live at gqz.app.</p>
           <p><a href="https://gqz.app/">gqz.app</a></p>
         </article>
         <article class="card work-card">
           <h3>Lumi Dance Studio</h3>
           <p class="meta">Dance studio · Deer Park</p>
-          <p>A bright, playful class site — full timetable, packages, and
-          tap-to-copy payment details, made phone-first.</p>
           <p><a href="https://lumidance.frankgqz.workers.dev">lumidance.com.au</a></p>
         </article>
 
@@ -271,7 +266,7 @@
       const io = new IntersectionObserver((entries) => {
         for (const en of entries) {
           if (!en.isIntersecting) continue;
-          en.target.style.transitionDelay = (tiles.indexOf(en.target) % 4) * 70 + 'ms';
+          en.target.style.transitionDelay = (tiles.indexOf(en.target) % 4) * (document.body.classList.contains('fancy') ? 115 : 70) + 'ms';
           en.target.classList.add('in');
           io.unobserve(en.target);
         }
@@ -610,7 +605,7 @@
       "Standard": "Tiêu chuẩn",
       "Custom design · Draft + revision process · Domain · Emails": "Thiết kế riêng · Quy trình nháp + hiệu chỉnh · Tên miền · Email",
       "Yearly care": "Chăm sóc hằng năm",
-      "Domain · Hosting · Backups · Security · SEO reports · Yearly revision": "Tên miền · Hosting · Sao lưu · Bảo mật · Báo cáo SEO · Hiệu chỉnh hằng năm",
+      "Domain · Hosting · Backups · Security · SEO reports · Code access · Yearly revision": "Tên miền · Hosting · Sao lưu · Bảo mật · Báo cáo SEO · Mã nguồn · Hiệu chỉnh hằng năm",
       "Revision": "Hiệu chỉnh",
       "sessions included, draft edit design process. ~60-90 mins a session.": "buổi bao gồm, quy trình nháp – sửa – thiết kế. ~60–90 phút mỗi buổi.",
       "sessions": "buổi",
@@ -666,7 +661,7 @@
       "Build": "Xây dựng",
       "Care $200 / year": "Chăm sóc $200 / năm",
       "Get a quote": "Nhận báo giá",
-      "Personal hobby projects": "Dự án cá nhân",
+      "Hobby projects": "Dự án sở thích",
       "Apps · experiments · games": "Ứng dụng · thử nghiệm · trò chơi",
       "Tools and experiments built for the joy of it — live at gqz.app.": "Công cụ và thử nghiệm được làm cho vui — xem tại gqz.app.",
       "Tap a tag to see products.": "Chạm một thẻ để xem sản phẩm.",
@@ -781,7 +776,8 @@
       lastCard = card;
       $('wdTitle').textContent = card.querySelector('h3').textContent;
       $('wdMeta').textContent = card.querySelector('.meta').textContent;
-      $('wdBody').textContent = card.querySelector('p:not(.meta)').textContent;
+      const bodyEl = [...card.querySelectorAll('p')].find((x) => !x.classList.contains('meta') && !x.querySelector('a'));
+      $('wdBody').textContent = bodyEl ? bodyEl.textContent : '';
       const link = card.querySelector('a');
       $('wdLink').href = link.href;
       $('wdLink').textContent = link.textContent;

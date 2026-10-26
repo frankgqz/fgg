@@ -1050,3 +1050,16 @@ html.fancy #evDate { color: #6fdccf; }
 .car-btn { min-width: 2.15rem; padding: 0.42rem 0.85rem; }
 .book { padding: 0.32rem 1rem; font-size: 0.88rem; }
 .lang-toggle button { padding: 0.38rem 0.85rem; font-size: 0.8rem; }
+
+/* fancy: spring-tuned presses */
+body.fancy .button, body.fancy .button.small, body.fancy .button.yellow,
+body.fancy .rev-btn, body.fancy .car-btn, body.fancy .book,
+body.fancy .upload-btn, body.fancy .av, body.fancy .cal-day {
+  transition: transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+body.fancy .button:active, body.fancy .button.small:active, body.fancy .button.yellow:active,
+body.fancy .rev-btn:active, body.fancy .book:active,
+body.fancy .upload-btn:active, body.fancy .av:active, body.fancy .cal-day:active {
+  transform: scale(0.93); transition-duration: 80ms;
+}
+body.fancy .car-btn:active { transform: translateY(-50%) scale(0.93); transition-duration: 80ms; }
