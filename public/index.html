@@ -46,27 +46,24 @@
 
       <div class="features bento">
 
-        <label class="feature t11">
-          <input type="checkbox" id="fancy">
+        <label class="feature t11" data-feature="fancy">
           <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
           <span class="feature-desc">Custom art direction.</span>
           <canvas id="lens" class="lens" onclick="event.stopPropagation()" title="hover me"></canvas>
           <button class="fx" data-fx="liquid" onclick="event.stopPropagation()">liquid</button>
         </label>
 
-        <label class="feature t11">
-          <input type="checkbox" id="cms">
-          <span class="feature-head"><b>Editing for you</b><em>+$100</em></span>
+        <label class="feature t11" data-feature="cms">
+          <span class="feature-head"><b>Editing</b><em>+$100</em></span>
           <div class="event-demo" onclick="event.stopPropagation()">
             <b id="evName" contenteditable="true">Spring Showcase</b>
             <span id="evDate" contenteditable="true">Sat 14 Nov</span>
             <span id="evPrice" contenteditable="true">$15</span>
-            <i class="ex-hint">all three editable — and they stay</i>
+            <i class="ex-hint">(edit me!)</i>
           </div>
         </label>
 
-        <label class="feature t11">
-          <input type="checkbox" id="login">
+        <label class="feature t11" data-feature="login">
           <span class="feature-head"><b>Login</b><em>+$100</em></span>
           <span class="feature-desc">Things that follow the customer.</span>
           <div class="plain-ex">Order history · Gated content · Avatar</div>
@@ -78,8 +75,7 @@
           <div class="plain-ex">About · Services · Products</div>
         </label>
 
-        <label class="feature t22">
-          <input type="checkbox" id="db">
+        <label class="feature t22" data-feature="db">
           <span class="feature-head"><b>Database</b><em>+$100</em></span>
           <span class="feature-desc">Persistent information. Listings · Search ·
           Records · Comments & likes · Settings.</span>
@@ -103,21 +99,13 @@
           </div>
         </label>
 
-        <label class="feature t21">
-          <input type="checkbox" id="math">
+        <label class="feature t21" data-feature="math">
           <span class="feature-head"><b>Logic</b><em>+$100</em></span>
           <span class="feature-desc">Math, Calculations. Quote estimators.
           Multilingual and currency toggles.</span>
-          <div class="mini-bento" onclick="event.stopPropagation()">
-            <div class="mb">2 × 3</div>
-            <div class="mb">USD → AUD</div>
-            <div class="mb">EN / VI</div>
-            <div class="mb">this quote ↑ is the demo</div>
-          </div>
         </label>
 
-        <label class="feature t21">
-          <input type="checkbox" id="shop">
+        <label class="feature t21" data-feature="shop">
           <span class="feature-head"><b>Shop</b><em>+$200</em></span>
           <span class="feature-desc">Payment, products, photos, tags.</span>
           <div class="shop-kinds" onclick="event.stopPropagation()">
@@ -196,21 +184,23 @@
     const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 200, login: 100 };
     const BASE = 200, INCLUDED_PAGES = 5, PAGE_PRICE = 50;
 
-    const boxes = ['fancy', 'math', 'db', 'cms', 'shop', 'login'].map($);
+    const state = { fancy: false, math: false, db: false, cms: false, shop: false, login: false };
     const pages = $('pages');
 
     function money(n) { return '$' + n.toLocaleString('en-AU'); }
 
     function update() {
-      // dependencies: shop -> db required; login -> db required; shop recommends editing + login
-      const shop = $('shop'), db = $('db'), login = $('login');
-      const needDb = shop.checked || login.checked;
-      if (needDb && !db.checked) db.checked = true;
-      db.disabled = needDb;
-      for (const id of ['db', 'cms', 'login']) {
-        const el = $(id).closest('.feature');
+      // dependencies: shop or login -> database required; shop recommends editing + login
+      const needDb = state.shop || state.login;
+      if (needDb) state.db = true;
+
+      const TAGS = { db: 'required', cms: 'recommended', login: 'recommended' };
+      for (const id of Object.keys(state)) {
+        const el = document.querySelector('[data-feature="' + id + '"]');
+        if (!el) continue;
+        el.classList.toggle('selected', state[id]);
         const mandatory = id === 'db' && needDb;
-        const recommended = (id === 'cms' || id === 'login') && shop.checked;
+        const recommended = (id === 'cms' || id === 'login') && state.shop;
         el.classList.toggle('mandatory', mandatory);
         el.classList.toggle('recommended', recommended);
         let tag = el.querySelector('.tag');
@@ -221,7 +211,7 @@
       }
 
       let total = BASE;
-      for (const b of boxes) if (b.checked) total += PRICES[b.id];
+      for (const id of Object.keys(state)) if (state[id]) total += PRICES[id];
       const p = Math.max(1, parseInt(pages.value || '1', 10));
       pages.value = p;
       total += Math.max(0, p - INCLUDED_PAGES) * PAGE_PRICE;
@@ -229,19 +219,21 @@
       $('buildTotal').textContent = money(total);
       $('quotePill').innerHTML = 'Build <b>' + money(total) + '</b> · Care $200/y';
 
-      document.body.classList.toggle('fancy', $('fancy').checked);
+      document.body.classList.toggle('fancy', state.fancy);
     }
 
-    for (const b of boxes) b.addEventListener('change', update);
+    // tiles toggle themselves (no checkboxes); demo areas never toggle
+    document.querySelectorAll('.feature[data-feature]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        if (e.target.closest('.no-toggle')) return;
+        const id = el.dataset.feature;
+        if (id === 'db' && (state.shop || state.login)) return; // required tiles stay on
+        state[id] = !state[id];
+        if ((id === 'shop' || id === 'login') && !state.shop && !state.login) state.db = false;
+        update();
+      });
+    });
     pages.addEventListener('input', update);
-    $('shop').addEventListener('change', () => {
-      if (!$('shop').checked && !$('login').checked) $('db').checked = false;
-      update();
-    });
-    $('login').addEventListener('change', () => {
-      if (!$('login').checked && !$('shop').checked) $('db').checked = false;
-      update();
-    });
 
     // ---- liquid effect (one button) ----
     document.querySelectorAll('.fx').forEach((b) => b.addEventListener('click', () => {
@@ -249,16 +241,13 @@
       setTimeout(() => document.body.classList.remove('fx-liquid'), 2600);
     }));
 
-    // ---- editing demo: 3 editable parts that STAY ----
-    // (contenteditable does the work; real editing = no snap-back)
-
     // ---- shop kind carousel ----
     document.querySelectorAll('.car-btn').forEach((b) => b.addEventListener('click', () => {
       const el = $('shopGrid');
       el.scrollBy({ left: Number(b.dataset.dir) * el.clientWidth * 0.85, behavior: 'smooth' });
     }));
 
-    // ---- fluid glass lens (WebGL, hover-only — like amanda.fassberg.se) ----
+    // ---- fluid glass lens (WebGL, hover-only) ----
     const lens = $('lens');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (lens && !reduced && lens.getContext('webgl')) {
@@ -290,7 +279,8 @@
         '  float shine = 0.22 * lens;',
         '  gl_FragColor = vec4(rC + shine, gC + shine, bC + shine, 1.0);',
         '}'
-      ].join('\n'));
+      ].join('
+'));
       gl.compileShader(fs);
       const prog = gl.createProgram();
       gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
