@@ -57,7 +57,7 @@
         </label>
 
         <label class="feature t21">
-          <span class="feature-head"><b>Revisions</b><em>$50 / session over 3</em></span>
+          <span class="feature-head"><b>Revisions</b><em>$50 / session</em></span>
           <span class="feature-desc">A time for us to add, remove, edit — talk about
           site direction. <b id="revCount">3</b> sessions included.</span>
           <div class="rev-row" onclick="event.stopPropagation()">
@@ -78,14 +78,15 @@
           <span class="feature-head"><b>Editing</b><em>+$100</em></span>
           <span class="feature-desc">A portal allowing editing.</span>
           <div class="event-demo" onclick="event.stopPropagation()">
-            <b id="evName" contenteditable="true">Showcase</b>
-            <span id="evDate" contenteditable="true">Sat 14 Nov</span>
-            <p class="ev-text" id="evText" contenteditable="true">I'm thinking of an event this saturday, and the tickets are currently $0</p>
-            <div class="upload-row">
+            <div class="demo-head">
+              <div class="demo-titles">
+                <b id="evName" contenteditable="true">Showcase</b>
+                <span id="evDate" contenteditable="true">Sat 14 Nov</span>
+              </div>
               <button class="upload-btn" id="uploadBtn" type="button" title="choose an image">↑</button>
-              <input type="file" id="demoImgInput" accept="image/*" hidden>
-              <img id="demoImg" class="demo-img" alt="" hidden>
             </div>
+            <p class="ev-text" id="evText" contenteditable="true">I'm thinking of an event this saturday, and the tickets are currently $0</p>
+            <img id="demoImg" class="demo-img" alt="" hidden>
             <i class="ex-hint">(edit me)</i>
           </div>
         </label>
@@ -101,8 +102,6 @@
                 <button type="button" class="av" data-av="🌟">🌟</button>
                 <button type="button" class="av" data-av="💃">💃</button>
                 <button type="button" class="av" data-av="🚀">🚀</button>
-                <button type="button" class="av more-av" data-av="😍">😍</button>
-                <button type="button" class="av more-av" data-av="🎉">🎉</button>
                 <button type="button" class="av more-av" data-av="🔥">🔥</button>
               </div>
               <p class="login-chip">🌟 signed in</p>
@@ -152,7 +151,7 @@
               <div class="shop-slide course-theme">
                 <h4>Digital courses</h4>
                 <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 1</b><i class="bar"><i class="fill f1"></i></i></div><i class="bought">purchased</i></div>
-                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 2</b><i class="bar"><i class="fill f2"></i></i></div><i class="bought">purchased</i></div>
+                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 2</b><i class="bar"><i class="fill f2"></i></i></div></div>
                 <span class="shop-note">logins · progress · gated content</span>
               </div>
             </div>
@@ -172,7 +171,6 @@
           <div class="plain-ex">Order history · Gated content · Avatar</div>
           <div class="login-demo" onclick="event.stopPropagation()">
             <button class="button small" id="loginSim" type="button">Log in</button>
-            <i class="ex-hint" id="loginGreet"></i>
           </div>
         </label>
 
@@ -180,7 +178,7 @@
           <span class="feature-head"><b>Pages</b><em>$50 over 5</em></span>
           <div class="rev-row" onclick="event.stopPropagation()">
             <button class="rev-btn" id="pagesMinus" type="button">−</button>
-            <input type="number" id="pages" min="1" max="30" value="5" class="pages-input">
+            <input type="number" id="pages" min="1" max="30" value="1" class="pages-input>
             <button class="rev-btn" id="pagesPlus" type="button">+</button>
           </div>
         </label>
@@ -211,6 +209,8 @@
   <footer>
     <p>FGG Pty Ltd · Melbourne</p>
   </footer>
+
+  <input type="file" id="demoImgInput" accept="image/*" hidden>
 
   <script>
   (() => {
@@ -324,7 +324,6 @@
       loggedIn = !loggedIn;
       document.body.classList.toggle('logged-in', loggedIn);
       $('loginSim').textContent = loggedIn ? 'Log out' : 'Log in';
-      $('loginGreet').textContent = loggedIn ? 'welcome back 🌟' : '';
     });
 
     // ---- shop kind carousel ----
@@ -406,6 +405,12 @@
         if (!raf) raf = requestAnimationFrame(frame);
       });
       lens.addEventListener('pointerleave', () => {
+        target = 0; if (!raf) raf = requestAnimationFrame(frame);
+      });
+      lens.addEventListener('pointerup', () => {
+        target = 0; if (!raf) raf = requestAnimationFrame(frame);
+      });
+      lens.addEventListener('pointercancel', () => {
         target = 0; if (!raf) raf = requestAnimationFrame(frame);
       });
       resize();
