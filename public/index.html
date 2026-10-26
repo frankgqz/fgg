@@ -148,8 +148,8 @@
                 <div class="slide-head"><h4>Physical items</h4><span class="cart-ico">🛒</span></div>
                 <div class="tag-row">
                   <span class="tag-chip on" data-tag="pastry">pastry</span>
-                  <span class="tag-chip on" data-tag="coffee">coffee</span>
-                  <span class="tag-chip on" data-tag="beans">beans</span>
+                  <span class="tag-chip" data-tag="coffee">coffee</span>
+                  <span class="tag-chip" data-tag="beans">beans</span>
                 </div>
                 <div class="prod-row" id="prodRow">
                   <div class="prod-card"><i class="prod-thumb a"></i><span class="wish">♡</span><b>Espresso</b><span>$4.50</span></div>
@@ -227,6 +227,10 @@
   <footer>
     <p>FGG Pty Ltd · Melbourne</p>
   </footer>
+
+  <div class="piano-panel" id="pianoPanel" hidden>
+    <canvas id="piano3d"></canvas>
+  </div>
 
   <div class="work-detail" id="workDetail" hidden>
     <div class="work-detail-card">
@@ -321,6 +325,11 @@
 
       document.body.classList.toggle('fancy', state.fancy);
       document.documentElement.classList.toggle('fancy', state.fancy);
+      const pianoPanel = $('pianoPanel');
+      if (pianoPanel) {
+        pianoPanel.hidden = !state.fancy;
+        if (state.fancy) startPiano();
+      }
     }
 
     // tiles toggle themselves (no checkboxes); demo areas never toggle
@@ -423,19 +432,27 @@
     // ---- product filters: tag chips toggle their cards ----
     const PRODUCTS = {
       pastry: [['Croissant', '$4.00', 'b'], ['Cinnamon scroll', '$5.50', 'a']],
-      coffee: [['Espresso', '$4.50', 'a'], ['Flat white', '$5.50', 'b']],
-      beans: [['House blend 250g', '$18', 'a'], ['Single origin 250g', '$22', 'b']],
+      coffee: [['House blend 250g', '$18', 'a'], ['Espresso', '$4.50', 'b']],
+      beans: [['House blend 250g', '$18', 'a']],
     };
     function renderProducts() {
       const on = [...document.querySelectorAll('.tag-chip.on')].map((c) => c.dataset.tag);
-      const items = on.flatMap((tag) => PRODUCTS[tag] || []);
+      const seen = new Set();
+      const items = [];
+      for (const item of on.flatMap((tag) => PRODUCTS[tag] || [])) {
+        if (seen.has(item[0])) continue;
+        seen.add(item[0]);
+        items.push(item);
+      }
       $('prodRow').innerHTML = items.length
-        ? items.map(([name, price, thumb]) =>
+        ? items.slice(0, 2).map(([name, price, thumb]) =>
             '<div class="prod-card"><i class="prod-thumb ' + thumb + '"></i><span class="wish">♡</span><b>' + name + '</b><span>' + price + '</span></div>').join('')
         : '<p class="note">Tap a tag to see products.</p>';
     }
     document.querySelectorAll('.tag-chip').forEach((chip) => chip.addEventListener('click', () => {
-      chip.classList.toggle('on');
+      const wasOn = chip.classList.contains('on');
+      for (const c of chip.parentElement.children) c.classList.remove('on');
+      if (!wasOn) chip.classList.add('on');
       renderProducts();
     }));
     renderProducts();
@@ -683,6 +700,66 @@
       const b = e.target.closest('[data-lang]');
       if (b) setLang(b.dataset.lang);
     });
+
+    // ---- fancy: a little three.js piano panel (shrine vibes) ----
+    let pianoStarted = false;
+    async function startPiano() {
+      if (pianoStarted) return; pianoStarted = true;
+      const THREE = await import('https://unpkg.com/three@0.160.0/build/three.module.js');
+      const canvas = $('piano3d');
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(38, 1.5, 0.1, 100);
+      camera.position.set(0, 2.5, 3.3);
+      camera.lookAt(0, 0.35, 0);
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x223344, 1.0));
+      const keyLight = new THREE.DirectionalLight(0xffffff, 1.4);
+      keyLight.position.set(2.5, 4, 3); scene.add(keyLight);
+      const rim = new THREE.DirectionalLight(0xb9a3ff, 1.0);
+      rim.position.set(-3, 1.5, -2.5); scene.add(rim);
+
+      const piano = new THREE.Group();
+      piano.add(new THREE.Mesh(new THREE.BoxGeometry(3, 0.42, 1.15),
+        new THREE.MeshStandardMaterial({ color: 0x17141f, metalness: 0.35, roughness: 0.45 })));
+      const fall = new THREE.Mesh(new THREE.BoxGeometry(3, 0.55, 0.16),
+        new THREE.MeshStandardMaterial({ color: 0x241d33, metalness: 0.45, roughness: 0.38 }));
+      fall.position.set(0, 0.34, -0.52);
+      piano.add(fall);
+      const whiteKey = new THREE.MeshStandardMaterial({ color: 0xf4f1ea, metalness: 0.05, roughness: 0.35 });
+      const blackKey = new THREE.MeshStandardMaterial({ color: 0x14121a, metalness: 0.55, roughness: 0.32 });
+      const n = 14, w = 3 / n;
+      for (let i = 0; i < n; i++) {
+        const k = new THREE.Mesh(new THREE.BoxGeometry(w * 0.92, 0.12, 0.62), whiteKey);
+        k.position.set(-1.5 + (i + 0.5) * w, 0.27, 0.18);
+        piano.add(k);
+      }
+      const gap = [0, 0, 1, 0, 0, 0, 1]; // E and B have no black key after them
+      for (let i = 0; i < n - 1; i++) {
+        if (gap[i % 7]) continue;
+        const k = new THREE.Mesh(new THREE.BoxGeometry(w * 0.55, 0.15, 0.4), blackKey);
+        k.position.set(-1.5 + (i + 1) * w, 0.385, -0.02);
+        piano.add(k);
+      }
+      scene.add(piano);
+
+      const fit = () => {
+        const r = canvas.getBoundingClientRect();
+        renderer.setSize(Math.max(2, r.width), Math.max(2, r.height), false);
+        renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+        camera.aspect = r.width / Math.max(1, r.height);
+        camera.updateProjectionMatrix();
+      };
+      fit();
+      addEventListener('resize', fit);
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const loop = (t) => {
+        piano.rotation.y = Math.sin(t * 0.00035) * 0.38;
+        piano.position.y = Math.sin(t * 0.0006) * 0.05;
+        renderer.render(scene, camera);
+        if (!reduce) requestAnimationFrame(loop);
+      };
+      loop(0);
+    }
 
     // ---- work panels: shared-element open (View Transitions + FLIP fallback) ----
     const workDetail = $('workDetail');

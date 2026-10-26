@@ -1006,3 +1006,18 @@ html.fancy #evDate { color: #6fdccf; }
 /* paragraph size: one value (0.95rem) */
 .plain-ex { font-size: 0.95rem; }
 .ev-text { font-size: 0.95rem; }
+
+/* piano panel (fancy only) */
+.piano-panel {
+  position: fixed; left: 1.15rem; bottom: 1.15rem; z-index: 240;
+  width: 21rem; height: 14rem;
+  background: rgba(18, 16, 28, 0.92); border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px; overflow: hidden;
+  box-shadow: 0 10px 30px rgba(10, 8, 24, 0.55);
+}
+.piano-panel[hidden] { display: none; }
+.piano-panel canvas { width: 100%; height: 100%; display: block; }
+@media (max-width: 700px) { .piano-panel { width: 15rem; height: 10.5rem; } }
+
+/* steppers: slimmer */
+.rev-btn { min-width: 2.15rem; padding: 0.42rem 0.85rem; }
