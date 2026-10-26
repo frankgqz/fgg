@@ -1114,3 +1114,8 @@ html.fancy .price-widget .button {
     padding: 0.42rem 0.85rem; font-size: 0.84rem; white-space: nowrap; flex-shrink: 0;
   }
 }
+
+/* uploaded image: panel grows to show it (scroll fallback if it still overflows) */
+.event-demo { overflow-y: auto; }
+.event-demo:has(.demo-img:not([hidden])) { height: auto; }
+.demo-img { max-height: 6.5rem; }
