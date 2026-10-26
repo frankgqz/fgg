@@ -368,9 +368,20 @@
       if (!file) return;
       const reader = new FileReader();
       reader.onload = () => {
-        demoImg.src = reader.result;
-        demoImg.hidden = false;
-        try { localStorage.setItem('fggDemoImg', reader.result); } catch { /* quota */ }
+        const img = new Image();
+        img.onload = () => {
+          // shrink first: full-size dataURLs blow the localStorage quota
+          const scale = Math.min(1, 720 / img.width);
+          const cv = document.createElement('canvas');
+          cv.width = Math.round(img.width * scale);
+          cv.height = Math.round(img.height * scale);
+          cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+          const data = cv.toDataURL('image/jpeg', 0.82);
+          demoImg.src = data;
+          demoImg.hidden = false;
+          try { localStorage.setItem('fggDemoImg', data); } catch { /* quota */ }
+        };
+        img.src = reader.result;
       };
       reader.readAsDataURL(file);
     });
