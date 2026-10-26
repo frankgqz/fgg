@@ -595,9 +595,7 @@ body.fancy .bar {
 .wall-item p { margin: 0.15rem 0 0; color: var(--ink-soft); }
 @media (max-width: 640px) { .wall-form { grid-template-columns: 1fr; } }
 
-/* ============ one-shot fancy effects (liquid; the glass is the lens) ============ */
 
- to { background-position: 100% 50%; } }
 @media (prefers-reduced-motion: reduce) {
   
 }
