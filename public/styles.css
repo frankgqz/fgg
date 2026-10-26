@@ -780,7 +780,7 @@ h4, .feature-head b, .lede { font-size: var(--fs-h6); }
 h3 { font-size: var(--fs-h5); }
 
 /* ============ work panels ============ */
-.work-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.work-panels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
 .work-card { margin: 0; }
 @media (max-width: 700px) { .work-panels { grid-template-columns: minmax(0, 1fr); } }
 
@@ -924,11 +924,11 @@ html.fancy .event-demo {
 /* price widget: wider rectangle on desktop */
 @media (min-width: 901px) {
   .price-widget {
-    display: flex; align-items: center; gap: 1.35rem;
+    display: grid; gap: 0.3rem;
     min-width: 21.5rem; padding: 1.15rem 1.5rem;
     text-align: left;
   }
-  .price-widget .button { margin: 0 0 0 auto; }
+  .price-widget .button { margin: 0.55rem 0 0; justify-self: end; }
 }
 
 /* ============ fancy design ON: polished 3D buttons across the page ============ */
@@ -980,3 +980,7 @@ body.fancy .feature.locked {
 .lede, .card p, .work-detail-card p, .feature-desc, .ev-text, .wall-item p {
   font-size: 1rem; line-height: 1.65;
 }
+
+/* purchased badge: top-right so the progress row stays full width */
+.lesson { position: relative; }
+.bought { position: absolute; top: 0.55rem; right: 0.75rem; }

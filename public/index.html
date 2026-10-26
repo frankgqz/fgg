@@ -23,7 +23,7 @@
   <aside class="price-widget">
     <p class="pw-line">Build <b id="pwTotal">$200</b></p>
     <p class="pw-line care">Care $200 / year</p>
-    <a class="button small" href="#contact">Get a quote</a>
+    <a class="button small" href="#contact">Contact</a>
   </aside>
 
   <main>
@@ -144,11 +144,11 @@
               <div class="shop-slide tags-theme">
                 <div class="slide-head"><h4>Physical items</h4><span class="cart-ico">🛒</span></div>
                 <div class="tag-row">
-                  <span class="tag-chip on">pastry</span>
-                  <span class="tag-chip">coffee</span>
-                  <span class="tag-chip">beans</span>
+                  <span class="tag-chip on" data-tag="pastry">pastry</span>
+                  <span class="tag-chip on" data-tag="coffee">coffee</span>
+                  <span class="tag-chip on" data-tag="beans">beans</span>
                 </div>
-                <div class="prod-row">
+                <div class="prod-row" id="prodRow">
                   <div class="prod-card"><i class="prod-thumb a"></i><span class="wish">♡</span><b>Espresso</b><span>$4.50</span></div>
                   <div class="prod-card"><i class="prod-thumb b"></i><span class="wish">♡</span><b>Croissant</b><span>$4.00</span></div>
                 </div>
@@ -192,6 +192,12 @@
           <p><a href="https://ggagency.com.au">ggagency.com.au</a></p>
         </article>
 
+        <article class="card work-card">
+          <h3>Personal hobby projects</h3>
+          <p class="meta">Apps · experiments · games</p>
+          <p>Tools and experiments built for the joy of it — live at gqz.app.</p>
+          <p><a href="https://gqz.app/">gqz.app</a></p>
+        </article>
         <article class="card work-card">
           <h3>Lumi Dance Studio</h3>
           <p class="meta">Dance studio · Deer Park</p>
@@ -411,6 +417,26 @@
     shopGrid.addEventListener('scroll', carState, { passive: true });
     setTimeout(carState, 60);
 
+    // ---- product filters: tag chips toggle their cards ----
+    const PRODUCTS = {
+      pastry: [['Croissant', '$4.00', 'b'], ['Cinnamon scroll', '$5.50', 'a']],
+      coffee: [['Espresso', '$4.50', 'a'], ['Flat white', '$5.50', 'b']],
+      beans: [['House blend 250g', '$18', 'a'], ['Single origin 250g', '$22', 'b']],
+    };
+    function renderProducts() {
+      const on = [...document.querySelectorAll('.tag-chip.on')].map((c) => c.dataset.tag);
+      const items = on.flatMap((tag) => PRODUCTS[tag] || []);
+      $('prodRow').innerHTML = items.length
+        ? items.map(([name, price, thumb]) =>
+            '<div class="prod-card"><i class="prod-thumb ' + thumb + '"></i><span class="wish">♡</span><b>' + name + '</b><span>' + price + '</span></div>').join('')
+        : '<p class="note">Tap a tag to see products.</p>';
+    }
+    document.querySelectorAll('.tag-chip').forEach((chip) => chip.addEventListener('click', () => {
+      chip.classList.toggle('on');
+      renderProducts();
+    }));
+    renderProducts();
+
     // ---- fluid glass lens (WebGL, hover-only) ----
     const lens = $('lens');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -616,6 +642,10 @@
       "Build": "Xây dựng",
       "Care $200 / year": "Chăm sóc $200 / năm",
       "Get a quote": "Nhận báo giá",
+      "Personal hobby projects": "Dự án cá nhân",
+      "Apps · experiments · games": "Ứng dụng · thử nghiệm · trò chơi",
+      "Tools and experiments built for the joy of it — live at gqz.app.": "Công cụ và thử nghiệm được làm cho vui — xem tại gqz.app.",
+      "Tap a tag to see products.": "Chạm một thẻ để xem sản phẩm.",
       "close": "đóng",
       "required for Payment": "cần cho Thanh toán",
       "required for Login": "cần cho Đăng nhập",
