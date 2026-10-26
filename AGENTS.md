@@ -40,3 +40,7 @@ Full addon menu = Frank's private quoting tool; this page is the public face.
 - OG share image not made yet
 - GG Agency case study listed — Frank to confirm
 - Login demo — "just change the end price" for now; real demo later
+
+## Domain (2026-10-26)
+frankg.com.au (apex + www) — Custom Domains on the `fgg` Worker (Type: Production, both hostnames), live and verified.
+Site references canonical + mailto:hello@frankg.com.au. Email receiving = Cloudflare Email Routing (free) recommended.
