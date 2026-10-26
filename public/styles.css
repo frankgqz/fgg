@@ -887,6 +887,7 @@ h3 { font-size: var(--fs-h5); }
   background: rgba(20, 20, 24, 0.45);
   display: flex; align-items: center; justify-content: center; padding: 1.25rem;
 }
+.work-detail[hidden] { display: none; }
 .work-detail-card {
   background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
   box-shadow: var(--shadow); padding: 1.75rem 1.9rem; max-width: 32rem; width: 100%;
