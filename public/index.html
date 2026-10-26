@@ -279,8 +279,8 @@
         '  float shine = 0.22 * lens;',
         '  gl_FragColor = vec4(rC + shine, gC + shine, bC + shine, 1.0);',
         '}'
-      ].join('
-'));
+      ].join('\n'));
+
       gl.compileShader(fs);
       const prog = gl.createProgram();
       gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
