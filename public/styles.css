@@ -1019,9 +1019,9 @@ body.fancy .car-btn:active { transform: translateY(-50%) scale(0.93); transition
 
 /* mobile: Login stacks right after Database */
 @media (max-width: 900px) {
-  .features.bento > [data-feature="math"] { order: 1; }
+  .features.bento > [data-feature="math"] { order: 3; }
   .features.bento > [data-feature="fancy"] { order: 2; }
-  .features.bento > [data-feature="cms"] { order: 3; }
+  .features.bento > [data-feature="cms"] { order: 1; }
   .features.bento > [data-feature="db"] { order: 4; }
   .features.bento > [data-feature="login"] { order: 5; }
   .features.bento > [data-feature="shop"] { order: 6; }
@@ -1148,3 +1148,6 @@ html.fancy :focus-visible { outline-color: var(--accent); }
     scroll-behavior: auto !important;
   }
 }
+
+/* work subtext stays on one line */
+.work-card .meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

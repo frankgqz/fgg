@@ -73,17 +73,6 @@
         </div>
 
         <div class="feature selected default-on">
-          <span class="feature-head"><b>Revision</b><em>$75</em></span>
-          <span class="feature-desc"><b id="revCount">2</b> sessions included,
-          draft edit design process. ~60-90 mins a session.</span>
-          <div class="rev-row" onclick="event.stopPropagation()">
-            <button class="rev-btn" id="revMinus" type="button">−</button>
-            <span class="rev-hours"><b id="revSessions">2</b> sessions</span>
-            <button class="rev-btn" id="revPlus" type="button">+</button>
-          </div>
-        </div>
-
-        <div class="feature selected default-on">
           <span class="feature-head"><b>Pages</b><em>$50 over 5</em></span>
           <div class="rev-row" onclick="event.stopPropagation()">
             <button class="rev-btn" id="pagesMinus" type="button">−</button>
@@ -91,26 +80,20 @@
             <button class="rev-btn" id="pagesPlus" type="button">+</button>
           </div>
         </div>
+        <div class="feature selected default-on">
+          <span class="feature-head"><b>Revision</b><em>$75</em></span>
+          <span class="feature-desc"><b id="revCount">2</b> included, draft design edit process. ~60-90 mins a session.</span>
+          <div class="rev-row" onclick="event.stopPropagation()">
+            <button class="rev-btn" id="revMinus" type="button">−</button>
+            <span class="rev-hours"><b id="revSessions">2</b> sessions</span>
+            <button class="rev-btn" id="revPlus" type="button">+</button>
+          </div>
+        </div>
+
 
       </div>
 
       <div class="features bento">
-
-        <div class="feature t11" data-feature="math">
-          <span class="feature-head"><b>Logic</b><em>+$100</em></span>
-          <span class="feature-desc">Math, Calculations. Quote estimators.
-          Multilingual toggles.</span>
-        </div>
-
-        <div class="feature t11" data-feature="fancy">
-          <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
-          <span class="feature-desc">Custom design direction, +1 revision.</span>
-          <div class="piano-panel" id="pianoPanel" onclick="event.stopPropagation()" hidden>
-            <canvas id="piano3d"></canvas>
-            <div class="piano-display" id="pianoDisplay">♪ First Love</div>
-            <audio id="pianoSong" src="media/first-love.mp4" loop preload="none"></audio>
-          </div>
-        </div>
 
         <div class="feature t11" data-feature="cms">
           <span class="feature-head"><b>Editing</b><em>+$100</em></span>
@@ -123,9 +106,25 @@
               </div>
               <button class="upload-btn" id="uploadBtn" type="button" title="choose an image">↑</button>
             </div>
-            <p class="ev-text" id="evText" contenteditable="true">Weekend Event, Tickets $0</p>
+            <p class="ev-text" id="evText" contenteditable="true">Weekend Event, Tickets $20 (edit me)</p>
             <img id="demoImg" class="demo-img" alt="" hidden>
           </div>
+        </div>
+
+        <div class="feature t11" data-feature="fancy">
+          <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
+          <span class="feature-desc">Custom design direction, +1 revision.</span>
+          <div class="piano-panel" id="pianoPanel" onclick="event.stopPropagation()" hidden>
+            <canvas id="piano3d"></canvas>
+            <div class="piano-display" id="pianoDisplay">♪ First Love</div>
+            <audio id="pianoSong" src="media/first-love.mp4" loop preload="none"></audio>
+          </div>
+        </div>
+
+        <div class="feature t11" data-feature="math">
+          <span class="feature-head"><b>Logic</b><em>+$100</em></span>
+          <span class="feature-desc">Math, Calculations. Quote estimators.
+          Multilingual toggles.</span>
         </div>
 
         <div class="feature t11" data-feature="login">
@@ -211,7 +210,7 @@
 
         <article class="card work-card" data-desc="A fast, modern site for Australia's largest Bigo agency — gallery, live prices, and a contact form, all editable by the team.">
           <h3>GG Agency</h3>
-          <p class="meta">Livestreaming agency · Content creation</p>
+          <p class="meta">Livestreaming · Content Creation</p>
           <p><a href="https://ggagency.com.au">ggagency.com.au</a></p>
         </article>
 
@@ -647,7 +646,7 @@
       "Care": "Chăm sóc",
       "Domain · Hosting · Backups · Security · Quarterly Traffic Reports · Code access · Yearly revision": "Tên miền · Hosting · Sao lưu · Bảo mật · Báo cáo lưu lượng hằng quý · Mã nguồn · Hiệu chỉnh hằng năm",
       "Revision": "Hiệu chỉnh",
-      "sessions included, draft edit design process. ~60-90 mins a session.": "buổi bao gồm, quy trình nháp – sửa – thiết kế. ~60–90 phút mỗi buổi.",
+      "included, draft design edit process. ~60-90 mins a session.": "bao gồm, quy trình nháp – thiết kế – sửa. ~60–90 phút mỗi buổi.",
       "sessions": "buổi",
       "Pages": "Trang",
       "$50 over 5": "$50 vượt 5 trang",
@@ -660,7 +659,7 @@
       "Web portal or linked spreadsheet.": "Cổng web hoặc bảng tính liên kết.",
       "Showcase": "Sự kiện",
       "Sat 14 Nov": "Th 7, 14/11",
-      "Weekend Event, Tickets $0": "Sự kiện cuối tuần. Vé $0",
+      "Weekend Event, Tickets $20 (edit me)": "Sự kiện cuối tuần. Vé $20 (chỉnh sửa tại đây)",
       "(edit me)": "(chỉnh sửa tôi)",
       "Login": "Đăng nhập",
       "Things that follow the customer.": "Những thứ đi theo khách hàng.",
@@ -695,7 +694,7 @@
       "Loading the wall…": "Đang tải bảng…",
       "No comments yet — be the first.": "Chưa có bình luận — hãy là người đầu tiên.",
       "Work": "Dự án",
-      "Livestreaming agency · Content creation": "Agency livestream · Sáng tạo nội dung",
+      "Livestreaming · Content Creation": "Livestream · Sáng tạo nội dung",
       "A fast, modern site for Australia's largest Bigo agency — gallery, live prices, and a contact form, all editable by the team.": "Website nhanh, hiện đại cho agency Bigo lớn nhất Úc — thư viện ảnh, bảng giá trực tiếp, form liên hệ — đội ngũ tự chỉnh sửa được tất cả.",
       "Dance studio · Deer Park": "Studio nhảy · Deer Park",
       "A bright, playful class site — full timetable, packages, and tap-to-copy payment details, made phone-first.": "Website lớp học tươi sáng, vui nhộn — thời khóa biểu đầy đủ, gói học, thông tin thanh toán chạm để sao chép — thiết kế cho điện thoại trước.",
