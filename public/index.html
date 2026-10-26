@@ -24,15 +24,6 @@
     <a class="button small" href="#contact">Get a quote</a>
   </aside>
 
-  <header class="bar">
-    <a class="wordmark" href="/">FGG</a>
-    <nav>
-      <a href="#quote">Quote</a>
-      <a href="#work">Work</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
-
   <main>
     <section class="hero">
       <h1>Websites, built and cared for.</h1>
@@ -66,12 +57,12 @@
         </label>
 
         <label class="feature t21">
-          <span class="feature-head"><b>Revisions</b><em>$50 / extra session</em></span>
+          <span class="feature-head"><b>Revisions</b><em>$50 / session over 3</em></span>
           <span class="feature-desc">A time for us to add, remove, edit — talk about
           site direction. <b id="revCount">3</b> sessions included.</span>
           <div class="rev-row" onclick="event.stopPropagation()">
             <button class="rev-btn" id="revMinus" type="button">−</button>
-            <span class="rev-hours"><b id="revHours">0</b> extra sessions</span>
+            <span class="rev-hours"><b id="revSessions">3</b> sessions</span>
             <button class="rev-btn" id="revPlus" type="button">+</button>
           </div>
         </label>
@@ -85,10 +76,16 @@
 
         <label class="feature t11" data-feature="cms">
           <span class="feature-head"><b>Editing</b><em>+$100</em></span>
-          <span class="feature-desc">A login portal lets you edit text, add images, including changing products in a shop.</span>
+          <span class="feature-desc">A portal allowing editing.</span>
           <div class="event-demo" onclick="event.stopPropagation()">
             <b id="evName" contenteditable="true">Showcase</b>
             <span id="evDate" contenteditable="true">Sat 14 Nov</span>
+            <p class="ev-text" id="evText" contenteditable="true">I'm thinking of an event this saturday, and the tickets are currently $0</p>
+            <div class="upload-row">
+              <button class="upload-btn" id="uploadBtn" type="button" title="choose an image">↑</button>
+              <input type="file" id="demoImgInput" accept="image/*" hidden>
+              <img id="demoImg" class="demo-img" alt="" hidden>
+            </div>
             <i class="ex-hint">(edit me)</i>
           </div>
         </label>
@@ -98,12 +95,17 @@
           <span class="feature-desc">Persistent information. Listings · Search ·
           Records · Comments & likes · Settings.</span>
           <div class="wall" onclick="event.stopPropagation()">
-            <p class="login-chip">🌟 signed in</p>
-            <div class="avatar-row" id="avatarRow">
-              <button type="button" class="av on" data-av="🙂">🙂</button>
-              <button type="button" class="av" data-av="🌟">🌟</button>
-              <button type="button" class="av" data-av="💃">💃</button>
-              <button type="button" class="av" data-av="🚀">🚀</button>
+            <div class="wall-top">
+              <div class="avatar-row" id="avatarRow">
+                <button type="button" class="av on" data-av="🙂">🙂</button>
+                <button type="button" class="av" data-av="🌟">🌟</button>
+                <button type="button" class="av" data-av="💃">💃</button>
+                <button type="button" class="av" data-av="🚀">🚀</button>
+                <button type="button" class="av more-av" data-av="😍">😍</button>
+                <button type="button" class="av more-av" data-av="🎉">🎉</button>
+                <button type="button" class="av more-av" data-av="🔥">🔥</button>
+              </div>
+              <p class="login-chip">🌟 signed in</p>
             </div>
             <form class="wall-form" id="wallForm">
               <input type="text" id="wallName" maxlength="24" placeholder="Your name" required>
@@ -123,15 +125,15 @@
             <button class="car-btn prev" data-dir="-1" aria-label="Previous">‹</button>
             <div class="carousel" id="shopGrid">
               <div class="shop-slide tags-theme">
-                <h4>Physical items</h4>
+                <div class="slide-head"><h4>Physical items</h4><span class="cart-ico">🛒</span></div>
                 <div class="tag-row">
                   <span class="tag-chip on">pastry</span>
                   <span class="tag-chip">coffee</span>
                   <span class="tag-chip">beans</span>
                 </div>
                 <div class="prod-row">
-                  <div class="prod-card"><i class="prod-thumb a"></i><b>Espresso</b><span>$4.50</span></div>
-                  <div class="prod-card"><i class="prod-thumb b"></i><b>Croissant</b><span>$4.00</span></div>
+                  <div class="prod-card"><i class="prod-thumb a"></i><span class="wish">♡</span><b>Espresso</b><span>$4.50</span></div>
+                  <div class="prod-card"><i class="prod-thumb b"></i><span class="wish">♡</span><b>Croissant</b><span>$4.00</span></div>
                 </div>
                 <span class="shop-note">tags · photos · stock</span>
               </div>
@@ -184,12 +186,6 @@
         </label>
       </div>
 
-      <div class="total-row">
-        <p class="meta">One-off build</p>
-        <p class="total" id="buildTotal">$200</p>
-        <p class="meta">+ care $200/year (domain, hosting, backups, security,
-        SEO reports, small changes)</p>
-      </div>
     </section>
 
     <section id="work" class="band">
@@ -224,7 +220,8 @@
 
     const state = { fancy: false, math: false, db: false, cms: false, shop: false, login: false };
     const pages = $('pages');
-    let extraHours = 0;
+    let revSessions = 3;
+    const auto = new Set();
 
     function money(n) { return '$' + n.toLocaleString('en-AU'); }
 
@@ -233,19 +230,17 @@
       const needDb = state.shop || state.login;
       if (needDb) state.db = true;
 
-      const TAGS = { db: 'required', cms: 'recommended', login: 'recommended' };
       for (const id of Object.keys(state)) {
         const el = document.querySelector('[data-feature="' + id + '"]');
         if (!el) continue;
         el.classList.toggle('selected', state[id]);
+        el.classList.toggle('auto', state[id] && auto.has(id));
         const mandatory = id === 'db' && needDb;
-        const recommended = (id === 'cms' || id === 'login') && state.shop;
         el.classList.toggle('mandatory', mandatory);
-        el.classList.toggle('recommended', recommended);
         let tag = el.querySelector('.tag');
-        if (mandatory || recommended) {
+        if (mandatory) {
           if (!tag) { tag = document.createElement('span'); tag.className = 'tag'; el.appendChild(tag); }
-          tag.textContent = mandatory ? 'required' : 'recommended';
+          tag.textContent = 'required';
         } else if (tag) tag.remove();
       }
 
@@ -254,9 +249,8 @@
       const p = Math.max(1, parseInt(pages.value || '1', 10));
       pages.value = p;
       total += Math.max(0, p - INCLUDED_PAGES) * PAGE_PRICE;
-      total += extraHours * 50;
+      total += Math.max(0, revSessions - (state.fancy ? 4 : 3)) * 50;
 
-      $('buildTotal').textContent = money(total);
       $('pwTotal').textContent = money(total);
       $('revCount').textContent = state.fancy ? 4 : 3;
 
@@ -271,6 +265,14 @@
         const id = el.dataset.feature;
         if (id === 'db' && (state.shop || state.login)) return; // required tiles stay on
         state[id] = !state[id];
+        auto.delete(id); // a manual click makes it a manual choice
+        if (id === 'shop') {
+          if (state.shop) {
+            for (const dep of ['cms', 'login']) if (!state[dep]) { state[dep] = true; auto.add(dep); }
+          } else {
+            for (const dep of ['cms', 'login']) if (auto.has(dep)) { state[dep] = false; auto.delete(dep); }
+          }
+        }
         if ((id === 'shop' || id === 'login') && !state.shop && !state.login) state.db = false;
         update();
       });
@@ -278,10 +280,10 @@
     pages.addEventListener('input', update);
     // revisions stepper
     $('revMinus').addEventListener('click', () => {
-      extraHours = Math.max(0, extraHours - 1); $('revHours').textContent = extraHours; update();
+      revSessions = Math.max(0, revSessions - 1); $('revSessions').textContent = revSessions; update();
     });
     $('revPlus').addEventListener('click', () => {
-      extraHours += 1; $('revHours').textContent = extraHours; update();
+      revSessions += 1; $('revSessions').textContent = revSessions; update();
     });
     $('pagesMinus').addEventListener('click', () => {
       pages.value = Math.max(1, (parseInt(pages.value || '1', 10) || 1) - 1); update();
@@ -298,6 +300,23 @@
       tile.classList.add('sweeping');
       setTimeout(() => tile.classList.remove('sweeping'), 750);
     }));
+
+    // ---- upload demo: pick an image, kept in localStorage ----
+    const demoImg = $('demoImg');
+    const savedImg = localStorage.getItem('fggDemoImg');
+    if (savedImg) { demoImg.src = savedImg; demoImg.hidden = false; }
+    $('uploadBtn').addEventListener('click', () => $('demoImgInput').click());
+    $('demoImgInput').addEventListener('change', () => {
+      const file = $('demoImgInput').files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        demoImg.src = reader.result;
+        demoImg.hidden = false;
+        try { localStorage.setItem('fggDemoImg', reader.result); } catch { /* quota */ }
+      };
+      reader.readAsDataURL(file);
+    });
 
     // ---- simulated login (touches the wall + the shop) ----
     let loggedIn = false;
