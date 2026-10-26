@@ -928,3 +928,16 @@ html.fancy .event-demo {
 html.fancy .feature[data-feature="fancy"] {
   background-image: linear-gradient(155deg, rgba(255, 255, 255, 0.18), rgba(0, 0, 0, 0.22) 72%);
 }
+
+/* contact: buttons side by side */
+.contact-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+/* price widget: wider rectangle on desktop */
+@media (min-width: 901px) {
+  .price-widget {
+    display: flex; align-items: center; gap: 1.35rem;
+    min-width: 21.5rem; padding: 1.15rem 1.5rem;
+    text-align: left;
+  }
+  .price-widget .button { margin: 0 0 0 auto; }
+}
