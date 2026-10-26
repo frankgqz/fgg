@@ -106,7 +106,7 @@
           <span class="feature-desc">Things that follow the customer.</span>
           <div class="plain-ex">Order history · Gated content · Avatar</div>
           <div class="login-demo" onclick="event.stopPropagation()">
-            <button class="button small" id="loginSim" type="button">Log in</button>
+            <button class="button small" id="loginSim" type="button">Log In</button>
           </div>
         </div>
 
@@ -119,8 +119,8 @@
               <div class="avatar-row" id="avatarRow">
                 <button type="button" class="av on" data-av="🙂">🙂</button>
                 <button type="button" class="av" data-av="🌟">🌟</button>
-                <button type="button" class="av" data-av="💃">💃</button>
                 <button type="button" class="av" data-av="🚀">🚀</button>
+                <button type="button" class="av more-av" data-av="💃">💃</button>
                 <button type="button" class="av more-av" data-av="🔥">🔥</button>
               </div>
               <p class="login-chip">🌟 signed in</p>
@@ -137,7 +137,7 @@
         </div>
 
         <div class="feature t22" data-feature="shop">
-          <span class="feature-head"><b>Shop</b><em>+$200</em></span>
+          <span class="feature-head"><b>Payment</b><em>+$200</em></span>
           <span class="feature-desc">Payment, saved cards, products, photos, tags.</span>
           <div class="shop-kinds" onclick="event.stopPropagation()">
             <button class="car-btn prev" data-dir="-1" aria-label="Previous">‹</button>
@@ -389,7 +389,7 @@
     $('loginSim').addEventListener('click', () => {
       loggedIn = !loggedIn;
       document.body.classList.toggle('logged-in', loggedIn);
-      $('loginSim').textContent = loggedIn ? 'Log out' : 'Log in';
+      $('loginSim').textContent = loggedIn ? 'Log Out' : 'Log In';
     });
 
     // ---- shop kind carousel ----
