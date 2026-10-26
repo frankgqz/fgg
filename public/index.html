@@ -4,16 +4,37 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FGG — Frank Gao, web developer</title>
-  <meta name="description" content="Small websites, built and looked after. Frank Gao, web developer in Melbourne. $200 to build, $200 a year to keep running. Try the live demos — build your own quote.">
+  <meta name="description" content="Small websites, built and looked after. Frank Gao, web developer in Melbourne. $200 to build, $200 a year to keep running. Try the live demos — build your own package.">
   <link rel="canonical" href="https://frankg.com.au/">
   <meta property="og:title" content="FGG — Frank Gao, web developer">
   <meta property="og:description" content="Small websites, built and looked after. $200 to build, $200 a year to keep running.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://frankg.com.au/">
+  <meta property="og:image" content="https://frankg.com.au/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "FGG",
+    "description": "Small websites, built and looked after.",
+    "url": "https://frankg.com.au/",
+    "email": "frank@frankg.com.au",
+    "areaServed": "Melbourne, Australia",
+    "priceRange": "$200",
+    "makesOffer": [
+      { "@type": "Offer", "name": "Standard website", "price": "200", "priceCurrency": "AUD" },
+      { "@type": "Offer", "name": "Care plan", "price": "200", "priceCurrency": "AUD", "description": "per year" }
+    ]
+  }
+  </script>
 </head>
 <body>
   <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -38,7 +59,7 @@
 
     <!-- ============ THE QUOTE BUILDER (compact bento) ============ -->
     <section id="quote" class="band">
-      <h2>Build your quote</h2>
+      <h2>Build your package</h2>
       <div class="top-row">
 
         <div class="feature locked">
@@ -160,8 +181,8 @@
               </div>
               <div class="shop-slide course-theme">
                 <h4>Digital courses</h4>
-                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 1</b><i class="bar"><i class="fill f1"></i></i></div><i class="bought">purchased</i></div>
-                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 2</b><i class="bar"><i class="fill f2"></i></i></div></div>
+                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 1</b><i class="lesson-bar"><i class="fill f1"></i></i></div><i class="bought">purchased</i></div>
+                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 2</b><i class="lesson-bar"><i class="fill f2"></i></i></div></div>
                 <span class="shop-note">logins · progress · gated content</span>
               </div>
               <div class="shop-slide cal-theme">
@@ -614,7 +635,7 @@
       "Websites, built and cared for.": "Website được dựng nên và chăm chút.",
       "I'm Frank Gao, a web developer in Melbourne. I build websites and apps for businesses.": "Tôi là Frank Gao, lập trình viên web tại Melbourne. Tôi làm website và ứng dụng cho doanh nghiệp.",
       "Try it": "Dùng thử",
-      "Build your quote": "Tạo báo giá",
+      "Build your package": "Tạo báo giá",
       "Standard": "Tiêu chuẩn",
       "Custom design · Media · Gallery · Draft + Revision process · Domain · Receiving emails · Desktop and Mobile optimized · Fast & secure · Form · Dynamic page elements · UI polish · Favicon": "Thiết kế riêng · Media · Thư viện ảnh · Quy trình nháp + hiệu chỉnh · Tên miền · Nhận email · Tối ưu máy tính & điện thoại · Nhanh & bảo mật · Form · Thành phần động · Tinh chỉnh giao diện · Favicon",
       "Care": "Chăm sóc",
@@ -718,9 +739,17 @@
 
     // ---- fancy: a little three.js piano panel (shrine vibes) ----
     let pianoStarted = false;
+    let threePromise = null;
+    const loadThree = () => threePromise || (threePromise = import('https://unpkg.com/three@0.160.0/build/three.module.js'));
+    // warm the module after the page settles so the first tap is instant on mobile
+    window.addEventListener('load', () => {
+      const warm = () => loadThree().catch(() => {});
+      if ('requestIdleCallback' in window) requestIdleCallback(warm, { timeout: 3500 });
+      else setTimeout(warm, 2500);
+    });
     async function startPiano() {
       if (pianoStarted) return; pianoStarted = true;
-      const THREE = await import('https://unpkg.com/three@0.160.0/build/three.module.js');
+      const THREE = await loadThree();
       const canvas = $('piano3d');
       const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
       const scene = new THREE.Scene();
