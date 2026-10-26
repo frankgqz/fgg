@@ -918,17 +918,6 @@ html.fancy .event-demo {
 /* carousel arrows: keep the centering translate while pressed */
 .car-btn:active { transform: translateY(-50%) scale(0.96); }
 
-/* fancy panel: the button lighting, exaggerated */
-.feature[data-feature="fancy"] {
-  background-image: linear-gradient(155deg, rgba(255, 255, 255, 0.30), rgba(0, 0, 0, 0.13) 72%);
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.12),
-    0 16px 38px -8px rgba(20, 20, 40, 0.32);
-}
-html.fancy .feature[data-feature="fancy"] {
-  background-image: linear-gradient(155deg, rgba(255, 255, 255, 0.18), rgba(0, 0, 0, 0.22) 72%);
-}
-
 /* contact: buttons side by side */
 .contact-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 
@@ -941,3 +930,16 @@ html.fancy .feature[data-feature="fancy"] {
   }
   .price-widget .button { margin: 0 0 0 auto; }
 }
+
+/* ============ fancy design ON: polished 3D buttons across the page ============ */
+body.fancy .button, body.fancy .button.small, body.fancy .button.yellow,
+body.fancy .rev-btn, body.fancy .car-btn, body.fancy .book,
+body.fancy .upload-btn, body.fancy .av, body.fancy .cal-day {
+  background-image: linear-gradient(160deg, rgba(255, 255, 255, 0.32), rgba(0, 0, 0, 0.16) 78%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.22),
+    0 2px 3px rgba(0, 0, 0, 0.18),
+    0 12px 26px -8px rgba(20, 20, 40, 0.45);
+}
+body.fancy .feature { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 30px rgba(10, 8, 24, 0.55); }
