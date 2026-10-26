@@ -1122,3 +1122,6 @@ html.fancy .price-widget .button {
 
 /* showcase upload button: smaller */
 .upload-btn { padding: 0.34rem 0.72rem; font-size: 0.9rem; }
+
+/* one uniform gap between the title row and the next line, every panel */
+.feature-head + * { margin-top: 0.7rem; }
