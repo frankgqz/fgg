@@ -1036,3 +1036,17 @@ html.fancy #evDate { color: #6fdccf; }
 
 /* product row: 2 fixed columns (a single card stays 1 column) */
 .prod-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+
+/* mini frames sit at the bottom of their tiles (fancy + editing balance) */
+.feature[data-feature="fancy"], .feature[data-feature="cms"] { display: flex; flex-direction: column; }
+.feature[data-feature="fancy"] .piano-panel,
+.feature[data-feature="cms"] .event-demo { margin-top: auto; }
+
+/* buttons: slightly smaller across the board */
+.button { padding: 0.65rem 1.5rem; font-size: 0.95rem; }
+.button.small { padding: 0.48rem 1.02rem; font-size: 0.9rem; }
+.rev-btn { min-width: 1.95rem; padding: 0.35rem 0.75rem; font-size: 0.95rem; }
+.upload-btn { padding: 0.48rem 1rem; }
+.car-btn { min-width: 2.15rem; padding: 0.42rem 0.85rem; }
+.book { padding: 0.32rem 1rem; font-size: 0.88rem; }
+.lang-toggle button { padding: 0.38rem 0.85rem; font-size: 0.8rem; }
