@@ -18,7 +18,10 @@
 <body>
   <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
 
-  <button class="button small lang-toggle" id="langToggle" type="button">VI</button>
+  <div class="lang-toggle" id="langToggle" role="group" aria-label="language">
+    <button type="button" data-lang="en" class="on">EN</button>
+    <button type="button" data-lang="vi">VI</button>
+  </div>
 
   <aside class="price-widget">
     <p class="pw-line">Build <b id="pwTotal">$200</b></p>
@@ -658,7 +661,9 @@
     function setLang(next) {
       lang = next;
       document.documentElement.lang = next;
-      $('langToggle').textContent = next === 'vi' ? 'EN' : 'VI';
+      for (const b of $('langToggle').querySelectorAll('[data-lang]')) {
+        b.classList.toggle('on', b.dataset.lang === next);
+      }
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       const nodes = [];
       while (walker.nextNode()) nodes.push(walker.currentNode);
@@ -674,7 +679,10 @@
       }
       update();
     }
-    $('langToggle').addEventListener('click', () => setLang(lang === 'vi' ? 'en' : 'vi'));
+    $('langToggle').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-lang]');
+      if (b) setLang(b.dataset.lang);
+    });
 
     // ---- work panels: shared-element open (View Transitions + FLIP fallback) ----
     const workDetail = $('workDetail');

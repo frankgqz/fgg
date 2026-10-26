@@ -973,8 +973,20 @@ body.fancy .feature.locked {
   body.fancy .feature.auto { box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.9), 0 0 18px rgba(251, 191, 36, 0.4), 0 10px 30px rgba(10, 8, 24, 0.55); }
 }
 
-/* language toggle: fixed top-right */
-.lang-toggle { position: fixed; top: 1rem; right: 1.15rem; z-index: 260; }
+/* language toggle: segmented, both labels visible */
+.lang-toggle {
+  position: fixed; top: 1rem; right: 1.15rem; z-index: 260;
+  display: flex; gap: 0.25rem; padding: 0.25rem;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.10), 0 8px 24px -6px rgba(20, 20, 40, 0.18);
+}
+.lang-toggle button {
+  border: 0; background: transparent; color: var(--ink-soft);
+  font: inherit; font-size: 0.85rem; font-weight: 600;
+  padding: 0.45rem 0.95rem; border-radius: 999px; cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+.lang-toggle button.on { background: var(--accent); color: var(--accent-ink); }
 
 /* paragraph text: one size everywhere */
 .lede, .card p, .work-detail-card p, .feature-desc, .ev-text, .wall-item p {
@@ -984,3 +996,13 @@ body.fancy .feature.locked {
 /* purchased badge: top-right so the progress row stays full width */
 .lesson { position: relative; }
 .bought { position: absolute; top: 0.55rem; right: 0.75rem; }
+
+/* editing demo: color in the title + date rows */
+#evName { color: #6b2fb5; }
+#evDate { color: #1f7a70; }
+html.fancy #evName { color: #d7a6ff; }
+html.fancy #evDate { color: #6fdccf; }
+
+/* paragraph size: one value (0.95rem) */
+.plain-ex { font-size: 0.95rem; }
+.ev-text { font-size: 0.95rem; }
