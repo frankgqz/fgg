@@ -914,3 +914,6 @@ html.fancy .event-demo {
 
 /* price baseline: nudge the $ down to sit with the title */
 .feature-head em { position: relative; top: 3px; }
+
+/* carousel arrows: keep the centering translate while pressed */
+.car-btn:active { transform: translateY(-50%) scale(0.96); }

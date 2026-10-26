@@ -81,7 +81,7 @@
 
         <div class="feature t11" data-feature="fancy">
           <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
-          <span class="feature-desc">Custom art direction.</span>
+          <span class="feature-desc">Custom design direction, 1 more revision included.</span>
         </div>
 
         <div class="feature t11" data-feature="cms">
@@ -208,7 +208,7 @@
       <h2>Contact</h2>
       <p class="lede">Tell me about your business and what the site needs to do.
       I'll reply with a plan and a price — no jargon, no pressure.</p>
-      <p><a class="button" href="mailto:hello@frankg.com.au">Email</a></p>
+      <p><a class="button" href="mailto:frank@frankg.com.au">Email</a></p>
       <p class="meta">Melbourne, Australia</p>
     </section>
   </main>
@@ -320,6 +320,10 @@
         if (id === 'db' && (state.shop || state.login)) return; // required tiles stay on
         state[id] = !state[id];
         auto.delete(id); // a manual click makes it a manual choice
+        if (id === 'fancy') {
+          revSessions = Math.max(0, revSessions + (state.fancy ? 1 : -1));
+          $('revSessions').textContent = revSessions;
+        }
         if (id === 'shop') {
           if (state.shop) {
             for (const dep of ['cms', 'login']) if (!state[dep]) { state[dep] = true; auto.add(dep); }
