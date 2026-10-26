@@ -424,15 +424,15 @@ footer p { margin: 0; font-size: 0.9rem; color: var(--ink-soft); }
   transition: opacity 700ms ease;
 }
 
-.aurora i:nth-child(1) { background: #7f5cff; top: -12vw; left: -10vw; }
-.aurora i:nth-child(2) { background: #ff5c8a; top: 30vh; right: -14vw; }
+.aurora i:nth-child(1) { background: #ff8a3d; top: -12vw; left: -10vw; }
+.aurora i:nth-child(2) { background: #f2b25e; top: 30vh; right: -14vw; }
 .aurora i:nth-child(3) { background: #26d0c9; bottom: -16vw; left: 22vw; }
 
 html.fancy, body.fancy {
   --paper: #0d0d16;
   --surface: rgba(255, 255, 255, 0.06);
   --ink: #f6eef1;
-  --ink-soft: #b0a3b8;
+  --ink-soft: #b3aca4;
   --accent: #ff8f7a;
   --accent-ink: #2b1224;
   --line: rgba(255, 255, 255, 0.16);
@@ -998,7 +998,7 @@ body.fancy .feature.locked {
 .bought { position: absolute; top: 0.55rem; right: 0.75rem; }
 
 /* editing demo: color in the title + date rows */
-#evName { color: #6b2fb5; }
+#evName { color: #6b2fb5; font-size: 0.9rem; }
 #evDate { color: #1f7a70; }
 html.fancy #evName { color: #ff9e8a; }
 html.fancy #evDate { color: #f2c27e; }
@@ -1032,7 +1032,7 @@ html.fancy #evDate { color: #f2c27e; }
 .rev-btn { min-width: 2.15rem; padding: 0.42rem 0.85rem; }
 
 /* editing demo matches the piano frame for balance */
-.event-demo { height: 8.5rem; overflow: hidden; align-content: start; }
+.event-demo { overflow: hidden; align-content: start; }
 
 /* product row: 2 fixed columns (a single card stays 1 column) */
 .prod-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
@@ -1040,7 +1040,7 @@ html.fancy #evDate { color: #f2c27e; }
 /* mini frames sit at the bottom of their tiles (fancy + editing balance) */
 .feature[data-feature="fancy"], .feature[data-feature="cms"] { display: flex; flex-direction: column; }
 .feature[data-feature="fancy"] .piano-panel,
-.feature[data-feature="cms"] .event-demo { margin-top: 0.9rem; margin-bottom: auto; }
+.feature[data-feature="cms"] .event-demo { margin-top: auto; }
 
 /* buttons: slightly smaller across the board */
 .button { padding: 0.65rem 1.5rem; font-size: 0.95rem; }
@@ -1116,8 +1116,7 @@ html.fancy .price-widget .button {
 }
 
 /* uploaded image: panel grows to show it (scroll fallback if it still overflows) */
-.event-demo { overflow-y: auto; }
-.event-demo:has(.demo-img:not([hidden])) { height: auto; }
+.event-demo { height: auto; min-height: 8.5rem; }
 .demo-img { max-height: 6.5rem; }
 
 /* showcase upload button: smaller */
@@ -1128,7 +1127,7 @@ html.fancy .price-widget .button {
 
 /* ===== fancy: duotone dusk + dark glass ===== */
 html.fancy {
-  background: linear-gradient(158deg, #2b1638 0%, #1a1a3e 52%, #101227 100%);
+  background: linear-gradient(158deg, #241610 0%, #14222a 55%, #0c1116 100%);
   background-attachment: fixed;
 }
 html.fancy .aurora i { opacity: 0.12; }
@@ -1143,3 +1142,7 @@ body.fancy .card, body.fancy .feature {
   background-image: linear-gradient(168deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.05));
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.10), 0 8px 24px -6px rgba(20, 20, 40, 0.18);
 }
+
+/* login-locked emojis need more specificity than the .av centering rule */
+.av.more-av { display: none; }
+body.logged-in .av.more-av { display: inline-flex; }
