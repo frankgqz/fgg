@@ -911,3 +911,6 @@ html.fancy .event-demo {
   background: linear-gradient(135deg, rgba(127, 92, 255, 0.28), rgba(255, 92, 138, 0.20), rgba(38, 208, 201, 0.20));
   border-color: rgba(255, 255, 255, 0.14);
 }
+
+/* price baseline: nudge the $ down to sit with the title */
+.feature-head em { position: relative; top: 3px; }
