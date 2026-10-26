@@ -18,9 +18,14 @@
 <body>
   <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
 
+  <aside class="price-widget">
+    <p class="pw-line">Build <b id="pwTotal">$200</b></p>
+    <p class="pw-line care">Care $200 / year</p>
+    <a class="button small" href="#contact">Get a quote</a>
+  </aside>
+
   <header class="bar">
     <a class="wordmark" href="/">FGG</a>
-    <p class="quote-pill" id="quotePill">Build <b>$200</b> · Care $200/y</p>
     <nav>
       <a href="#quote">Quote</a>
       <a href="#work">Work</a>
@@ -45,6 +50,20 @@
       Tick what you need; the price is calculated as you go.</p>
 
       <div class="features bento">
+
+        <label class="feature t21 locked">
+          <span class="feature-head"><b>Standard build</b><em>$200</em></span>
+          <span class="feature-desc">Every site starts here.</span>
+          <div class="plain-ex">Email · Form · Media · Dynamic components</div>
+          <span class="tag">included</span>
+        </label>
+
+        <label class="feature t21 locked">
+          <span class="feature-head"><b>Yearly care</b><em>$200 / y</em></span>
+          <span class="feature-desc">Always on.</span>
+          <div class="plain-ex">Domain · Hosting · Backups · Security · SEO reports · Small changes</div>
+          <span class="tag">always on</span>
+        </label>
 
         <label class="feature t11" data-feature="fancy">
           <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
@@ -97,13 +116,24 @@
           </div>
         </label>
 
+        <label class="feature t21">
+          <span class="feature-head"><b>Revisions</b><em>$50 / extra hour</em></span>
+          <span class="feature-desc"><b id="revCount">3</b> included — 2 more with
+          fancy design. Extra work $50 / hour.</span>
+          <div class="rev-row" onclick="event.stopPropagation()">
+            <button class="rev-btn" id="revMinus" type="button">−</button>
+            <span class="rev-hours"><b id="revHours">0</b> extra hours</span>
+            <button class="rev-btn" id="revPlus" type="button">+</button>
+          </div>
+        </label>
+
         <label class="feature t21" data-feature="math">
           <span class="feature-head"><b>Logic</b><em>+$100</em></span>
           <span class="feature-desc">Math, Calculations. Quote estimators.
           Multilingual and currency toggles.</span>
         </label>
 
-        <label class="feature t21" data-feature="shop">
+        <label class="feature t22" data-feature="shop">
           <span class="feature-head"><b>Shop</b><em>+$200</em></span>
           <span class="feature-desc">Payment, products, photos, tags.</span>
           <div class="shop-kinds" onclick="event.stopPropagation()">
@@ -191,6 +221,7 @@
 
     const state = { fancy: false, math: false, db: false, cms: false, shop: false, login: false };
     const pages = $('pages');
+    let extraHours = 0;
 
     function money(n) { return '$' + n.toLocaleString('en-AU'); }
 
@@ -220,9 +251,11 @@
       const p = Math.max(1, parseInt(pages.value || '1', 10));
       pages.value = p;
       total += Math.max(0, p - INCLUDED_PAGES) * PAGE_PRICE;
+      total += extraHours * 50;
 
       $('buildTotal').textContent = money(total);
-      $('quotePill').innerHTML = 'Build <b>' + money(total) + '</b> · Care $200/y';
+      $('pwTotal').textContent = money(total);
+      $('revCount').textContent = state.fancy ? 5 : 3;
 
       document.body.classList.toggle('fancy', state.fancy);
     }
@@ -239,6 +272,13 @@
       });
     });
     pages.addEventListener('input', update);
+    // revisions stepper
+    $('revMinus').addEventListener('click', () => {
+      extraHours = Math.max(0, extraHours - 1); $('revHours').textContent = extraHours; update();
+    });
+    $('revPlus').addEventListener('click', () => {
+      extraHours += 1; $('revHours').textContent = extraHours; update();
+    });
 
     // ---- liquid effect (one button) ----
     document.querySelectorAll('.fx').forEach((b) => b.addEventListener('click', () => {
