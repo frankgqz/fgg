@@ -12,7 +12,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600;6..72,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -65,6 +65,17 @@
           <span class="tag">always on</span>
         </label>
 
+        <label class="feature t21">
+          <span class="feature-head"><b>Revisions</b><em>$50 / extra session</em></span>
+          <span class="feature-desc">A time for us to add, remove, edit — talk about
+          site direction. <b id="revCount">3</b> sessions included.</span>
+          <div class="rev-row" onclick="event.stopPropagation()">
+            <button class="rev-btn" id="revMinus" type="button">−</button>
+            <span class="rev-hours"><b id="revHours">0</b> extra sessions</span>
+            <button class="rev-btn" id="revPlus" type="button">+</button>
+          </div>
+        </label>
+
         <label class="feature t11" data-feature="fancy">
           <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
           <span class="feature-desc">Custom art direction.</span>
@@ -79,16 +90,6 @@
             <b id="evName" contenteditable="true">Showcase</b>
             <span id="evDate" contenteditable="true">Sat 14 Nov</span>
             <i class="ex-hint">(edit me)</i>
-          </div>
-        </label>
-
-        <label class="feature t11" data-feature="login">
-          <span class="feature-head"><b>Login</b><em>+$100</em></span>
-          <span class="feature-desc">Things that follow the customer.</span>
-          <div class="plain-ex">Order history · Gated content · Avatar</div>
-          <div class="login-demo" onclick="event.stopPropagation()">
-            <button class="button small" id="loginSim" type="button">Log in</button>
-            <i class="ex-hint" id="loginGreet"></i>
           </div>
         </label>
 
@@ -113,23 +114,6 @@
             <p class="meta wall-count"><b id="wallCount">…</b> comments</p>
             <div class="wall-list" id="wallList"><p class="note">Loading the wall…</p></div>
           </div>
-        </label>
-
-        <label class="feature t21">
-          <span class="feature-head"><b>Revisions</b><em>$50 / extra hour</em></span>
-          <span class="feature-desc"><b id="revCount">3</b> included — 2 more with
-          fancy design. Extra work $50 / hour.</span>
-          <div class="rev-row" onclick="event.stopPropagation()">
-            <button class="rev-btn" id="revMinus" type="button">−</button>
-            <span class="rev-hours"><b id="revHours">0</b> extra hours</span>
-            <button class="rev-btn" id="revPlus" type="button">+</button>
-          </div>
-        </label>
-
-        <label class="feature t21" data-feature="math">
-          <span class="feature-head"><b>Logic</b><em>+$100</em></span>
-          <span class="feature-desc">Math, Calculations. Quote estimators.
-          Multilingual and currency toggles.</span>
         </label>
 
         <label class="feature t22" data-feature="shop">
@@ -173,14 +157,34 @@
             <button class="car-btn next" data-dir="1" aria-label="Next">›</button>
           </div>
         </label>
+
+        <label class="feature t21" data-feature="math">
+          <span class="feature-head"><b>Logic</b><em>+$100</em></span>
+          <span class="feature-desc">Math, Calculations. Quote estimators.
+          Multilingual and currency toggles.</span>
+        </label>
+
+        <label class="feature t11" data-feature="login">
+          <span class="feature-head"><b>Login</b><em>+$100</em></span>
+          <span class="feature-desc">Things that follow the customer.</span>
+          <div class="plain-ex">Order history · Gated content · Avatar</div>
+          <div class="login-demo" onclick="event.stopPropagation()">
+            <button class="button small" id="loginSim" type="button">Log in</button>
+            <i class="ex-hint" id="loginGreet"></i>
+          </div>
+        </label>
+
+        <label class="feature t11">
+          <span class="feature-head"><b>Pages</b><em>$50 over 5</em></span>
+          <div class="rev-row" onclick="event.stopPropagation()">
+            <button class="rev-btn" id="pagesMinus" type="button">−</button>
+            <input type="number" id="pages" min="1" max="30" value="5" class="pages-input">
+            <button class="rev-btn" id="pagesPlus" type="button">+</button>
+          </div>
+        </label>
       </div>
 
       <div class="total-row">
-        <div class="pages-line">
-          <b>Pages</b>
-          <input type="number" id="pages" min="1" max="30" value="5" class="pages-input">
-          <span class="meta">$50 each over 5 included</span>
-        </div>
         <p class="meta">One-off build</p>
         <p class="total" id="buildTotal">$200</p>
         <p class="meta">+ care $200/year (domain, hosting, backups, security,
@@ -254,9 +258,10 @@
 
       $('buildTotal').textContent = money(total);
       $('pwTotal').textContent = money(total);
-      $('revCount').textContent = state.fancy ? 5 : 3;
+      $('revCount').textContent = state.fancy ? 4 : 3;
 
       document.body.classList.toggle('fancy', state.fancy);
+      document.documentElement.classList.toggle('fancy', state.fancy);
     }
 
     // tiles toggle themselves (no checkboxes); demo areas never toggle
@@ -277,6 +282,12 @@
     });
     $('revPlus').addEventListener('click', () => {
       extraHours += 1; $('revHours').textContent = extraHours; update();
+    });
+    $('pagesMinus').addEventListener('click', () => {
+      pages.value = Math.max(1, (parseInt(pages.value || '1', 10) || 1) - 1); update();
+    });
+    $('pagesPlus').addEventListener('click', () => {
+      pages.value = Math.min(30, (parseInt(pages.value || '1', 10) || 1) + 1); update();
     });
 
     // ---- gloss sweep (contained effect button) ----
