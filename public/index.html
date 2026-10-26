@@ -116,9 +116,8 @@
         </div>
 
         <div class="feature t22" data-feature="db">
-          <span class="feature-head"><b>Database</b><em>included</em></span>
-          <span class="feature-desc">Persistent information. Listings · Search ·
-          Records · Comments & likes · Settings.</span>
+          <span class="feature-head"><b>Database</b><em>+$100</em></span>
+          <span class="feature-desc">Persistent information. Listings · Search · Records · Comments & likes · Match History · Settings.</span>
           <div class="wall" onclick="event.stopPropagation()">
             <div class="wall-top">
               <div class="avatar-row" id="avatarRow">
@@ -142,7 +141,7 @@
 
         <div class="feature t22" data-feature="shop">
           <span class="feature-head"><b>Payment</b><em>+$200</em></span>
-          <span class="feature-desc">Stripe, saved credit cards, custom products, cart and checkout pages, sort and tags.</span>
+          <span class="feature-desc">Stripe, saved credit cards, custom products, cart and checkout pages, sort, filter by tags.</span>
           <div class="shop-kinds" onclick="event.stopPropagation()">
             <button class="car-btn prev" data-dir="-1" aria-label="Previous">‹</button>
             <div class="carousel" id="shopGrid">
@@ -242,7 +241,7 @@
   <script>
   (() => {
     const $ = (id) => document.getElementById(id);
-    const PRICES = { fancy: 200, math: 100, db: 0, cms: 100, shop: 250, login: 150 };
+    const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 200, login: 100 };
     const BASE = 200, INCLUDED_PAGES = 5, PAGE_PRICE = 50;
 
     const state = { fancy: false, math: false, db: false, cms: false, shop: false, login: false };
@@ -642,7 +641,7 @@
       "Log In": "Đăng nhập",
       "Log Out": "Đăng xuất",
       "Payment": "Thanh toán",
-      "Stripe, saved credit cards, custom products, cart and checkout pages, sort and tags.": "Stripe, thẻ tín dụng đã lưu, sản phẩm tùy chỉnh, trang giỏ hàng và thanh toán, sắp xếp và thẻ phân loại.",
+      "Stripe, saved credit cards, custom products, cart and checkout pages, sort, filter by tags.": "Stripe, thẻ tín dụng đã lưu, sản phẩm tùy chỉnh, trang giỏ hàng và thanh toán, sắp xếp, lọc theo thẻ.",
       "Physical items": "Hàng hóa",
       "pastry": "bánh ngọt",
       "coffee": "cà phê",
@@ -661,7 +660,7 @@
       "purchased": "đã mua",
       "logins · progress · gated content": "đăng nhập · tiến độ · nội dung riêng",
       "Database": "Cơ sở dữ liệu",
-      "Persistent information. Listings · Search · Records · Comments & likes · Settings.": "Dữ liệu lưu trữ. Danh sách · Tìm kiếm · Hồ sơ · Bình luận & lượt thích · Cài đặt.",
+      "Persistent information. Listings · Search · Records · Comments & likes · Match History · Settings.": "Dữ liệu lưu trữ. Danh sách · Tìm kiếm · Hồ sơ · Bình luận & lượt thích · Lịch sử đấu · Cài đặt.",
       "🌟 signed in": "🌟 đã đăng nhập",
       "Send": "Gửi",
       "comments": "bình luận",
