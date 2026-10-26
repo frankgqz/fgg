@@ -433,8 +433,8 @@ html.fancy, body.fancy {
   --surface: rgba(255, 255, 255, 0.06);
   --ink: #f6eef1;
   --ink-soft: #b3aca4;
-  --accent: #ff8f7a;
-  --accent-ink: #2b1224;
+  --accent: #dd7a4f;
+  --accent-ink: #2b1408;
   --line: rgba(255, 255, 255, 0.16);
   --shadow:
     0 1px 2px rgba(0, 0, 0, 0.35),
@@ -935,7 +935,7 @@ html.fancy .event-demo {
 body.fancy .button, body.fancy .button.small, body.fancy .button.yellow,
 body.fancy .rev-btn, body.fancy .car-btn, body.fancy .book,
 body.fancy .upload-btn, body.fancy .av, body.fancy .cal-day, body.fancy .lang-toggle button {
-  background-image: linear-gradient(160deg, rgba(255, 255, 255, 0.32), rgba(0, 0, 0, 0.16) 78%);
+  background-image: linear-gradient(165deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.10) 38%, rgba(90, 35, 5, 0.26) 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.38),
     inset 0 -2px 0 rgba(0, 0, 0, 0.22),
@@ -946,7 +946,7 @@ body.fancy .feature { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 30px rgb
 
 /* ============ fancy mode: selection rings survive AND glow ============ */
 body.fancy .feature.selected {
-  border-color: #ff8f7a;
+  border-color: #dd7a4f;
   animation: fancyRingGreen 2.8s ease-in-out infinite alternate;
 }
 body.fancy .feature.auto {
@@ -954,12 +954,12 @@ body.fancy .feature.auto {
   animation: fancyRingAmber 2.8s ease-in-out infinite alternate;
 }
 body.fancy .feature.locked {
-  border-color: #ff8f7a;
+  border-color: #dd7a4f;
   animation: fancyRingGreen 2.8s ease-in-out infinite alternate;
 }
 @keyframes fancyRingGreen {
-  from { box-shadow: 0 0 0 2px rgba(255, 143, 122, 0.85), 0 0 12px rgba(255, 143, 122, 0.30), 0 10px 30px rgba(10, 8, 24, 0.55); }
-  to   { box-shadow: 0 0 0 2px rgba(255, 143, 122, 1),    0 0 30px rgba(255, 143, 122, 0.60), 0 10px 30px rgba(10, 8, 24, 0.55); }
+  from { box-shadow: 0 0 0 2px rgba(221, 122, 79, 0.85), 0 0 12px rgba(221, 122, 79, 0.30), 0 10px 30px rgba(10, 8, 24, 0.55); }
+  to   { box-shadow: 0 0 0 2px rgba(221, 122, 79, 1),    0 0 30px rgba(221, 122, 79, 0.60), 0 10px 30px rgba(10, 8, 24, 0.55); }
 }
 @keyframes fancyRingAmber {
   from { box-shadow: 0 0 0 2px rgba(242, 194, 126, 0.85), 0 0 12px rgba(242, 194, 126, 0.28), 0 10px 30px rgba(10, 8, 24, 0.55); }
@@ -968,7 +968,7 @@ body.fancy .feature.locked {
 @media (prefers-reduced-motion: reduce) {
   body.fancy .feature.selected, body.fancy .feature.auto, body.fancy .feature.locked {
     animation: none;
-    box-shadow: 0 0 0 2px rgba(255, 143, 122, 0.9), 0 0 18px rgba(255, 143, 122, 0.4), 0 10px 30px rgba(10, 8, 24, 0.55);
+    box-shadow: 0 0 0 2px rgba(221, 122, 79, 0.9), 0 0 18px rgba(221, 122, 79, 0.4), 0 10px 30px rgba(10, 8, 24, 0.55);
   }
   body.fancy .feature.auto { box-shadow: 0 0 0 2px rgba(242, 194, 126, 0.9), 0 0 18px rgba(242, 194, 126, 0.4), 0 10px 30px rgba(10, 8, 24, 0.55); }
 }
@@ -1000,7 +1000,7 @@ body.fancy .feature.locked {
 /* editing demo: color in the title + date rows */
 #evName { color: #6b2fb5; font-size: 0.9rem; }
 #evDate { color: #1f7a70; }
-html.fancy #evName { color: #ff9e8a; }
+html.fancy #evName { color: #f0925f; }
 html.fancy #evDate { color: #f2c27e; }
 
 /* paragraph size: one value (0.95rem) */
@@ -1024,8 +1024,8 @@ html.fancy #evDate { color: #f2c27e; }
   transition: color 200ms ease, text-shadow 200ms ease;
 }
 .piano-panel.playing .piano-display {
-  color: #ff9e8a;
-  text-shadow: 0 0 12px rgba(255, 158, 138, 0.85);
+  color: #f0925f;
+  text-shadow: 0 0 12px rgba(240, 146, 95, 0.85);
 }
 
 /* steppers: slimmer */
@@ -1099,7 +1099,7 @@ html.fancy .price-widget {
   box-shadow: 0 10px 30px rgba(10, 8, 24, 0.35);
 }
 html.fancy .price-widget .button {
-  background-color: rgba(255, 143, 122, 0.30);
+  background-color: rgba(221, 122, 79, 0.30);
   border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
@@ -1146,3 +1146,11 @@ body.fancy .card, body.fancy .feature {
 /* login-locked emojis need more specificity than the .av centering rule */
 .av.more-av { display: none; }
 body.logged-in .av.more-av { display: inline-flex; }
+
+/* services: a booked class after login */
+.booked {
+  display: none; font-style: normal; font-size: 0.82rem; font-weight: 700;
+  background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: 0.32rem 1rem;
+}
+body.logged-in .booked-slot .book { display: none; }
+body.logged-in .booked-slot .booked { display: inline-block; }
