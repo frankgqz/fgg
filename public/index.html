@@ -47,7 +47,7 @@
     <section id="quote" class="band">
       <h2>Build your quote</h2>
       <p class="note">Every tile <b>is</b> its own example — this page is the demo.
-      Tick what you need; the price is calculated as you go.</p>
+      Tap what you need; the price is calculated as you go.</p>
 
       <div class="features bento">
 
@@ -69,16 +69,16 @@
           <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
           <span class="feature-desc">Custom art direction.</span>
           <canvas id="lens" class="lens" onclick="event.stopPropagation()" title="hover me"></canvas>
-          <button class="fx" data-fx="liquid" onclick="event.stopPropagation()">liquid</button>
+          <button class="fx" data-fx="sweep" onclick="event.stopPropagation()">shine</button>
         </label>
 
         <label class="feature t11" data-feature="cms">
           <span class="feature-head"><b>Editing</b><em>+$100</em></span>
+          <span class="feature-desc">A login portal lets you edit text, add images, including changing products in a shop.</span>
           <div class="event-demo" onclick="event.stopPropagation()">
-            <b id="evName" contenteditable="true">Spring Showcase</b>
+            <b id="evName" contenteditable="true">Showcase</b>
             <span id="evDate" contenteditable="true">Sat 14 Nov</span>
-            <span id="evPrice" contenteditable="true">$15</span>
-            <i class="ex-hint">(edit me!)</i>
+            <i class="ex-hint">(edit me)</i>
           </div>
         </label>
 
@@ -86,12 +86,10 @@
           <span class="feature-head"><b>Login</b><em>+$100</em></span>
           <span class="feature-desc">Things that follow the customer.</span>
           <div class="plain-ex">Order history · Gated content · Avatar</div>
-        </label>
-
-        <label class="feature t11">
-          <span class="feature-head"><b>Copywriting</b><em>by quote</em></span>
-          <span class="feature-desc">Words in your voice.</span>
-          <div class="plain-ex">About · Services · Products</div>
+          <div class="login-demo" onclick="event.stopPropagation()">
+            <button class="button small" id="loginSim" type="button">Log in</button>
+            <i class="ex-hint" id="loginGreet"></i>
+          </div>
         </label>
 
         <label class="feature t22" data-feature="db">
@@ -99,6 +97,7 @@
           <span class="feature-desc">Persistent information. Listings · Search ·
           Records · Comments & likes · Settings.</span>
           <div class="wall" onclick="event.stopPropagation()">
+            <p class="login-chip">🌟 signed in</p>
             <div class="avatar-row" id="avatarRow">
               <button type="button" class="av on" data-av="🙂">🙂</button>
               <button type="button" class="av" data-av="🌟">🌟</button>
@@ -166,8 +165,8 @@
               </div>
               <div class="shop-slide course-theme">
                 <h4>Digital courses</h4>
-                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 1</b><i class="bar"><i class="fill" style="width:70%"></i></i></div></div>
-                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 2</b><i class="bar"><i class="fill" style="width:25%"></i></i></div></div>
+                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 1</b><i class="bar"><i class="fill f1"></i></i></div><i class="bought">purchased</i></div>
+                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 2</b><i class="bar"><i class="fill f2"></i></i></div><i class="bought">purchased</i></div>
                 <span class="shop-note">logins · progress · gated content</span>
               </div>
             </div>
@@ -280,11 +279,23 @@
       extraHours += 1; $('revHours').textContent = extraHours; update();
     });
 
-    // ---- liquid effect (one button) ----
+    // ---- gloss sweep (contained effect button) ----
     document.querySelectorAll('.fx').forEach((b) => b.addEventListener('click', () => {
-      document.body.classList.add('fx-liquid');
-      setTimeout(() => document.body.classList.remove('fx-liquid'), 2600);
+      const tile = b.closest('.feature');
+      tile.classList.remove('sweeping');
+      void tile.offsetWidth; // restart the animation
+      tile.classList.add('sweeping');
+      setTimeout(() => tile.classList.remove('sweeping'), 750);
     }));
+
+    // ---- simulated login (touches the wall + the shop) ----
+    let loggedIn = false;
+    $('loginSim').addEventListener('click', () => {
+      loggedIn = !loggedIn;
+      document.body.classList.toggle('logged-in', loggedIn);
+      $('loginSim').textContent = loggedIn ? 'Log out' : 'Log in';
+      $('loginGreet').textContent = loggedIn ? 'welcome back 🌟' : '';
+    });
 
     // ---- shop kind carousel ----
     document.querySelectorAll('.car-btn').forEach((b) => b.addEventListener('click', () => {
