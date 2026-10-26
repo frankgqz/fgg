@@ -27,10 +27,7 @@
   <main>
     <section class="hero">
       <h1>Websites, built and cared for.</h1>
-      <p class="lede">I'm Frank Gao, a web developer in Melbourne. I build small,
-      fast websites for businesses — and look after them so you never have to
-      think about it.</p>
-      <p class="meta">$200 to build · $200 a year to keep running</p>
+      <p class="lede">I'm Frank Gao, a web developer in Melbourne. I build websites and apps for businesses.</p>
       <a class="button" href="#quote">Try it</a>
     </section>
 
@@ -42,21 +39,21 @@
 
       <div class="features bento">
 
-        <label class="feature t21 locked">
+        <div class="feature t21 locked">
           <span class="feature-head"><b>Standard build</b><em>$200</em></span>
           <span class="feature-desc">Every site starts here.</span>
           <div class="plain-ex">Email · Form · Media · Dynamic components</div>
           <span class="tag">included</span>
-        </label>
+        </div>
 
-        <label class="feature t21 locked">
+        <div class="feature t21 locked">
           <span class="feature-head"><b>Yearly care</b><em>$200 / y</em></span>
           <span class="feature-desc">Always on.</span>
           <div class="plain-ex">Domain · Hosting · Backups · Security · SEO reports · Small changes</div>
           <span class="tag">always on</span>
-        </label>
+        </div>
 
-        <label class="feature t21">
+        <div class="feature t21">
           <span class="feature-head"><b>Revisions</b><em>$50 / session</em></span>
           <span class="feature-desc">A time for us to add, remove, edit — talk about
           site direction. <b id="revCount">3</b> sessions included.</span>
@@ -65,16 +62,26 @@
             <span class="rev-hours"><b id="revSessions">3</b> sessions</span>
             <button class="rev-btn" id="revPlus" type="button">+</button>
           </div>
-        </label>
+        </div>
 
-        <label class="feature t11" data-feature="fancy">
+        <div class="feature t11" data-feature="fancy">
           <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
           <span class="feature-desc">Custom art direction.</span>
-          <canvas id="lens" class="lens" onclick="event.stopPropagation()" title="hover me"></canvas>
-          <button class="fx" data-fx="sweep" onclick="event.stopPropagation()">shine</button>
-        </label>
+          <div class="flip-stage" onclick="event.stopPropagation()">
+            <div class="flip-inner" id="flipInner">
+              <div class="flip-face">
+                <canvas id="lens" class="lens" title="hover me"></canvas>
+                <button class="fx" data-fx="sweep">shine</button>
+              </div>
+              <div class="flip-face flip-back">
+                <canvas id="scene3d"></canvas>
+                <i class="flip-hint">tap to flip</i>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <label class="feature t11" data-feature="cms">
+        <div class="feature t11" data-feature="cms">
           <span class="feature-head"><b>Editing</b><em>+$100</em></span>
           <span class="feature-desc">A portal allowing editing.</span>
           <div class="event-demo" onclick="event.stopPropagation()">
@@ -85,13 +92,13 @@
               </div>
               <button class="upload-btn" id="uploadBtn" type="button" title="choose an image">↑</button>
             </div>
-            <p class="ev-text" id="evText" contenteditable="true">I'm thinking of an event this saturday, and the tickets are currently $0</p>
+            <p class="ev-text" id="evText" contenteditable="true">I'm thinking of an event for Saturday. The tickets are currently $0</p>
             <img id="demoImg" class="demo-img" alt="" hidden>
             <i class="ex-hint">(edit me)</i>
           </div>
-        </label>
+        </div>
 
-        <label class="feature t22" data-feature="db">
+        <div class="feature t22" data-feature="db">
           <span class="feature-head"><b>Database</b><em>+$100</em></span>
           <span class="feature-desc">Persistent information. Listings · Search ·
           Records · Comments & likes · Settings.</span>
@@ -115,9 +122,9 @@
             <p class="meta wall-count"><b id="wallCount">…</b> comments</p>
             <div class="wall-list" id="wallList"><p class="note">Loading the wall…</p></div>
           </div>
-        </label>
+        </div>
 
-        <label class="feature t22" data-feature="shop">
+        <div class="feature t22" data-feature="shop">
           <span class="feature-head"><b>Shop</b><em>+$200</em></span>
           <span class="feature-desc">Payment, products, photos, tags.</span>
           <div class="shop-kinds" onclick="event.stopPropagation()">
@@ -157,44 +164,53 @@
             </div>
             <button class="car-btn next" data-dir="1" aria-label="Next">›</button>
           </div>
-        </label>
+        </div>
 
-        <label class="feature t21" data-feature="math">
+        <div class="feature t21" data-feature="math">
           <span class="feature-head"><b>Logic</b><em>+$100</em></span>
           <span class="feature-desc">Math, Calculations. Quote estimators.
           Multilingual and currency toggles.</span>
-        </label>
+        </div>
 
-        <label class="feature t11" data-feature="login">
+        <div class="feature t11" data-feature="login">
           <span class="feature-head"><b>Login</b><em>+$100</em></span>
           <span class="feature-desc">Things that follow the customer.</span>
           <div class="plain-ex">Order history · Gated content · Avatar</div>
           <div class="login-demo" onclick="event.stopPropagation()">
             <button class="button small" id="loginSim" type="button">Log in</button>
           </div>
-        </label>
+        </div>
 
-        <label class="feature t11">
+        <div class="feature t11">
           <span class="feature-head"><b>Pages</b><em>$50 over 5</em></span>
           <div class="rev-row" onclick="event.stopPropagation()">
             <button class="rev-btn" id="pagesMinus" type="button">−</button>
             <input type="number" id="pages" min="1" max="30" value="1" class="pages-input">
             <button class="rev-btn" id="pagesPlus" type="button">+</button>
           </div>
-        </label>
+        </div>
       </div>
 
     </section>
 
     <section id="work" class="band">
       <h2>Work</h2>
-      <article class="card wide">
-        <h3>GG Agency</h3>
-        <p class="meta">Livestreaming agency · Melbourne</p>
-        <p>A fast, modern site for Australia's largest Bigo agency — gallery,
-        live prices, and a contact form, all editable by the team.</p>
-        <p><a href="https://ggagency.com.au">ggagency.com.au</a></p>
-      </article>
+      <div class="work-panels">
+        <article class="card work-card">
+          <h3>GG Agency</h3>
+          <p class="meta">Livestreaming agency · Melbourne</p>
+          <p>A fast, modern site for Australia's largest Bigo agency — gallery,
+          live prices, and a contact form, all editable by the team.</p>
+          <p><a href="https://ggagency.com.au">ggagency.com.au</a></p>
+        </article>
+        <article class="card work-card">
+          <h3>Lumi Dance Studio</h3>
+          <p class="meta">Dance studio · Deer Park</p>
+          <p>A bright, playful class site — full timetable, packages, and
+          tap-to-copy payment details, made phone-first.</p>
+          <p><a href="https://lumidance.frankgqz.workers.dev">lumidance.com.au</a></p>
+        </article>
+      </div>
     </section>
 
     <section id="contact" class="band">
@@ -292,6 +308,12 @@
       pages.value = Math.min(30, (parseInt(pages.value || '1', 10) || 1) + 1); update();
     });
 
+    // ---- tap-flip (front: lens + shine, back: 3D scene) ----
+    const flipInner = $('flipInner');
+    flipInner.parentElement.addEventListener('click', () => {
+      flipInner.classList.toggle('flipped');
+    });
+
     // ---- gloss sweep (contained effect button) ----
     document.querySelectorAll('.fx').forEach((b) => b.addEventListener('click', () => {
       const tile = b.closest('.feature');
@@ -331,6 +353,15 @@
       const el = $('shopGrid');
       el.scrollBy({ left: Number(b.dataset.dir) * el.clientWidth * 0.85, behavior: 'smooth' });
     }));
+    // pagination: only show the direction you can still go
+    const shopGrid = $('shopGrid');
+    function carState() {
+      const max = shopGrid.scrollWidth - shopGrid.clientWidth - 4;
+      document.querySelector('.car-btn.prev').hidden = shopGrid.scrollLeft <= 4;
+      document.querySelector('.car-btn.next').hidden = shopGrid.scrollLeft >= max;
+    }
+    shopGrid.addEventListener('scroll', carState, { passive: true });
+    setTimeout(carState, 60);
 
     // ---- fluid glass lens (WebGL, hover-only) ----
     const lens = $('lens');
@@ -471,6 +502,48 @@
     loadWall();
     update();
   })();
+  </script>
+
+  <script type="module">
+    // tiny three.js scene behind the flip card — lazy, starts on first tap
+    let started = false;
+    const start = async () => {
+      if (started) return; started = true;
+      const THREE = await import('https://unpkg.com/three@0.160.0/build/three.module.js');
+      const canvas = document.getElementById('scene3d');
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+      camera.position.z = 3.2;
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x223344, 1.1));
+      const key = new THREE.DirectionalLight(0xffffff, 1.6);
+      key.position.set(2, 3, 4); scene.add(key);
+      const rim = new THREE.DirectionalLight(0xb9a3ff, 1.1);
+      rim.position.set(-3, -1, -2); scene.add(rim);
+      const knot = new THREE.Mesh(
+        new THREE.TorusKnotGeometry(0.85, 0.28, 180, 32),
+        new THREE.MeshStandardMaterial({ color: 0xf0eef7, metalness: 0.95, roughness: 0.18 })
+      );
+      scene.add(knot);
+      const fit = () => {
+        const r = canvas.getBoundingClientRect();
+        renderer.setSize(Math.max(2, r.width), Math.max(2, r.height), false);
+        renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+        camera.aspect = r.width / Math.max(1, r.height);
+        camera.updateProjectionMatrix();
+      };
+      fit();
+      addEventListener('resize', fit);
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const loop = () => {
+        knot.rotation.y += 0.01;
+        knot.rotation.x += 0.004;
+        renderer.render(scene, camera);
+        if (!reduce) requestAnimationFrame(loop);
+      };
+      loop();
+    };
+    document.querySelector('.flip-stage').addEventListener('click', start);
   </script>
 </body>
 </html>
