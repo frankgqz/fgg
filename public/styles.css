@@ -1007,17 +1007,32 @@ html.fancy #evDate { color: #6fdccf; }
 .plain-ex { font-size: 0.95rem; }
 .ev-text { font-size: 0.95rem; }
 
-/* piano panel (fancy only) */
+/* piano panel: bottom of the fancy tile (same mini frame as the editing demo) */
 .piano-panel {
-  position: fixed; left: 1.15rem; bottom: 1.15rem; z-index: 240;
-  width: 21rem; height: 14rem;
+  position: relative; margin-top: 0.55rem;
+  width: 100%; height: 8.5rem;
   background: rgba(18, 16, 28, 0.92); border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 18px; overflow: hidden;
-  box-shadow: 0 10px 30px rgba(10, 8, 24, 0.55);
+  border-radius: 12px; overflow: hidden; cursor: pointer;
+  box-shadow: 0 6px 18px rgba(10, 8, 24, 0.45);
 }
 .piano-panel[hidden] { display: none; }
 .piano-panel canvas { width: 100%; height: 100%; display: block; }
-@media (max-width: 700px) { .piano-panel { width: 15rem; height: 10.5rem; } }
+.piano-display {
+  position: absolute; left: 0.55rem; bottom: 0.5rem;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.35);
+  transition: color 200ms ease, text-shadow 200ms ease;
+}
+.piano-panel.playing .piano-display {
+  color: #d7a6ff;
+  text-shadow: 0 0 12px rgba(185, 163, 255, 0.85);
+}
 
 /* steppers: slimmer */
 .rev-btn { min-width: 2.15rem; padding: 0.42rem 0.85rem; }
+
+/* editing demo matches the piano frame for balance */
+.event-demo { height: 8.5rem; overflow: hidden; align-content: start; }
+
+/* product row: 2 fixed columns (a single card stays 1 column) */
+.prod-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }

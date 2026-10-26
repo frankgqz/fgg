@@ -84,6 +84,11 @@
         <div class="feature t11" data-feature="fancy">
           <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
           <span class="feature-desc">Custom design direction, 1 more revision included.</span>
+          <div class="piano-panel" id="pianoPanel" onclick="event.stopPropagation()" hidden>
+            <canvas id="piano3d"></canvas>
+            <div class="piano-display" id="pianoDisplay">♪ First Love</div>
+            <audio id="pianoSong" src="media/first-love.mp4" loop preload="none"></audio>
+          </div>
         </div>
 
         <div class="feature t11" data-feature="cms">
@@ -99,7 +104,6 @@
             </div>
             <p class="ev-text" id="evText" contenteditable="true">Weekend Event, Tickets $0</p>
             <img id="demoImg" class="demo-img" alt="" hidden>
-            <i class="ex-hint">(edit me)</i>
           </div>
         </div>
 
@@ -228,10 +232,6 @@
     <p>FGG Pty Ltd · Melbourne</p>
   </footer>
 
-  <div class="piano-panel" id="pianoPanel" hidden>
-    <canvas id="piano3d"></canvas>
-  </div>
-
   <div class="work-detail" id="workDetail" hidden>
     <div class="work-detail-card">
       <h3 id="wdTitle"></h3>
@@ -329,6 +329,10 @@
       if (pianoPanel) {
         pianoPanel.hidden = !state.fancy;
         if (state.fancy) startPiano();
+        else {
+          $('pianoSong').pause();
+          pianoPanel.classList.remove('playing');
+        }
       }
     }
 
@@ -760,6 +764,14 @@
       };
       loop(0);
     }
+
+    $('pianoPanel').addEventListener('click', () => {
+      const panel = $('pianoPanel');
+      const on = !panel.classList.contains('playing');
+      panel.classList.toggle('playing', on);
+      if (on) $('pianoSong').play().catch(() => {});
+      else $('pianoSong').pause();
+    });
 
     // ---- work panels: shared-element open (View Transitions + FLIP fallback) ----
     const workDetail = $('workDetail');
