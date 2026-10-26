@@ -37,33 +37,26 @@
       <p class="note">Every tile <b>is</b> its own example — this page is the demo.
       Tap what you need; the price is calculated as you go.</p>
 
-      <div class="features bento">
+      <div class="top-row">
 
-        <div class="feature t21 locked">
+        <div class="feature locked">
           <span class="feature-head"><b>Standard build</b><em>$200</em></span>
           <span class="feature-desc">Every site starts here.</span>
-          <div class="plain-ex">Email · Form · Media · Dynamic components · Micro-interactions</div>
-          <span class="tag">included</span>
+          <div class="plain-ex">Custom design · Draft + revision process · Yearly update · Domain</div>
         </div>
 
 
-        <div class="feature t21 locked">
+
+        <div class="feature locked">
           <span class="feature-head"><b>Yearly care</b><em>$200 / y</em></span>
           <span class="feature-desc">Always on.</span>
           <div class="plain-ex">Domain · Hosting · Backups · Security · SEO reports · Small changes</div>
-          <span class="tag">always on</span>
         </div>
 
 
-        <div class="feature t21" data-feature="math">
-          <span class="feature-head"><b>Logic</b><em>+$100</em></span>
-          <span class="feature-desc">Math, Calculations. Quote estimators.
-          Multilingual and currency toggles.</span>
-        </div>
 
-
-        <div class="feature t21 selected default-on">
-          <span class="feature-head"><b>Revisions</b><em>$50 / session</em></span>
+        <div class="feature selected default-on">
+          <span class="feature-head"><b>Revisions</b><em>$75 / session</em></span>
           <span class="feature-desc">A time for us to add, remove, edit — talk about
           site direction. <b id="revCount">2</b> sessions included (~ 90 mins a session).</span>
           <div class="rev-row" onclick="event.stopPropagation()">
@@ -74,6 +67,18 @@
         </div>
 
 
+      </div>
+
+      <div class="features bento">
+
+        <div class="feature t21" data-feature="math">
+          <span class="feature-head"><b>Logic</b><em>+$100</em></span>
+          <span class="feature-desc">Math, Calculations. Quote estimators.
+          Multilingual and currency toggles.</span>
+        </div>
+
+
+
         <div class="feature t11" data-feature="fancy">
           <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
           <span class="feature-desc">Custom art direction.</span>
@@ -82,63 +87,25 @@
         </div>
 
 
+
         <div class="feature t11" data-feature="cms">
           <span class="feature-head"><b>Editing</b><em>+$100</em></span>
           <span class="feature-desc">A portal allowing editing.</span>
           <div class="event-demo" onclick="event.stopPropagation()">
             <div class="demo-head">
               <div class="demo-titles">
-                <b id="evName" contenteditable="true">Showcase</b>
+                <b id="evName" contenteditable="true">Weekend Event</b>
                 <span id="evDate" contenteditable="true">Sat 14 Nov</span>
               </div>
               <button class="upload-btn" id="uploadBtn" type="button" title="choose an image">↑</button>
             </div>
-            <p class="ev-text" id="evText" contenteditable="true">Event this Weekend. Tickets currently $0.</p>
+            <p class="ev-text" id="evText" contenteditable="true">Tickets $0</p>
             <img id="demoImg" class="demo-img" alt="" hidden>
             <i class="ex-hint">(edit me)</i>
           </div>
         </div>
 
 
-        <div class="feature t11" data-feature="login">
-          <span class="feature-head"><b>Login</b><em>+$100</em></span>
-          <span class="feature-desc">Things that follow the customer.</span>
-          <div class="plain-ex">Order history · Gated content · Avatar</div>
-          <div class="login-demo" onclick="event.stopPropagation()">
-            <button class="button small" id="loginSim" type="button">Log in</button>
-          </div>
-        </div>
-
-
-        <div class="feature t11 selected default-on">
-          <span class="feature-head"><b>Pages</b><em>$50 over 5</em></span>
-          <div class="rev-row" onclick="event.stopPropagation()">
-            <button class="rev-btn" id="pagesMinus" type="button">−</button>
-            <input type="number" id="pages" min="1" max="30" value="1" class="pages-input">
-            <button class="rev-btn" id="pagesPlus" type="button">+</button>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-    <section id="work" class="band">
-      <h2>Work</h2>
-      <div class="work-panels">
-        <article class="card work-card">
-          <h3>GG Agency</h3>
-          <p class="meta">Livestreaming agency · Melbourne</p>
-          <p>A fast, modern site for Australia's largest Bigo agency — gallery,
-          live prices, and a contact form, all editable by the team.</p>
-          <p><a href="https://ggagency.com.au">ggagency.com.au</a></p>
-        </article>
-        <article class="card work-card">
-          <h3>Lumi Dance Studio</h3>
-          <p class="meta">Dance studio · Deer Park</p>
-          <p>A bright, playful class site — full timetable, packages, and
-          tap-to-copy payment details, made phone-first.</p>
-          <p><a href="https://lumidance.frankgqz.workers.dev">lumidance.com.au</a></p>
-        </article>
 
         <div class="feature t22" data-feature="db">
           <span class="feature-head"><b>Database</b><em>+$100</em></span>
@@ -165,6 +132,7 @@
             <div class="wall-list" id="wallList"><p class="note">Loading the wall…</p></div>
           </div>
         </div>
+
 
 
         <div class="feature t22" data-feature="shop">
@@ -209,6 +177,48 @@
           </div>
         </div>
 
+
+        <div class="feature t21" data-feature="login">
+          <span class="feature-head"><b>Login</b><em>+$100</em></span>
+          <span class="feature-desc">Things that follow the customer.</span>
+          <div class="plain-ex">Order history · Gated content · Avatar</div>
+          <div class="login-demo" onclick="event.stopPropagation()">
+            <button class="button small" id="loginSim" type="button">Log in</button>
+          </div>
+        </div>
+
+
+
+        <div class="feature t21 selected default-on">
+          <span class="feature-head"><b>Pages</b><em>$50 over 5</em></span>
+          <div class="rev-row" onclick="event.stopPropagation()">
+            <button class="rev-btn" id="pagesMinus" type="button">−</button>
+            <input type="number" id="pages" min="1" max="30" value="1" class="pages-input">
+            <button class="rev-btn" id="pagesPlus" type="button">+</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section id="work" class="band">
+      <h2>Work</h2>
+      <div class="work-panels">
+        <article class="card work-card">
+          <h3>GG Agency</h3>
+          <p class="meta">Livestreaming agency · Melbourne</p>
+          <p>A fast, modern site for Australia's largest Bigo agency — gallery,
+          live prices, and a contact form, all editable by the team.</p>
+          <p><a href="https://ggagency.com.au">ggagency.com.au</a></p>
+        </article>
+        <article class="card work-card">
+          <h3>Lumi Dance Studio</h3>
+          <p class="meta">Dance studio · Deer Park</p>
+          <p>A bright, playful class site — full timetable, packages, and
+          tap-to-copy payment details, made phone-first.</p>
+          <p><a href="https://lumidance.frankgqz.workers.dev">lumidance.com.au</a></p>
+        </article>
+
       </div>
     </section>
 
@@ -224,6 +234,18 @@
   <footer>
     <p>FGG Pty Ltd · Melbourne</p>
   </footer>
+
+  <div class="work-detail" id="workDetail" hidden>
+    <div class="work-detail-card">
+      <h3 id="wdTitle"></h3>
+      <p class="meta" id="wdMeta"></p>
+      <p id="wdBody"></p>
+      <p class="wd-actions">
+        <a class="button small" id="wdLink" target="_blank" rel="noopener"></a>
+        <button class="button small" id="wdClose" type="button">close</button>
+      </p>
+    </div>
+  </div>
 
   <input type="file" id="demoImgInput" accept="image/*" hidden>
 
@@ -299,7 +321,7 @@
       const p = Math.max(1, parseInt(pages.value || '1', 10));
       pages.value = p;
       total += Math.max(0, p - INCLUDED_PAGES) * PAGE_PRICE;
-      total += Math.max(0, revSessions - (state.fancy ? 3 : 2)) * 50;
+      total += Math.max(0, revSessions - (state.fancy ? 3 : 2)) * 75;
 
       setTotal(total);
       $('revCount').textContent = state.fancy ? 3 : 2;
@@ -353,8 +375,6 @@
 
     // ---- upload demo: pick an image, kept in localStorage ----
     const demoImg = $('demoImg');
-    const savedImg = localStorage.getItem('fggDemoImg');
-    if (savedImg) { demoImg.src = savedImg; demoImg.hidden = false; }
     $('uploadBtn').addEventListener('click', () => $('demoImgInput').click());
     $('demoImgInput').addEventListener('change', () => {
       const file = $('demoImgInput').files[0];
@@ -363,7 +383,7 @@
       reader.onload = () => {
         const img = new Image();
         img.onload = () => {
-          // shrink first: full-size dataURLs blow the localStorage quota
+          // shrink before preview
           const scale = Math.min(1, 720 / img.width);
           const cv = document.createElement('canvas');
           cv.width = Math.round(img.width * scale);
@@ -372,7 +392,6 @@
           const data = cv.toDataURL('image/jpeg', 0.82);
           demoImg.src = data;
           demoImg.hidden = false;
-          try { localStorage.setItem('fggDemoImg', data); } catch { /* quota */ }
         };
         img.src = reader.result;
       };
@@ -542,6 +561,61 @@
         $('wallBody').value = '';
         loadWall();
       } catch { /* wall offline */ }
+    });
+
+    // ---- work panels: shared-element open (View Transitions + FLIP fallback) ----
+    const workDetail = $('workDetail');
+    const detailCard = workDetail.querySelector('.work-detail-card');
+    let lastCard = null;
+    function openWork(card) {
+      lastCard = card;
+      $('wdTitle').textContent = card.querySelector('h3').textContent;
+      $('wdMeta').textContent = card.querySelector('.meta').textContent;
+      $('wdBody').textContent = card.querySelector('p:not(.meta)').textContent;
+      const link = card.querySelector('a');
+      $('wdLink').href = link.href;
+      $('wdLink').textContent = link.textContent;
+      const show = () => { workDetail.hidden = false; document.body.classList.add('modal-open'); };
+      if (document.startViewTransition) {
+        card.style.viewTransitionName = 'work-hero';
+        detailCard.style.viewTransitionName = 'work-hero';
+        document.startViewTransition(show).finished.finally(() => {
+          card.style.viewTransitionName = '';
+          detailCard.style.viewTransitionName = '';
+        });
+      } else {
+        show();
+        const from = card.getBoundingClientRect();
+        const to = detailCard.getBoundingClientRect();
+        const dx = (from.left + from.width / 2) - (to.left + to.width / 2);
+        const dy = (from.top + from.height / 2) - (to.top + to.height / 2);
+        detailCard.animate([
+          { transform: `translate(${dx}px, ${dy}px) scale(${from.width / to.width}, ${from.height / to.height})`, opacity: 0.5 },
+          { transform: 'none', opacity: 1 },
+        ], { duration: 340, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' });
+      }
+    }
+    function closeWork() {
+      const hide = () => { workDetail.hidden = true; document.body.classList.remove('modal-open'); };
+      if (document.startViewTransition && lastCard) {
+        lastCard.style.viewTransitionName = 'work-hero';
+        detailCard.style.viewTransitionName = 'work-hero';
+        document.startViewTransition(hide).finished.finally(() => {
+          lastCard.style.viewTransitionName = '';
+          detailCard.style.viewTransitionName = '';
+        });
+      } else hide();
+    }
+    document.querySelectorAll('.work-card').forEach((card) => {
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('a')) return;
+        openWork(card);
+      });
+    });
+    $('wdClose').addEventListener('click', closeWork);
+    workDetail.addEventListener('click', (e) => { if (e.target === workDetail) closeWork(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !workDetail.hidden) closeWork();
     });
 
     loadWall();

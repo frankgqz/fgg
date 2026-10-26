@@ -868,3 +868,32 @@ h3 { font-size: var(--fs-h5); }
 /* default-included panels (Revisions, Pages) hold their highlight */
 .feature.default-on { cursor: default; }
 .feature.default-on .rev-row { cursor: auto; }
+
+/* ============ top row: the three included panels ============ */
+.top-row {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem; margin-bottom: 1rem;
+}
+.top-row .feature { grid-column: auto; grid-row: auto; }
+@media (max-width: 900px) { .top-row { grid-template-columns: minmax(0, 1fr); } }
+
+/* locked panels: selected green */
+.feature.locked { border-color: #2e9e6b; box-shadow: 0 0 0 2px #2e9e6b; }
+
+/* ============ work detail: shared-element open ============ */
+.work-card { cursor: pointer; }
+.work-detail {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(20, 20, 24, 0.45);
+  display: flex; align-items: center; justify-content: center; padding: 1.25rem;
+}
+.work-detail-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+  box-shadow: var(--shadow); padding: 1.75rem 1.9rem; max-width: 32rem; width: 100%;
+}
+.wd-actions { display: flex; gap: 0.75rem; align-items: center; margin: 1.15rem 0 0; }
+body.modal-open { overflow: hidden; }
+::view-transition-old(work-hero), ::view-transition-new(work-hero) {
+  animation-duration: 380ms;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
