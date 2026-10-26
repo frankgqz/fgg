@@ -44,12 +44,12 @@
         <div class="feature locked">
           <span class="feature-head"><b>Standard</b><em>$200</em></span>
           <div class="plain-ex">Custom design · Draft + revision process · Domain · Receiving emails</div>
-          <div class="plain-ex">Mobile friendly · Fast & secure · SEO setup · Contact form · Media gallery · Micro-interactions</div>
+          <div class="plain-ex">Mobile and desktop optimized · Fast & secure · Form · Media · Gallery</div>
         </div>
 
         <div class="feature locked">
           <span class="feature-head"><b>Care</b><em>$200 / y</em></span>
-          <div class="plain-ex">Domain · Hosting · Backups · Security · SEO reports · Code access · Yearly revision</div>
+          <div class="plain-ex">Domain · Hosting · Backups · Security · Quarterly traffic reports · Code access · Yearly revision</div>
         </div>
 
         <div class="feature selected default-on">
@@ -117,7 +117,7 @@
         </div>
 
         <div class="feature t22" data-feature="db">
-          <span class="feature-head"><b>Database</b><em>+$100</em></span>
+          <span class="feature-head"><b>Database</b><em>included</em></span>
           <span class="feature-desc">Persistent information. Listings · Search ·
           Records · Comments & likes · Settings.</span>
           <div class="wall" onclick="event.stopPropagation()">
@@ -243,7 +243,7 @@
   <script>
   (() => {
     const $ = (id) => document.getElementById(id);
-    const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 200, login: 100 };
+    const PRICES = { fancy: 200, math: 100, db: 0, cms: 100, shop: 250, login: 150 };
     const BASE = 200, INCLUDED_PAGES = 5, PAGE_PRICE = 50;
 
     const state = { fancy: false, math: false, db: false, cms: false, shop: false, login: false };
@@ -617,9 +617,9 @@
       "Build your quote": "Tạo báo giá",
       "Standard": "Tiêu chuẩn",
       "Custom design · Draft + revision process · Domain · Receiving emails": "Thiết kế riêng · Quy trình nháp + hiệu chỉnh · Tên miền · Nhận email",
-      "Mobile friendly · Fast & secure · SEO setup · Contact form · Media gallery · Micro-interactions": "Tương thích di động · Nhanh & bảo mật · Thiết lập SEO · Form liên hệ · Thư viện ảnh · Tương tác mượt",
+      "Mobile and desktop optimized · Fast & secure · Form · Media · Gallery": "Tối ưu máy tính & điện thoại · Nhanh & bảo mật · Form · Media · Thư viện ảnh",
       "Care": "Chăm sóc",
-      "Domain · Hosting · Backups · Security · SEO reports · Code access · Yearly revision": "Tên miền · Hosting · Sao lưu · Bảo mật · Báo cáo SEO · Mã nguồn · Hiệu chỉnh hằng năm",
+      "Domain · Hosting · Backups · Security · Quarterly traffic reports · Code access · Yearly revision": "Tên miền · Hosting · Sao lưu · Bảo mật · Báo cáo lưu lượng hằng quý · Mã nguồn · Hiệu chỉnh hằng năm",
       "Revision": "Hiệu chỉnh",
       "sessions included, draft edit design process. ~60-90 mins a session.": "buổi bao gồm, quy trình nháp – sửa – thiết kế. ~60–90 phút mỗi buổi.",
       "sessions": "buổi",
@@ -653,6 +653,7 @@
       "Class pass": "Vé lớp học",
       "book": "đặt",
       "booked": "đã đặt",
+      "included": "bao gồm",
       "calendar · time slots · bookings": "lịch · khung giờ · đặt chỗ",
       "Digital courses": "Khóa học số",
       "Lesson 1": "Bài 1",
