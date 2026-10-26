@@ -80,21 +80,19 @@
           <span class="feature-desc">Persistent information. Listings · Search ·
           Records · Comments & likes · Settings.</span>
           <div class="wall" onclick="event.stopPropagation()">
-            <div class="wall-stats">
-              <button class="button yellow small" id="likeBtn">♥ <b id="likeCount">…</b></button>
-              <span class="meta"><b id="wallCount">…</b> comments — this wall lives in a real database</span>
+            <div class="avatar-row" id="avatarRow">
+              <button type="button" class="av on" data-av="🙂">🙂</button>
+              <button type="button" class="av" data-av="🌟">🌟</button>
+              <button type="button" class="av" data-av="💃">💃</button>
+              <button type="button" class="av" data-av="🚀">🚀</button>
             </div>
             <form class="wall-form" id="wallForm">
-              <div class="avatar-row" id="avatarRow">
-                <button type="button" class="av on" data-av="🙂">🙂</button>
-                <button type="button" class="av" data-av="🌟">🌟</button>
-                <button type="button" class="av" data-av="💃">💃</button>
-                <button type="button" class="av" data-av="🚀">🚀</button>
-              </div>
               <input type="text" id="wallName" maxlength="24" placeholder="Your name" required>
-              <input type="text" id="wallBody" maxlength="280" placeholder="Say something nice…" required>
+              <input type="text" id="wallBody" maxlength="280" placeholder="express yourself" required>
               <button class="button small" type="submit">Send</button>
+              <button class="button yellow small" id="likeBtn" type="button">♥ <b id="likeCount">…</b></button>
             </form>
+            <p class="meta wall-count"><b id="wallCount">…</b> comments</p>
             <div class="wall-list" id="wallList"><p class="note">Loading the wall…</p></div>
           </div>
         </label>
@@ -111,29 +109,36 @@
           <div class="shop-kinds" onclick="event.stopPropagation()">
             <button class="car-btn prev" data-dir="-1" aria-label="Previous">‹</button>
             <div class="carousel" id="shopGrid">
-              <div class="shop-slide"><h4>Physical items</h4>
-                <div class="mini-grid">
-                  <div class="mini-card"><b>Espresso</b><span>$4.50</span></div>
-                  <div class="mini-card"><b>Croissant</b><span>$4.00</span></div>
-                  <div class="mini-card"><b>Beans 250g</b><span>$18</span></div>
+              <div class="shop-slide tags-theme">
+                <h4>Physical items</h4>
+                <div class="tag-row">
+                  <span class="tag-chip on">pastry</span>
+                  <span class="tag-chip">coffee</span>
+                  <span class="tag-chip">beans</span>
                 </div>
-                <span class="shop-note">cart · photos · stock</span>
+                <div class="prod-row">
+                  <div class="prod-card"><i class="prod-thumb a"></i><b>Espresso</b><span>$4.50</span></div>
+                  <div class="prod-card"><i class="prod-thumb b"></i><b>Croissant</b><span>$4.00</span></div>
+                </div>
+                <span class="shop-note">tags · photos · stock</span>
               </div>
-              <div class="shop-slide"><h4>Services</h4>
-                <div class="mini-grid">
-                  <div class="mini-card"><b>Consult</b><span>$60 / hr</span></div>
-                  <div class="mini-card"><b>Class pass</b><span>$120</span></div>
-                  <div class="mini-card"><b>Clean</b><span>$90</span></div>
+              <div class="shop-slide cal-theme">
+                <h4>Services</h4>
+                <div class="cal-row">
+                  <span class="cal-day">M</span><span class="cal-day on">T</span>
+                  <span class="cal-day">W</span><span class="cal-day">T</span>
+                  <span class="cal-day">F</span><span class="cal-day">S</span>
+                  <span class="cal-day">S</span>
                 </div>
-                <span class="shop-note">bookings · time slots</span>
+                <div class="slot-row"><b>10:00</b><span>Consult · 60 min</span><i class="book">book</i></div>
+                <div class="slot-row"><b>14:30</b><span>Class pass</span><i class="book">book</i></div>
+                <span class="shop-note">calendar · time slots · bookings</span>
               </div>
-              <div class="shop-slide"><h4>Digital courses</h4>
-                <div class="mini-grid">
-                  <div class="mini-card"><b>Lesson 1</b><span>free</span></div>
-                  <div class="mini-card"><b>Full course</b><span>$149</span></div>
-                  <div class="mini-card"><b>Members</b><span>$9 / mo</span></div>
-                </div>
-                <span class="shop-note">logins · gated content</span>
+              <div class="shop-slide course-theme">
+                <h4>Digital courses</h4>
+                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 1</b><i class="bar"><i class="fill" style="width:70%"></i></i></div></div>
+                <div class="lesson"><span class="play">▶</span><div class="lesson-body"><b>Lesson 2</b><i class="bar"><i class="fill" style="width:25%"></i></i></div></div>
+                <span class="shop-note">logins · progress · gated content</span>
               </div>
             </div>
             <button class="car-btn next" data-dir="1" aria-label="Next">›</button>
