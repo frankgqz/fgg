@@ -56,13 +56,7 @@
     .chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
     .chip.emoji { font-size: 1.15rem; padding: 0.35rem 0.7rem; }
 
-    /* spectrum rows */
-    .spectrum { display: flex; gap: 0.5rem; margin-bottom: 0.7rem; }
-    .spectrum .chip { flex: 1; text-align: center; }
 
-    .go-deeper { border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.15rem; margin: 1.75rem 0; background: var(--surface); }
-    .go-deeper summary { cursor: pointer; font-weight: 600; font-size: 0.95rem; }
-    .go-deeper .inner { margin-top: 1.25rem; }
 
     .step-nav { display: flex; gap: 0.75rem; align-items: center; margin-top: 1.75rem; }
     .back-link { background: none; border: 0; font: inherit; font-size: 0.92rem; color: var(--ink-soft); cursor: pointer; padding: 0.5rem 0.25rem; }
@@ -104,17 +98,7 @@
             <button type="button" class="chip">Both</button>
           </div>
         </fieldset>
-        <fieldset class="chips-field">
-          <legend>How did you find me?</legend>
-          <div class="chips" data-name="source">
-            <button type="button" class="chip">Google</button>
-            <button type="button" class="chip">Facebook</button>
-            <button type="button" class="chip">Instagram</button>
-            <button type="button" class="chip">A friend</button>
-            <button type="button" class="chip">Just found you</button>
-          </div>
-        </fieldset>
-      </section>
+              </section>
 
       <section class="step" data-step="1">
         <h2>The feel</h2>
@@ -144,28 +128,7 @@
             <button type="button" class="chip">Trustworthy</button>
           </div>
         </fieldset>
-        <fieldset class="chips-field">
-          <legend>Pick emojis that fit your business</legend>
-          <div class="chips" data-name="emojis" data-multi="1">
-            <button type="button" class="chip emoji">🌸</button>
-            <button type="button" class="chip emoji">☕</button>
-            <button type="button" class="chip emoji">🍰</button>
-            <button type="button" class="chip emoji">🛍️</button>
-            <button type="button" class="chip emoji">💇</button>
-            <button type="button" class="chip emoji">🍜</button>
-            <button type="button" class="chip emoji">🧁</button>
-            <button type="button" class="chip emoji">🌿</button>
-            <button type="button" class="chip emoji">⚡</button>
-            <button type="button" class="chip emoji">🎵</button>
-            <button type="button" class="chip emoji">💪</button>
-            <button type="button" class="chip emoji">📸</button>
-            <button type="button" class="chip emoji">🎨</button>
-            <button type="button" class="chip emoji">🏠</button>
-            <button type="button" class="chip emoji">✨</button>
-            <button type="button" class="chip emoji">🚗</button>
-          </div>
-        </fieldset>
-        <label class="field">What should it NOT feel like?<input name="notfeel" maxlength="160"></label>
+                <label class="field">What should it NOT feel like?<input name="notfeel" maxlength="160"></label>
         <fieldset class="chips-field">
           <legend>Have photos &amp; logo?</legend>
           <div class="chips" data-name="photos">
@@ -188,103 +151,9 @@
 
       <section class="step" data-step="2">
         <h2>Details</h2>
-        <label class="field">3 things you love — website, menu, shop sign, anything<textarea name="love" maxlength="2000"></textarea></label>
-        <label class="field">1 you'd avoid<textarea name="hate" maxlength="1000"></textarea></label>
-        <fieldset class="chips-field">
-          <legend>Pages &amp; structure</legend>
-          <div class="chips" data-name="pages">
-            <button type="button" class="chip">One page</button>
-            <button type="button" class="chip">A few pages</button>
-            <button type="button" class="chip">Menu-style</button>
-            <button type="button" class="chip">Not sure</button>
-          </div>
-        </fieldset>
-        <fieldset class="chips-field">
-          <legend>Layout preference</legend>
-          <div class="chips" data-name="layout">
-            <button type="button" class="chip">Big photos</button>
-            <button type="button" class="chip">Lots of info</button>
-            <button type="button" class="chip">Balanced</button>
-            <button type="button" class="chip">You decide</button>
-          </div>
-        </fieldset>
-
-        <details class="go-deeper" open>
-          <summary>Go deeper (optional)</summary>
-          <div class="inner">
-            <fieldset class="chips-field">
-              <legend>Light or dark?</legend>
-              <div class="chips" data-name="spectrum_lightdark">
-                <button type="button" class="chip">Light</button>
-                <button type="button" class="chip">In between</button>
-                <button type="button" class="chip">Dark</button>
-              </div>
-            </fieldset>
-            <fieldset class="chips-field">
-              <legend>Vibrant or monochrome?</legend>
-              <div class="chips" data-name="spectrum_vibrantmono">
-                <button type="button" class="chip">Vibrant</button>
-                <button type="button" class="chip">In between</button>
-                <button type="button" class="chip">Monochrome</button>
-              </div>
-            </fieldset>
-            <fieldset class="chips-field">
-              <legend>Warm or cool?</legend>
-              <div class="chips" data-name="spectrum_warmcool">
-                <button type="button" class="chip">Warm</button>
-                <button type="button" class="chip">In between</button>
-                <button type="button" class="chip">Cool</button>
-              </div>
-            </fieldset>
-            <fieldset class="chips-field">
-              <legend>Quiet or loud?</legend>
-              <div class="chips" data-name="spectrum_quietloud">
-                <button type="button" class="chip">Quiet</button>
-                <button type="button" class="chip">In between</button>
-                <button type="button" class="chip">Loud</button>
-              </div>
-            </fieldset>
-            <fieldset class="chips-field">
-              <legend>Modern or classic?</legend>
-              <div class="chips" data-name="spectrum_modernclassic">
-                <button type="button" class="chip">Modern</button>
-                <button type="button" class="chip">In between</button>
-                <button type="button" class="chip">Classic</button>
-              </div>
-            </fieldset>
-            <fieldset class="chips-field">
-              <legend>Plain or detailed?</legend>
-              <div class="chips" data-name="spectrum_plaindetailed">
-                <button type="button" class="chip">Plain</button>
-                <button type="button" class="chip">In between</button>
-                <button type="button" class="chip">Detailed</button>
-              </div>
-            </fieldset>
-            <fieldset class="chips-field">
-              <legend>Flair or professional?</legend>
-              <div class="chips" data-name="spectrum_flairpro">
-                <button type="button" class="chip">Flair</button>
-                <button type="button" class="chip">In between</button>
-                <button type="button" class="chip">Professional</button>
-              </div>
-            </fieldset>
-            <fieldset class="chips-field">
-              <legend>Friendly or authority?</legend>
-              <div class="chips" data-name="spectrum_friendlyauth">
-                <button type="button" class="chip">Friendly</button>
-                <button type="button" class="chip">In between</button>
-                <button type="button" class="chip">Authority</button>
-              </div>
-            </fieldset>
-            <label class="field">What does your business do better than anyone nearby?<input name="better" maxlength="300"></label>
-            <label class="field">What do your customers want?<input name="customers" maxlength="300"></label>
-            <label class="field">Anything in your own words you want included?<textarea name="ownwords" maxlength="2000"></textarea></label>
-            <label class="field">What should people think or feel after visiting?<input name="afterthought" maxlength="300"></label>
-            <label class="field">Got colors already? (sign, uniforms, Instagram, packaging — photo or link)<input name="colors" maxlength="300"></label>
-            <label class="field">Existing website or socials?<input name="socials" maxlength="300"></label>
-          </div>
-        </details>
-
+        <label class="field">Anything you love — or want to avoid?<textarea name="love" maxlength="2000"></textarea><small>Links, screenshots, a shop sign — anything.</small></label>
+                
+        
         <label class="field">Anything else? Any questions for me?<textarea name="anything" maxlength="2000"></textarea></label>
 
         <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
