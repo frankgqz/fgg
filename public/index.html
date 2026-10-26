@@ -117,7 +117,7 @@
 
         <div class="feature t22" data-feature="db">
           <span class="feature-head"><b>Database</b><em>+$100</em></span>
-          <span class="feature-desc">Persistent information. Listings · Search · Records · Comments & likes · Match History · Settings.</span>
+          <span class="feature-desc">Persistent information. Submissions · Listings · Bookings · Inventory · Search · Records · Comments & likes · Match History · Settings.</span>
           <div class="wall" onclick="event.stopPropagation()">
             <div class="wall-top">
               <div class="avatar-row" id="avatarRow">
@@ -569,7 +569,7 @@
         void $('wallList').offsetWidth;
         $('wallList').classList.add('fade-in');
       } catch {
-        $('wallList').innerHTML = '<p class="note">The wall needs its database — run setup-d1.ps1.</p>';
+        $('wallList').innerHTML = "<p class=\"note\">Couldn't load the wall just now — refresh to try again.</p>";
       }
     }
 
@@ -653,6 +653,7 @@
       "book": "đặt",
       "booked": "đã đặt",
       "included": "bao gồm",
+      "Couldn't load the wall just now — refresh to try again.": "Không tải được bảng tin — tải lại trang để thử lại.",
       "calendar · time slots · bookings": "lịch · khung giờ · đặt chỗ",
       "Digital courses": "Khóa học số",
       "Lesson 1": "Bài 1",
@@ -660,7 +661,7 @@
       "purchased": "đã mua",
       "logins · progress · gated content": "đăng nhập · tiến độ · nội dung riêng",
       "Database": "Cơ sở dữ liệu",
-      "Persistent information. Listings · Search · Records · Comments & likes · Match History · Settings.": "Dữ liệu lưu trữ. Danh sách · Tìm kiếm · Hồ sơ · Bình luận & lượt thích · Lịch sử đấu · Cài đặt.",
+      "Persistent information. Submissions · Listings · Bookings · Inventory · Search · Records · Comments & likes · Match History · Settings.": "Dữ liệu lưu trữ. Đơn gửi · Danh sách · Đặt chỗ · Tồn kho · Tìm kiếm · Hồ sơ · Bình luận & lượt thích · Lịch sử đấu · Cài đặt.",
       "🌟 signed in": "🌟 đã đăng nhập",
       "Send": "Gửi",
       "comments": "bình luận",
