@@ -217,6 +217,24 @@
       });
     });
 
+    // question/answer list for the email — every question, unanswered as ""
+    function collectQA() {
+      const qa = [];
+      document.querySelectorAll('.field, .chips-field').forEach((el) => {
+        if (el.classList.contains('chips-field')) {
+          const q = el.querySelector('legend').textContent.trim();
+          const on = [...el.querySelectorAll('.chip.on')].map((c) => c.textContent.trim());
+          qa.push([q, on.join(' · ')]);
+        } else {
+          const input = el.querySelector('input[name], textarea[name]');
+          if (!input || input.name === 'website') return;
+          const q = el.childNodes[0].textContent.trim();
+          qa.push([q, input.value.trim()]);
+        }
+      });
+      return qa;
+    }
+
     // collect + draft save
     function collect() {
       const answers = {};
@@ -264,7 +282,7 @@
             name: document.querySelector('[name="name"]').value.trim(),
             business: document.querySelector('[name="business"]').value.trim(),
             email: document.querySelector('[name="email"]').value.trim(),
-            answers: collect(),
+            qa: collectQA(),
             quote: location.search,
             elapsed: Date.now() - loadedAt,
             website: document.querySelector('[name="website"]').value,

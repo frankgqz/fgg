@@ -70,14 +70,18 @@ export default {
         const email = String(d.email || "").trim().slice(0, 200);
         const business = String(d.business || "").trim().slice(0, 200);
         if (!name || !email || !business) return json({ error: "name, business and email required" }, 400);
-        const record = { answers: d.answers || {}, quote: String(d.quote || "") };
+        const qa = Array.isArray(d.qa) ? d.qa : [];
+        const record = { qa, quote: String(d.quote || "") };
         const answers = JSON.stringify(record);
         await env.DB.prepare("INSERT INTO submissions (name, email, business, answers) VALUES (?, ?, ?, ?)")
           .bind(name, email, business, answers).run();
-        let emailed = false;
+        const lines = qa
+          .map((row) => Array.isArray(row) ? String(row[0] || "") + ": " + (row[1] ? String(row[1]) : '""') : "")
+          .join("\n");
+        let emailed = false, confirmed = false;
         if (env.RESEND_API_KEY) {
           try {
-            const body = name + " (" + email + ") \u2014 " + business + "\n\n" + JSON.stringify(record, null, 2);
+            const body = name + " (" + email + ") \u2014 " + business + "\n\n" + (lines || "(no answers)");
             const r = await fetch("https://api.resend.com/emails", {
               method: "POST",
               headers: { "content-type": "application/json", authorization: "Bearer " + env.RESEND_API_KEY },
@@ -91,8 +95,22 @@ export default {
             });
             emailed = r.ok;
           } catch {}
+          try {
+            const r2 = await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { "content-type": "application/json", authorization: "Bearer " + env.RESEND_API_KEY },
+              body: JSON.stringify({
+                from: "FGG Intake <intake@frankg.com.au>",
+                to: [email],
+                reply_to: "frank@frankg.com.au",
+                subject: "Got your intake \u2014 FGG",
+                text: "Hi " + name + ",\n\nThanks \u2014 I have your answers and I will read them properly.\n\nI will reply to " + email + " within a day.\n\n\u2014 Frank\nFGG \u00b7 frankg.com.au",
+              }),
+            });
+            confirmed = r2.ok;
+          } catch {}
         }
-        return json({ ok: true, emailed });
+        return json({ ok: true, emailed, confirmed });
       }
       return env.ASSETS.fetch(req);
     } catch (err) {
