@@ -143,7 +143,23 @@
           </div>
         </fieldset>
         <label class="field">Where are they? (links — Drive, Facebook, anywhere)<textarea name="assets" maxlength="600"></textarea></label>
+        <label class="field">What words/paragraphs do you want included on the website?<textarea name="ownwords" maxlength="2000" style="min-height:7.25rem"></textarea></label>
+        
         <fieldset class="chips-field">
+          <legend>How soon do you want the site? Normal time is 3 weeks, first revision after a week.</legend>
+          <div class="chips" data-name="timing">
+            <button type="button" class="chip">Within 1 week (+$100)</button>
+            <button type="button" class="chip" data-reveal="dateField">There's a date</button>
+            <button type="button" class="chip">Normal timeframe</button>
+            <button type="button" class="chip">No Rush</button>
+          </div>
+        </fieldset>
+        <label class="field" id="dateField" style="display:none">Your date<input type="date" name="deadline"></label>
+      </section>
+
+      <section class="step">
+        <h2>Details</h2>
+<fieldset class="chips-field">
           <legend>What should the site feel like?</legend>
           <div class="chips" data-name="feel" data-multi="1">
             <button type="button" class="chip">Friendly</button>
@@ -168,27 +184,14 @@
           </div>
         </fieldset>
         <label class="field">What should visitors not feel or think?<input name="notfeel" maxlength="160"></label>
-        <fieldset class="chips-field">
-          <legend>How soon do you want the site? Normal time is 3 weeks, first revision after a week.</legend>
-          <div class="chips" data-name="timing">
-            <button type="button" class="chip">Within 1 week (+$100)</button>
-            <button type="button" class="chip" data-reveal="dateField">There's a date</button>
-            <button type="button" class="chip">Normal timeframe</button>
-            <button type="button" class="chip">No Rush</button>
-          </div>
-        </fieldset>
-        <label class="field" id="dateField" style="display:none">Your date<input type="date" name="deadline"></label>
-      </section>
-
-      <section class="step">
-        <h2>Details</h2>
-        <label class="field">What do you want and love? Examples — any website template, menu, sign. Anything.<textarea name="love" maxlength="2000"></textarea><small>Web design tools for inspiration: <a href="https://godly.website" target="_blank" rel="noopener">godly — fancy sites</a> · <a href="https://onepagelove.com" target="_blank" rel="noopener">one page love — simple sites</a></small></label>
+        <label class="field">What do you want on the site? Examples — any website template, photo, menu. Anything.<textarea name="love" maxlength="2000"></textarea><small>Web design tools for inspiration: <a href="https://godly.website" target="_blank" rel="noopener">godly — fancy sites</a> · <a href="https://onepagelove.com" target="_blank" rel="noopener">one page love — simple sites</a></small></label>
         <label class="field">What do you want to avoid?<textarea name="avoid" maxlength="2000"></textarea><small>Screenshot and circle what you like, cross out what you don't.</small></label>
-        <label class="field">What words/paragraphs do you want included on the website?<textarea name="ownwords" maxlength="2000" style="min-height:7.25rem"></textarea></label>
 
         <details class="design-fold">
           <summary>Detailed design</summary>
           <div class="inner">
+            <label class="field">Specific colors and fonts<input name="colors" maxlength="300"><small>Hex, names, or a link — <a href="https://www.realtimecolors.com" target="_blank" rel="noopener">realtime colors</a> helps you pick · <a href="https://fontjoy.com" target="_blank" rel="noopener">fontjoy</a> for fonts.</small></label>
+
             <div class="slider-row" data-name="lightdark" data-q="Light or dark?">
               <div class="s-q">Light or dark?</div>
               <div class="slider">
@@ -326,7 +329,6 @@
               </div>
             </div>
 
-            <label class="field">Specific colors<input name="colors" maxlength="300"><small>Hex, names, or a link — <a href="https://www.realtimecolors.com" target="_blank" rel="noopener">realtime colors</a> helps you pick · <a href="https://fontjoy.com" target="_blank" rel="noopener">fontjoy</a> for fonts.</small></label>
           </div>
         </details>
 
