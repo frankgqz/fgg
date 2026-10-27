@@ -76,8 +76,8 @@ export default {
           mode: "payment",
           "line_items[0][quantity]": "1",
           "line_items[0][price_data][currency]": "aud",
-          "line_items[0][price_data][unit_amount]": String(total * 100),
-          "line_items[0][price_data][product_data][name]": "FGG \u2014 website build",
+          "line_items[0][price_data][unit_amount]": String(20000),
+          "line_items[0][price_data][product_data][name]": "FGG \u2014 website build deposit (balance billed later)",
           success_url: origin + "/pay?paid=1",
           cancel_url: origin + "/pay?pay=cancelled",
         });
