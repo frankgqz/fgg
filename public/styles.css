@@ -861,7 +861,7 @@ body.fancy { background: transparent; }
   border-color: rgba(120, 90, 200, 0.25);
 }
 html.fancy .event-demo {
-  background: linear-gradient(135deg, rgba(127, 92, 255, 0.28), rgba(255, 92, 138, 0.20), rgba(38, 208, 201, 0.20));
+  background: linear-gradient(135deg, rgba(221, 122, 79, 0.22), rgba(217, 161, 132, 0.12));
   border-color: rgba(255, 255, 255, 0.14);
 }
 
