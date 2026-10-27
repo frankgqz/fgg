@@ -91,7 +91,7 @@
   <main class="intake">
     <a class="back" href="/">&larr; FGG</a>
     <h1>Start a project</h1>
-    <p class="lede">Know what you want? Tell me as much detail as you like — it really helps me. Not sure yet? Just answer what feels right.</p>
+    <p class="lede">Know what you want? Tell me as much detail as you like — it really helps me. Not sure yet? Just answer what feels right and skip what you don't know.</p>
 
     <div class="quote-summary" id="quoteSummary" hidden>
       <p class="qs-label">From your quote</p>
@@ -104,22 +104,13 @@
         <h2>You &amp; your business</h2>
         <label class="field">Your name<input name="name" autocomplete="name"></label>
         <label class="field">Business name<input name="business" autocomplete="organization"></label>
-        <label class="field">Email *<input type="email" name="email" autocomplete="email" required><small>I'll read this properly and reply here.</small></label>
-        <label class="field">What does the business do?<input name="about" maxlength="160"></label>
-        <label class="field">Who are your customers?<input name="customers" maxlength="160"></label>
-        <label class="field">What should the site achieve?<input name="goal" maxlength="160"></label>
-        <fieldset class="chips-field">
-          <legend>Site language</legend>
-          <div class="chips" data-name="languages" data-multi="1" id="langGroup">
-            <button type="button" class="chip on">English</button>
-            <button type="button" class="chip plus-chip" data-reveal="otherLangField">+</button>
-          </div>
-        </fieldset>
-        <label class="field" id="otherLangField" style="display:none">Add a language — press Enter to add it to the list<input name="languagesExtra" maxlength="60"></label>
+        <label class="field">Email *<input type="email" name="email" autocomplete="email" required></label>
       </section>
 
       <section class="step">
-        <h2>The feel</h2>
+        <h2>The Website</h2>
+        <label class="field">What does the business do?<input name="about" maxlength="160"></label>
+        <label class="field">Who are your customers?<input name="customers" maxlength="160"></label>
         <fieldset class="chips-field">
           <legend>What should people do on the site?</legend>
           <div class="chips" data-name="actions" data-multi="1">
@@ -134,8 +125,26 @@
             <button type="button" class="chip">Prepare for visit</button>
           </div>
         </fieldset>
+        <label class="field">What should the site achieve?<input name="goal" maxlength="160"></label>
         <fieldset class="chips-field">
-          <legend>What should it feel like?</legend>
+          <legend>Site language</legend>
+          <div class="chips" data-name="languages" data-multi="1" id="langGroup">
+            <button type="button" class="chip on">English</button>
+            <button type="button" class="chip plus-chip" data-reveal="otherLangField">+</button>
+          </div>
+        </fieldset>
+        <label class="field" id="otherLangField" style="display:none">Add a language — press Enter to add it to the list<input name="languagesExtra" maxlength="60"></label>
+        <fieldset class="chips-field">
+          <legend>Have photos &amp; logo?</legend>
+          <div class="chips" data-name="photos">
+            <button type="button" class="chip">Have some</button>
+            <button type="button" class="chip">Not yet</button>
+            <button type="button" class="chip">Have everything</button>
+          </div>
+        </fieldset>
+        <label class="field">Where are they? (links — Drive, Facebook, anywhere)<textarea name="assets" maxlength="600"></textarea></label>
+        <fieldset class="chips-field">
+          <legend>What should the site feel like?</legend>
           <div class="chips" data-name="feel" data-multi="1">
             <button type="button" class="chip">Friendly</button>
             <button type="button" class="chip">Professional</button>
@@ -160,16 +169,7 @@
         </fieldset>
         <label class="field">What should visitors not feel or think?<input name="notfeel" maxlength="160"></label>
         <fieldset class="chips-field">
-          <legend>Have photos &amp; logo?</legend>
-          <div class="chips" data-name="photos">
-            <button type="button" class="chip">Have some</button>
-            <button type="button" class="chip">Not yet</button>
-            <button type="button" class="chip">Have everything</button>
-          </div>
-        </fieldset>
-        <label class="field">Where are they? (links — Drive, Instagram, anywhere)<textarea name="assets" maxlength="600"></textarea></label>
-        <fieldset class="chips-field">
-          <legend>How soon do you want the site? The normal delivery time is 3 weeks, with first revision after a week.</legend>
+          <legend>How soon do you want the site? Normal time is 3 weeks, first revision after a week.</legend>
           <div class="chips" data-name="timing">
             <button type="button" class="chip">Within 1 week (+$100)</button>
             <button type="button" class="chip" data-reveal="dateField">There's a date</button>
@@ -182,16 +182,7 @@
 
       <section class="step">
         <h2>Details</h2>
-        <fieldset class="chips-field">
-          <legend>What's your budget?</legend>
-          <div class="chips" data-name="budget">
-            <button type="button" class="chip">$200–$500</button>
-            <button type="button" class="chip">$500–$1,000</button>
-            <button type="button" class="chip">$1,000+</button>
-            <button type="button" class="chip">Not sure yet</button>
-          </div>
-        </fieldset>
-        <label class="field">What do you want and love? Examples — any website template, menu, sign. Anything.<textarea name="love" maxlength="2000"></textarea></label>
+        <label class="field">What do you want and love? Examples — any website template, menu, sign. Anything.<textarea name="love" maxlength="2000"></textarea><small>Web design tools for inspiration: <a href="https://ui.shadcn.com/docs/components" target="_blank" rel="noopener">shadcn components</a> · <a href="https://coolors.co" target="_blank" rel="noopener">coolors</a> · <a href="https://www.realtimecolors.com" target="_blank" rel="noopener">realtime colors</a> · <a href="https://mobbin.com" target="_blank" rel="noopener">mobbin</a> · <a href="https://godly.website" target="_blank" rel="noopener">godly</a> · <a href="https://fontjoy.com" target="_blank" rel="noopener">fontjoy</a></small></label>
         <label class="field">What do you want to avoid?<textarea name="avoid" maxlength="2000"></textarea><small>Screenshot and circle what you like, cross out what you don't.</small></label>
         <label class="field">What do you want in your own words to be included?<textarea name="ownwords" maxlength="2000"></textarea></label>
 
@@ -270,11 +261,12 @@
               </div>
               <div class="s-mid"><span>Photos</span><span>Balanced</span><span>Lots of info</span></div>
             </div>
+
+            <label class="field">Specific colors<input name="colors" maxlength="300"><small>Hex, names, or a link — anything with your colors.</small></label>
           </div>
         </details>
 
         <label class="field">Anything else? Any questions for me?<textarea name="anything" maxlength="2000"></textarea></label>
-        <label class="field">Specific colors<input name="colors" maxlength="300"><small>Hex, names, or a link — anything with your colors.</small></label>
 
         <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
 
