@@ -182,7 +182,7 @@
 
       <section class="step">
         <h2>Details</h2>
-        <label class="field">What do you want and love? Examples — any website template, menu, sign. Anything.<textarea name="love" maxlength="2000"></textarea><small>Web design tools for inspiration: <a href="https://ui.shadcn.com/docs/components" target="_blank" rel="noopener">shadcn components</a> · <a href="https://coolors.co" target="_blank" rel="noopener">coolors</a> · <a href="https://www.realtimecolors.com" target="_blank" rel="noopener">realtime colors</a> · <a href="https://mobbin.com" target="_blank" rel="noopener">mobbin</a> · <a href="https://godly.website" target="_blank" rel="noopener">godly</a> · <a href="https://fontjoy.com" target="_blank" rel="noopener">fontjoy</a></small></label>
+        <label class="field">What do you want and love? Examples — any website template, menu, sign. Anything.<textarea name="love" maxlength="2000"></textarea><small>Web design tools for inspiration: <a href="https://coolors.co" target="_blank" rel="noopener">coolors</a> · <a href="https://fontjoy.com" target="_blank" rel="noopener">fontjoy</a> · <a href="https://godly.website" target="_blank" rel="noopener">godly — fancy sites</a> · <a href="https://onepagelove.com" target="_blank" rel="noopener">one page love — simple sites</a> · <a href="https://mobbin.com" target="_blank" rel="noopener">mobbin</a></small></label>
         <label class="field">What do you want to avoid?<textarea name="avoid" maxlength="2000"></textarea><small>Screenshot and circle what you like, cross out what you don't.</small></label>
         <label class="field">What do you want in your own words to be included?<textarea name="ownwords" maxlength="2000"></textarea></label>
 
@@ -262,7 +262,7 @@
               <div class="s-mid"><span>Photos</span><span>Balanced</span><span>Lots of info</span></div>
             </div>
 
-            <label class="field">Specific colors<input name="colors" maxlength="300"><small>Hex, names, or a link — anything with your colors.</small></label>
+            <label class="field">Specific colors<input name="colors" maxlength="300"><small>Hex, names, or a link — <a href="https://www.realtimecolors.com" target="_blank" rel="noopener">realtime colors</a> helps you pick.</small></label>
           </div>
         </details>
 
@@ -468,7 +468,14 @@
         $('intakeForm').hidden = true;
         $('doneEmail').textContent = document.querySelector('[name="email"]').value.trim();
         $('done').hidden = false;
-        try { localStorage.removeItem('fgg-intake'); } catch {}
+        try {
+          localStorage.setItem('fgg-intake-sent', JSON.stringify({
+            at: Date.now(),
+            business: document.querySelector('[name="business"]').value.trim(),
+            about: document.querySelector('[name="about"]').value.trim(),
+          }));
+          localStorage.removeItem('fgg-intake');
+        } catch {}
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch {
         btn.disabled = false;

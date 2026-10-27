@@ -42,9 +42,11 @@
     <div class="pay-card">
       <p class="qs-label">From your quote</p>
       <div class="qs-chips" id="qsChips"></div>
-      <div class="pay-total" id="payTotal">$200<small>one-off build · Care $200/year after launch</small></div>
-      <a class="button" id="payBtn" href="/api/checkout">Pay $200</a>
+      <div class="pay-total" id="payTotal">$300<small>one-off build · Care $200/year after launch</small></div>
+      <a class="button" id="payBtn" href="/api/checkout">Pay $300</a>
     </div>
+
+    <div class="pay-card" id="intakeCard"></div>
 
     <div class="pay-note" id="payNote" hidden></div>
 
@@ -61,12 +63,36 @@
     (function () {
       const f = (q.get('f') || '').split(',').map((x) => x.trim()).filter(Boolean);
       if (f.length) $('qsChips').innerHTML = f.map((x) => '<span class="qs-chip">' + x.replace(/[<>&"]/g, '') + '</span>').join('');
-      const total = (q.get('total') || '200').replace(/[^0-9]/g, '') || '200';
+      const total = (q.get('total') || '300').replace(/[^0-9]/g, '') || '300';
       $('payTotal').innerHTML = '$' + total + '<small>one-off build · Care $200/year after launch</small>';
       $('payBtn').textContent = 'Pay $' + total;
       const params = new URLSearchParams();
       for (const k of ['ids', 'rev', 'pages']) if (q.get(k)) params.set(k, q.get(k));
       $('payBtn').href = '/api/checkout' + (params.toString() ? '?' + params.toString() : '');
+    })();
+
+    // intake handshake: recognize a submission, or point to the form
+    (function () {
+      const card = $('intakeCard');
+      let sent = null;
+      try { sent = JSON.parse(localStorage.getItem('fgg-intake-sent') || 'null'); } catch {}
+      const toIntake = '/intake' + location.search;
+      if (sent) {
+        const when = new Date(sent.at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
+        const label = String(sent.business || sent.about || 'Received').replace(/[<>&"]/g, '');
+        card.innerHTML = '<p class="qs-label">From your intake</p><p style="margin:0;font-weight:600;">' + label + '</p>'
+          + '<p class="qs-total" style="margin-top:.5rem;">Submitted ' + when + ' \u2713 \u2014 nothing more needed before we start.</p>';
+      } else {
+        card.innerHTML = '<p class="qs-label">From your intake</p>'
+          + '<p style="margin:0 0 1rem;font-weight:600;">Haven\'t told me about your project yet?</p>'
+          + '<a class="button small" href="' + toIntake + '">Tell me about your project</a>';
+      }
+      if (q.get('paid') === '1' && !sent) {
+        setTimeout(() => {
+          const note = $('payNote');
+          note.innerHTML = note.textContent + ' <a href="' + toIntake + '">Next: tell me about your project \u2192</a>';
+        }, 0);
+      }
     })();
 
     (function () {

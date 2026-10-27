@@ -61,7 +61,7 @@ export default {
         return env.ASSETS.fetch(new Request(new URL("/intake.html", url.origin), req));
       }
       if (url.pathname === "/api/checkout" && req.method === "GET") {
-        const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 100, login: 100 };
+        const PRICES = { fancy: 100, math: 100, db: 100, cms: 100, shop: 100, login: 0 };
         const ids = String(url.searchParams.get("ids") || "").split(",").map((x) => x.trim()).filter(Boolean);
         const rev = Math.max(0, parseInt(url.searchParams.get("rev") || "2", 10) || 0);
         const pages = Math.max(1, parseInt(url.searchParams.get("pages") || "1", 10) || 1);
@@ -69,6 +69,7 @@ export default {
         for (const id of ids) if (PRICES[id]) total += PRICES[id];
         total += Math.max(0, rev - (ids.includes("fancy") ? 3 : 2)) * 75;
         total += Math.max(0, pages - 5) * 50;
+        total = Math.max(300, total);
         const origin = url.origin;
         if (!env.STRIPE_SECRET_KEY) return Response.redirect(origin + "/pay?pay=unavailable", 302);
         const body = new URLSearchParams({
