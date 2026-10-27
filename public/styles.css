@@ -672,7 +672,7 @@ html { overflow-x: clip; }
 html.fancy .aurora i { opacity: 0.72; }
 
 /* selection colors: green = picked, yellow = pulled in by shop */
-.feature.selected { border-color: #2e9e6b; box-shadow: 0 0 0 2px #2e9e6b; }
+.feature.selected { border-color: #7e9c82; box-shadow: 0 0 0 2px #7e9c82; }
 .feature.auto { border-color: #e8b93b; box-shadow: 0 0 0 2px #e8b93b; }
 
 /* wall top: emojis left, signed-in chip right, extras unlocked on login */
@@ -831,7 +831,7 @@ h3 { font-size: var(--fs-h5); }
 @media (max-width: 900px) { .top-row { grid-template-columns: minmax(0, 1fr); } }
 
 /* locked panels: selected green */
-.feature.locked { border-color: #2e9e6b; box-shadow: 0 0 0 2px #2e9e6b; }
+.feature.locked { border-color: #7e9c82; box-shadow: 0 0 0 2px #7e9c82; }
 
 /* ============ work detail: shared-element open ============ */
 .work-card { cursor: pointer; }

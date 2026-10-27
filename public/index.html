@@ -267,7 +267,7 @@
   <script>
   (() => {
     const $ = (id) => document.getElementById(id);
-    const PRICES = { fancy: 100, math: 100, db: 100, cms: 100, shop: 100, login: 0 };
+    const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 200, login: 100 };
     const BASE = 200, INCLUDED_PAGES = 5, PAGE_PRICE = 50;
 
     const state = { fancy: false, math: false, db: false, cms: false, shop: false, login: false };
@@ -330,37 +330,20 @@
       for (const id of Object.keys(state)) if (state[id]) total += PRICES[id];
       const p = Math.max(1, parseInt(pages.value || '1', 10));
       pages.value = p;
-      total += Math.max(0, p - INCLUDED_PAGES) * PAGE_PRICE;
+      total = Math.max(300, total); // $300 minimum covers the package...
+      total += Math.max(0, p - INCLUDED_PAGES) * PAGE_PRICE; // ...revisions/pages add on top
       total += Math.max(0, revSessions - (state.fancy ? 3 : 2)) * 75;
 
-      total = Math.max(300, total);
       setTotal(total);
 
-      // panel prices: live marginal cost against the $300 minimum
-      const CASCADE = { shop: ['shop', 'login', 'cms', 'db'] };
-      const totalFor = (st) => {
-        const st2 = { ...st };
-        if (st2.shop || st2.login) st2.db = true;
-        let t = 200;
-        for (const k of Object.keys(st2)) if (st2[k]) t += PRICES[k] || 0;
-        t += Math.max(0, revSessions - (st2.fancy ? 3 : 2)) * 75;
-        t += Math.max(0, p - 5) * 50;
-        return Math.max(300, t);
-      };
+      // panel prices: selected panels are included ($0); unselected show the
+      // live marginal cost against the $300 minimum ($0 or +$100 or +$200)
       for (const id of Object.keys(PRICES)) {
         const em = document.querySelector('[data-feature="' + id + '"] .feature-head em');
         if (!em) continue;
-        let d;
-        if (state[id]) {
-          const off = { ...state };
-          off[id] = false;
-          for (const dep of (CASCADE[id] || [])) if (dep !== 'db') off[dep] = false;
-          d = totalFor(state) - totalFor(off);
-        } else {
-          const on = { ...state, [id]: true };
-          for (const dep of (CASCADE[id] || [])) on[dep] = true;
-          d = totalFor(on) - totalFor(state);
-        }
+        if (state[id]) { em.textContent = '$0'; continue; }
+        const sum = BASE + Object.keys(state).reduce((a, k) => a + (state[k] ? (PRICES[k] || 0) : 0), 0);
+        const d = Math.max(300, sum + (PRICES[id] || 0)) - Math.max(300, sum);
         em.textContent = d <= 0 ? '$0' : '+$' + d;
       }
       $('revCount').textContent = state.fancy ? 3 : 2;
