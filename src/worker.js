@@ -60,6 +60,38 @@ export default {
       if (url.pathname === "/intake" || url.pathname === "/intake/") {
         return env.ASSETS.fetch(new Request(new URL("/intake.html", url.origin), req));
       }
+      if (url.pathname === "/api/checkout" && req.method === "GET") {
+        const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 100, login: 100 };
+        const ids = String(url.searchParams.get("ids") || "").split(",").map((x) => x.trim()).filter(Boolean);
+        const rev = Math.max(0, parseInt(url.searchParams.get("rev") || "2", 10) || 0);
+        const pages = Math.max(1, parseInt(url.searchParams.get("pages") || "1", 10) || 1);
+        let total = 200;
+        for (const id of ids) if (PRICES[id]) total += PRICES[id];
+        total += Math.max(0, rev - (ids.includes("fancy") ? 3 : 2)) * 75;
+        total += Math.max(0, pages - 5) * 50;
+        const origin = url.origin;
+        if (!env.STRIPE_SECRET_KEY) return Response.redirect(origin + "/pay?pay=unavailable", 302);
+        const body = new URLSearchParams({
+          mode: "payment",
+          "line_items[0][quantity]": "1",
+          "line_items[0][price_data][currency]": "aud",
+          "line_items[0][price_data][unit_amount]": String(total * 100),
+          "line_items[0][price_data][product_data][name]": "FGG \u2014 website build",
+          success_url: origin + "/pay?paid=1",
+          cancel_url: origin + "/pay?pay=cancelled",
+        });
+        const r = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + env.STRIPE_SECRET_KEY,
+            "content-type": "application/x-www-form-urlencoded",
+          },
+          body,
+        });
+        const sess = await r.json().catch(() => null);
+        if (!sess || !sess.url) return Response.redirect(origin + "/pay?pay=unavailable", 302);
+        return Response.redirect(sess.url, 302);
+      }
       if (url.pathname === "/api/intake" && req.method === "POST") {
         await ensureDb(env);
         const d = await req.json().catch(() => ({}));

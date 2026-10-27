@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pay &amp; start — FGG</title>
+  <meta name="description" content="Pay for your build and we start. Care is billed after launch.">
+  <link rel="canonical" href="https://frankg.com.au/pay">
+  <meta property="og:title" content="Pay &amp; start — FGG">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://frankg.com.au/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .pay-page { max-width: 40rem; margin: 0 auto; padding: 2.5rem 1.25rem 6rem; }
+    .pay-page h1 { margin-bottom: 0.75rem; }
+    .pay-card {
+      border: 1px solid var(--line); border-radius: 16px; padding: 1.5rem;
+      background: var(--surface); margin: 1.75rem 0;
+    }
+    .pay-card .qs-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin: 0 0 0.55rem; }
+    .pay-card .qs-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+    .pay-card .qs-chip { font-size: 0.85rem; font-weight: 600; padding: 0.25rem 0.85rem; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); }
+    .pay-total { font-size: 1.35rem; font-weight: 700; margin: 1.15rem 0 1.35rem; }
+    .pay-total small { display: block; font-size: 0.88rem; font-weight: 400; color: var(--ink-soft); margin-top: 0.25rem; }
+    .pay-note { font-weight: 600; margin-top: 1.25rem; padding: 0.9rem 1.15rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+    .pay-fine { color: var(--ink-soft); font-size: 0.92rem; margin-top: 1.25rem; }
+  </style>
+</head>
+<body>
+  <nav class="dots" aria-label="journey">
+    <a class="dot" href="/"></a>
+    <a class="dot" href="/intake"></a>
+    <a class="dot on" href="/pay"></a>
+  </nav>
+
+  <main class="pay-page">
+    <h1>Pay &amp; start</h1>
+    <p class="lede">Pay the build and we start. Care is billed after launch. Prefer to talk first? <a href="/#contact">Contact me</a>.</p>
+
+    <div class="pay-card">
+      <p class="qs-label">From your quote</p>
+      <div class="qs-chips" id="qsChips"></div>
+      <div class="pay-total" id="payTotal">$200<small>one-off build · Care $200/year after launch</small></div>
+      <a class="button" id="payBtn" href="/api/checkout">Pay $200</a>
+    </div>
+
+    <div class="pay-note" id="payNote" hidden></div>
+
+    <p class="pay-fine">Card payments are processed by Stripe. Nothing is charged until you confirm on the next screen.</p>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const q = new URLSearchParams(location.search);
+
+    // carry the journey's quote across the dots
+    document.querySelectorAll('.dots .dot').forEach((a) => { a.href += location.search; });
+
+    (function () {
+      const f = (q.get('f') || '').split(',').map((x) => x.trim()).filter(Boolean);
+      if (f.length) $('qsChips').innerHTML = f.map((x) => '<span class="qs-chip">' + x.replace(/[<>&"]/g, '') + '</span>').join('');
+      const total = (q.get('total') || '200').replace(/[^0-9]/g, '') || '200';
+      $('payTotal').innerHTML = '$' + total + '<small>one-off build · Care $200/year after launch</small>';
+      $('payBtn').textContent = 'Pay $' + total;
+      const params = new URLSearchParams();
+      for (const k of ['ids', 'rev', 'pages']) if (q.get(k)) params.set(k, q.get(k));
+      $('payBtn').href = '/api/checkout' + (params.toString() ? '?' + params.toString() : '');
+    })();
+
+    (function () {
+      const msg = q.get('paid') === '1' ? 'Thanks! Your payment went through ✓'
+        : q.get('pay') === 'cancelled' ? 'No worries — nothing was charged. The button is still here when you’re ready.'
+        : q.get('pay') === 'unavailable' ? 'Card payments aren’t live yet — please use the Contact button and I’ll sort it.'
+        : '';
+      if (msg) { $('payNote').textContent = msg; $('payNote').hidden = false; }
+    })();
+  </script>
+</body>
+</html>

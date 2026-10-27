@@ -71,7 +71,13 @@
   </style>
 </head>
 <body>
-  <main class="intake">
+    <nav class="dots" aria-label="journey">
+    <a class="dot" href="/"></a>
+    <a class="dot on" href="/intake"></a>
+    <a class="dot" href="/pay"></a>
+  </nav>
+
+<main class="intake">
     <a class="back" href="/">&larr; FGG</a>
     <h1>Start a project</h1>
     <p class="lede">Know what you want? Tell me as much detail as you like — it really helps me. Not sure yet? Just answer what feels right.</p>
@@ -174,6 +180,7 @@
   <script>
     const $ = (id) => document.getElementById(id);
     const loadedAt = Date.now();
+    document.querySelectorAll('.dots .dot').forEach((a) => { a.href += location.search; });
 
     // quote handoff from the builder
     (function () {

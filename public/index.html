@@ -53,7 +53,13 @@
     </div>
   </aside>
 
-  <main>
+    <nav class="dots" aria-label="journey">
+    <a class="dot on" href="/"></a>
+    <a class="dot" href="/intake"></a>
+    <a class="dot" href="/pay"></a>
+  </nav>
+
+<main>
     <section class="hero">
       <h1>Websites, build and care.</h1>
       <p class="lede">I'm Frank Gao, a web developer in Melbourne. I build websites and apps for businesses.</p>
@@ -232,9 +238,7 @@
 
     <section id="contact" class="band">
       <h2>Contact</h2>
-      <p class="lede">Contact me to discuss your business, and what you want in the site.
-      We can talk about what's possible, the process, timelines, and what works for
-      your situation.</p>
+      <p class="lede">Contact me to discuss your business, and what you want in the site. We can talk about what's possible, the process, timelines, and what works for your situation.</p>
       <p class="contact-row">
         <a class="button" href="mailto:frank@frankg.com.au">Email</a>
         <a class="button" href="https://wa.me/61435695498">WhatsApp</a>
@@ -335,7 +339,9 @@
       const picked = Object.keys(state).filter((k) => state[k] && FEATURE_LABELS[k]).map((k) => FEATURE_LABELS[k]);
       picked.push(revSessions + ' revisions');
       if (p > 1) picked.push(p + ' pages');
-      const q = new URLSearchParams({ f: picked.join(', '), total: String(total) });
+      const pickedIds = Object.keys(state).filter((k) => state[k] && FEATURE_LABELS[k]);
+      const q = new URLSearchParams({ f: picked.join(', '), total: String(total), ids: pickedIds.join(','), rev: String(revSessions), pages: String(p) });
+      document.querySelectorAll('.dots .dot').forEach((a) => { const base = a.href.split('?')[0]; a.href = base + (q.toString() ? '?' + q.toString() : ''); });
       const startEl = $('pwStart');
       if (startEl) startEl.href = '/intake?' + q.toString();
 
@@ -670,7 +676,6 @@
       "Sat 14 Nov": "Th 7, 14/11",
       "Weekend Event, Tickets $20 (click)": "Sự kiện cuối tuần. Vé $20 (nhấn)",
       "Login": "Đăng nhập",
-      "Things that follow the customer.": "Những thứ đi theo khách hàng.",
       "User Information · Order history · Gated content": "Thông tin người dùng · Lịch sử đơn hàng · Nội dung riêng",
       "Log In": "Đăng nhập",
       "Log Out": "Đăng xuất",
@@ -711,7 +716,6 @@
       "Contact me to discuss your business, and what you want in the site. We can talk about what's possible, the process, timelines, and what works for your situation.": "Liên hệ tôi để trao đổi về doanh nghiệp của bạn và điều bạn muốn có trên website. Chúng ta có thể bàn về điều khả thi, quy trình, thời gian, và điều phù hợp với hoàn cảnh của bạn.",
       "Build": "Xây dựng",
       "Care $200/y": "Chăm sóc $200/năm",
-      "Get a quote": "Nhận báo giá",
       "Hobby projects": "Dự án sở thích",
       "Apps · experiments · games": "Ứng dụng · thử nghiệm · trò chơi",
       "Tools and experiments built for the joy of it — live at gqz.app.": "Công cụ và thử nghiệm được làm cho vui — xem tại gqz.app.",

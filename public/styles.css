@@ -1161,3 +1161,18 @@ html.fancy :focus-visible { outline-color: var(--accent); }
 
 /* editable fields show a typing cursor (desktop signal; the (click) hint covers phones) */
 .feature [contenteditable] { cursor: text; }
+
+/* journey dots: build / discovery / pay — no words, just three dots */
+.dots {
+  position: fixed; top: 1.15rem; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 0.6rem; z-index: 40; padding: 0.55rem 0.85rem;
+  border-radius: 999px; background: color-mix(in srgb, var(--paper) 72%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.dot {
+  width: 7px; height: 7px; border-radius: 999px;
+  background: var(--line); border: 1.5px solid transparent;
+  transition: transform 160ms cubic-bezier(.2,1.4,.4,1), background 160ms ease;
+}
+.dot:hover { transform: scale(1.35); background: var(--ink-soft); }
+.dot.on { background: var(--accent); }
