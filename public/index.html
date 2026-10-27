@@ -267,8 +267,8 @@
   <script>
   (() => {
     const $ = (id) => document.getElementById(id);
-    const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 200, login: 100 };
-    const BASE = 200, INCLUDED_PAGES = 5, PAGE_PRICE = 50;
+    const PRICES = { fancy: 100, math: 100, db: 100, cms: 100, shop: 100, login: 0 };
+    const BASE = 300, INCLUDED_PAGES = 5, PAGE_PRICE = 50;
 
     const state = { fancy: false, math: false, db: false, cms: false, shop: false, login: false };
     const pages = $('pages');
@@ -316,7 +316,7 @@
     function update() {
       // dependencies: shop or login -> database required; shop recommends editing + login
       const needDb = state.shop || state.login;
-      if (needDb) state.db = true;
+      if (needDb && !state.db) { state.db = true; auto.add('db'); }
 
       for (const id of Object.keys(state)) {
         const el = document.querySelector('[data-feature="' + id + '"]');
@@ -326,25 +326,22 @@
         el.classList.remove('mandatory');
       }
 
+      // Standard is $300 — no minimum trick, it's just the price.
+      // Pulled-in tiles (auto) are included at $0; extras always add.
       let total = BASE;
-      for (const id of Object.keys(state)) if (state[id]) total += PRICES[id];
+      for (const id of Object.keys(state)) if (state[id] && !auto.has(id)) total += PRICES[id];
       const p = Math.max(1, parseInt(pages.value || '1', 10));
       pages.value = p;
-      total = Math.max(300, total); // $300 minimum covers the package...
-      total += Math.max(0, p - INCLUDED_PAGES) * PAGE_PRICE; // ...revisions/pages add on top
+      total += Math.max(0, p - INCLUDED_PAGES) * PAGE_PRICE;
       total += Math.max(0, revSessions - (state.fancy ? 3 : 2)) * 75;
-
       setTotal(total);
 
-      // panel prices: selected panels are included ($0); unselected show the
-      // live marginal cost against the $300 minimum ($0 or +$100 or +$200)
+      // panel prices: flat and constant; pulled-in tiles show "included"
+      const STATIC_LABELS = { fancy: '+$100', math: '+$100', db: '+$100', cms: '+$100', shop: '+$100', login: '$0' };
       for (const id of Object.keys(PRICES)) {
         const em = document.querySelector('[data-feature="' + id + '"] .feature-head em');
         if (!em) continue;
-        if (state[id]) { em.textContent = '$0'; continue; }
-        const sum = BASE + Object.keys(state).reduce((a, k) => a + (state[k] ? (PRICES[k] || 0) : 0), 0);
-        const d = Math.max(300, sum + (PRICES[id] || 0)) - Math.max(300, sum);
-        em.textContent = d <= 0 ? '$0' : '+$' + d;
+        em.textContent = (state[id] && auto.has(id)) ? 'included' : STATIC_LABELS[id];
       }
       $('revCount').textContent = state.fancy ? 3 : 2;
       syncLogin();
