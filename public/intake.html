@@ -19,20 +19,14 @@
     .intake .back { display: inline-block; margin-bottom: 1.75rem; font-size: 0.92rem; color: var(--ink-soft); text-decoration: none; }
     .intake h1 { margin-bottom: 0.75rem; }
     .lede { color: var(--ink-soft); margin-bottom: 2rem; }
-
-    /* quote handoff from the builder */
     .quote-summary { border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.15rem; margin-bottom: 2rem; background: var(--surface); }
     .qs-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin: 0 0 0.55rem; }
     .qs-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
     .qs-chips .qs-chip { font-size: 0.85rem; font-weight: 600; padding: 0.25rem 0.85rem; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); }
     .qs-total { margin: 0.75rem 0 0; font-size: 0.95rem; color: var(--ink-soft); }
     .qs-total b { color: var(--ink); }
-
-    /* steps */
     .step { display: block; margin-bottom: 2.75rem; }
     .step h2 { margin-bottom: 1.15rem; }
-
-    /* fields */
     .field { display: block; margin-bottom: 1.35rem; font-size: 0.95rem; font-weight: 600; }
     .field small { display: block; font-weight: 400; color: var(--ink-soft); font-size: 0.82rem; margin-top: 0.3rem; }
     .field input, .field textarea {
@@ -54,30 +48,24 @@
     .chip:hover { border-color: var(--ink-soft); color: var(--ink); }
     .chip:active { transform: scale(0.95); }
     .chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-    .chip.emoji { font-size: 1.15rem; padding: 0.35rem 0.7rem; }
-
-
-
+    .chip.plus-chip { border-style: dashed; font-weight: 700; padding: 0.42rem 1.05rem; }
     .step-nav { display: flex; gap: 0.75rem; align-items: center; margin-top: 1.75rem; }
-    .back-link { background: none; border: 0; font: inherit; font-size: 0.92rem; color: var(--ink-soft); cursor: pointer; padding: 0.5rem 0.25rem; }
-
-    /* honeypot */
+    .design-fold { border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.15rem; margin: 1.75rem 0; background: var(--surface); }
+    .design-fold summary { cursor: pointer; font-weight: 600; font-size: 0.95rem; }
+    .design-fold .inner { margin-top: 1.25rem; }
     .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
-
     .done { text-align: left; border: 1px solid var(--line); border-radius: 16px; padding: 2rem; background: var(--surface); }
     .done h2 { margin-bottom: 0.5rem; }
-
-    @media (prefers-reduced-motion: reduce) { .step.on { animation: none; } }
   </style>
 </head>
 <body>
-    <nav class="dots" aria-label="journey">
+  <nav class="dots" aria-label="journey">
     <a class="dot" href="/"></a>
     <a class="dot on" href="/intake"></a>
     <a class="dot" href="/pay"></a>
   </nav>
 
-<main class="intake">
+  <main class="intake">
     <a class="back" href="/">&larr; FGG</a>
     <h1>Start a project</h1>
     <p class="lede">Know what you want? Tell me as much detail as you like — it really helps me. Not sure yet? Just answer what feels right.</p>
@@ -88,35 +76,37 @@
       <p class="qs-total" id="qsTotal"></p>
     </div>
 
-
     <form id="intakeForm" novalidate>
-      <section class="step on" data-step="0">
+      <section class="step">
         <h2>You &amp; your business</h2>
-        <label class="field">Your name *<input name="name" autocomplete="name" required></label>
-        <label class="field">Business name *<input name="business" autocomplete="organization" required></label>
+        <label class="field">Your name<input name="name" autocomplete="name"></label>
+        <label class="field">Business name<input name="business" autocomplete="organization"></label>
         <label class="field">Email *<input type="email" name="email" autocomplete="email" required><small>I'll read this properly and reply here.</small></label>
         <label class="field">What does the business do? (one line)<input name="about" maxlength="160"></label>
         <fieldset class="chips-field">
           <legend>Site language</legend>
           <div class="chips" data-name="languages" data-multi="1">
-            <button type="button" class="chip">English</button>
+            <button type="button" class="chip on">English</button>
             <button type="button" class="chip">Tiếng Việt</button>
             <button type="button" class="chip">Both</button>
+            <button type="button" class="chip plus-chip" data-reveal="otherLangField">+</button>
           </div>
         </fieldset>
-              </section>
+        <label class="field" id="otherLangField" style="display:none">Other languages<input name="languagesExtra" maxlength="120"></label>
+      </section>
 
-      <section class="step" data-step="1">
+      <section class="step">
         <h2>The feel</h2>
         <fieldset class="chips-field">
           <legend>What should people do on the site?</legend>
           <div class="chips" data-name="actions" data-multi="1">
-            <button type="button" class="chip">Call you</button>
+            <button type="button" class="chip">Call</button>
             <button type="button" class="chip">Book</button>
-            <button type="button" class="chip">Come in</button>
-            <button type="button" class="chip">Buy online</button>
-            <button type="button" class="chip">Message you</button>
-            <button type="button" class="chip">Read about you</button>
+            <button type="button" class="chip">Buy Online</button>
+            <button type="button" class="chip">Message</button>
+            <button type="button" class="chip">Look at information</button>
+            <button type="button" class="chip">Sign up</button>
+            <button type="button" class="chip">Physically visit</button>
           </div>
         </fieldset>
         <fieldset class="chips-field">
@@ -132,9 +122,15 @@
             <button type="button" class="chip">Simple</button>
             <button type="button" class="chip">Energetic</button>
             <button type="button" class="chip">Trustworthy</button>
+            <button type="button" class="chip">Minimal</button>
+            <button type="button" class="chip">Premium</button>
+            <button type="button" class="chip">Elegant</button>
+            <button type="button" class="chip">Natural</button>
+            <button type="button" class="chip">Youthful</button>
+            <button type="button" class="chip">Reassuring</button>
           </div>
         </fieldset>
-                <label class="field">What should it NOT feel like?<input name="notfeel" maxlength="160"></label>
+        <label class="field">What should visitors not feel or think?<input name="notfeel" maxlength="160"></label>
         <fieldset class="chips-field">
           <legend>Have photos &amp; logo?</legend>
           <div class="chips" data-name="photos">
@@ -143,23 +139,60 @@
             <button type="button" class="chip">Have everything</button>
           </div>
         </fieldset>
-        <label class="field">Where are they? (links — Drive, Instagram, anywhere)<input name="assets" maxlength="300"></label>
+        <label class="field">Where are they? (links — Drive, Instagram, anywhere)<textarea name="assets" maxlength="600"></textarea></label>
         <fieldset class="chips-field">
-          <legend>When does this need to be live?</legend>
-          <div class="chips" data-name="liveby">
-            <button type="button" class="chip">This month</button>
-            <button type="button" class="chip">Next month</button>
+          <legend>The normal delivery time is 3 weeks, with first revision after a week. Your timing?</legend>
+          <div class="chips" data-name="timing">
+            <button type="button" class="chip">I want it quick</button>
+            <button type="button" class="chip" data-reveal="dateField">There's a date</button>
+            <button type="button" class="chip">Normal timeframe</button>
             <button type="button" class="chip">Whenever</button>
-            <button type="button" class="chip">There's a date</button>
           </div>
         </fieldset>
+        <label class="field" id="dateField" style="display:none">Your date<input type="date" name="deadline"></label>
       </section>
 
-      <section class="step" data-step="2">
+      <section class="step">
         <h2>Details</h2>
-        <label class="field">Anything you love — or want to avoid?<textarea name="love" maxlength="2000"></textarea><small>Links, screenshots, a shop sign — anything.</small></label>
-                
-        
+        <label class="field">What do you want and love? Examples — any website template, menu, sign. Anything.<textarea name="love" maxlength="2000"></textarea></label>
+        <label class="field">What do you want to avoid?<textarea name="avoid" maxlength="2000"></textarea><small>Screenshot and circle what you like, cross out what you don't.</small></label>
+        <label class="field">What do you want in your own words to be included?<textarea name="ownwords" maxlength="2000"></textarea></label>
+
+        <details class="design-fold">
+          <summary>Detailed design</summary>
+          <div class="inner">
+            <label class="field">Colors or hex #ffffff<input name="colors" maxlength="300"><small>Links, photos, signs — anything with your colors.</small></label>
+            <fieldset class="chips-field">
+              <legend>Theme</legend>
+              <div class="chips" data-name="theme">
+                <button type="button" class="chip">Modern</button>
+                <button type="button" class="chip">Classic</button>
+                <button type="button" class="chip">Playful</button>
+                <button type="button" class="chip">Minimal</button>
+                <button type="button" class="chip">Luxe</button>
+                <button type="button" class="chip">Bold</button>
+              </div>
+            </fieldset>
+            <fieldset class="chips-field">
+              <legend>Layout</legend>
+              <div class="chips" data-name="layout">
+                <button type="button" class="chip">Big photos</button>
+                <button type="button" class="chip">Lots of info</button>
+                <button type="button" class="chip">Balanced</button>
+                <button type="button" class="chip">You decide</button>
+              </div>
+            </fieldset>
+            <fieldset class="chips-field">
+              <legend>Light or dark?</legend>
+              <div class="chips" data-name="lightdark">
+                <button type="button" class="chip">Light</button>
+                <button type="button" class="chip">In between</button>
+                <button type="button" class="chip">Dark</button>
+              </div>
+            </fieldset>
+          </div>
+        </details>
+
         <label class="field">Anything else? Any questions for me?<textarea name="anything" maxlength="2000"></textarea></label>
 
         <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -182,44 +215,58 @@
     const loadedAt = Date.now();
     document.querySelectorAll('.dots .dot').forEach((a) => { a.href += location.search; });
 
-    // quote handoff from the builder
     (function () {
       const q = new URLSearchParams(location.search);
       const f = (q.get('f') || '').split(',').map((x) => x.trim()).filter(Boolean);
       if (!f.length) return;
       $('quoteSummary').hidden = false;
-      $('qsChips').innerHTML = f.map((x) => '<span class="qs-chip">' + x.replace(/[<>&]/g, '') + '</span>').join('');
+      $('qsChips').innerHTML = f.map((x) => '<span class="qs-chip">' + x.replace(/[<>&"]/g, '') + '</span>').join('');
       const total = q.get('total');
       $('qsTotal').innerHTML = total ? 'Build estimate: <b>$' + total.replace(/[^0-9]/g, '') + '</b> · Care $200/y' : '';
     })();
 
-    // one page: everything visible, validation only on send
+    // only email is required
     function validateStep() {
-      const need = ['name', 'business', 'email'];
-      for (const n of need) {
-        const el = document.querySelector('[name="' + n + '"]');
-        if (!el.value.trim()) {
-          el.focus();
-          el.style.borderColor = '#c2495e';
-          return false;
-        }
-        el.style.borderColor = '';
+      const el = document.querySelector('[name="email"]');
+      if (!el.value.trim()) {
+        el.focus();
+        el.style.borderColor = '#c2495e';
+        return false;
       }
+      el.style.borderColor = '';
       return true;
     }
 
-    // chips
+    // + chip opens an input; "There's a date" opens the date box
+    function applyReveals() {
+      document.querySelectorAll('[data-reveal]').forEach((chip) => {
+        if (chip.classList.contains('plus-chip')) return;
+        const t = document.getElementById(chip.dataset.reveal);
+        if (t) t.style.display = chip.classList.contains('on') ? '' : 'none';
+      });
+    }
+
     document.querySelectorAll('.chips').forEach((group) => {
       const multi = group.dataset.multi === '1';
       group.addEventListener('click', (e) => {
         const chip = e.target.closest('.chip');
         if (!chip) return;
+        if (chip.classList.contains('plus-chip')) {
+          const t = document.getElementById(chip.dataset.reveal);
+          if (t) {
+            t.style.display = '';
+            const inp = t.querySelector('input');
+            if (inp) inp.focus();
+          }
+          return;
+        }
         if (multi) chip.classList.toggle('on');
         else {
           const was = chip.classList.contains('on');
           group.querySelectorAll('.chip').forEach((c) => c.classList.remove('on'));
           if (!was) chip.classList.add('on');
         }
+        applyReveals();
         save();
       });
     });
@@ -230,7 +277,7 @@
       document.querySelectorAll('.field, .chips-field').forEach((el) => {
         if (el.classList.contains('chips-field')) {
           const q = el.querySelector('legend').textContent.trim();
-          const on = [...el.querySelectorAll('.chip.on')].map((c) => c.textContent.trim());
+          const on = [...el.querySelectorAll('.chip.on')].filter((c) => !c.classList.contains('plus-chip')).map((c) => c.textContent.trim());
           qa.push([q, on.join(' · ')]);
         } else {
           const input = el.querySelector('input[name], textarea[name]');
@@ -242,14 +289,13 @@
       return qa;
     }
 
-    // collect + draft save
     function collect() {
       const answers = {};
       document.querySelectorAll('input[name], textarea[name]').forEach((el) => {
         if (el.name !== 'website') answers[el.name] = el.value.trim();
       });
       document.querySelectorAll('.chips').forEach((group) => {
-        const on = [...group.querySelectorAll('.chip.on')].map((c) => c.textContent.trim());
+        const on = [...group.querySelectorAll('.chip.on')].filter((c) => !c.classList.contains('plus-chip')).map((c) => c.textContent.trim());
         if (on.length) answers[group.dataset.name] = on;
       });
       return answers;
@@ -268,13 +314,20 @@
         document.querySelectorAll('.chips').forEach((group) => {
           const sel = (d.answers || {})[group.dataset.name];
           if (!Array.isArray(sel)) return;
-          group.querySelectorAll('.chip').forEach((c) => c.classList.toggle('on', sel.includes(c.textContent.trim())));
+          group.querySelectorAll('.chip').forEach((c) => {
+            if (c.classList.contains('plus-chip')) return;
+            c.classList.toggle('on', sel.includes(c.textContent.trim()));
+          });
         });
+        if ((d.answers || {}).languagesExtra) {
+          const f = document.getElementById('otherLangField');
+          if (f) f.style.display = '';
+        }
+        applyReveals();
       } catch {}
     })();
     document.querySelectorAll('input[name], textarea[name]').forEach((el) => el.addEventListener('input', save));
 
-    // submit -> D1 + a ping to Frank
     $('intakeForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!validateStep()) return;

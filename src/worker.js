@@ -101,7 +101,7 @@ export default {
         const name = String(d.name || "").trim().slice(0, 120);
         const email = String(d.email || "").trim().slice(0, 200);
         const business = String(d.business || "").trim().slice(0, 200);
-        if (!name || !email || !business) return json({ error: "name, business and email required" }, 400);
+        if (!email) return json({ error: "email required" }, 400);
         const qa = Array.isArray(d.qa) ? d.qa : [];
         const record = { qa, quote: String(d.quote || "") };
         const answers = JSON.stringify(record);
@@ -113,7 +113,7 @@ export default {
         let emailed = false, confirmed = false;
         if (env.RESEND_API_KEY) {
           try {
-            const body = name + " (" + email + ") \u2014 " + business + "\n\n" + (lines || "(no answers)");
+            const body = (name || "there") + " (" + email + ") \u2014 " + (business || "no business name") + "\n\n" + (lines || "(no answers)");
             const r = await fetch("https://api.resend.com/emails", {
               method: "POST",
               headers: { "content-type": "application/json", authorization: "Bearer " + env.RESEND_API_KEY },
@@ -121,7 +121,7 @@ export default {
                 from: "FGG Intake <intake@frankg.com.au>",
                 to: ["frank@frankg.com.au"],
                 reply_to: email,
-                subject: "New intake \u2014 " + business,
+                subject: "New intake \u2014 " + (business || email),
                 text: body,
               }),
             });
@@ -136,7 +136,7 @@ export default {
                 to: [email],
                 reply_to: "frank@frankg.com.au",
                 subject: "Thank you for submitting \u2014 FGG",
-                text: "Hi " + name + ",\n\nThank you for submitting the form \u2014 I have your answers and I will read them properly.\n\nI will reply to " + email + " within a day.\n\n\u2014 Frank\nFGG \u00b7 frankg.com.au",
+                text: "Hi " + (name || "there") + ",\n\nThank you for submitting the form \u2014 I have your answers and I will read them properly.\n\nI will reply to " + email + " within a day.\n\n\u2014 Frank\nFGG \u00b7 frankg.com.au",
               }),
             });
             confirmed = r2.ok;
