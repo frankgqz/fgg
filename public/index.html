@@ -72,7 +72,7 @@
       <div class="top-row">
 
         <div class="feature locked">
-          <span class="feature-head"><b>Standard</b><em>$300</em></span>
+          <span class="feature-head"><b>Standard</b><em>$200</em></span>
           <div class="plain-ex">Custom design · Media · Gallery · Draft + Revision process · Receiving emails · Desktop and Mobile optimized · Fast & secure · SEO setup · Form · Dynamic page elements · UI polish · Favicon</div>
         </div>
 
@@ -267,8 +267,8 @@
   <script>
   (() => {
     const $ = (id) => document.getElementById(id);
-    const PRICES = { fancy: 100, math: 100, db: 100, cms: 100, shop: 100, login: 0 };
-    const BASE = 300, INCLUDED_PAGES = 5, PAGE_PRICE = 50;
+    const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 100, login: 100 };
+    const BASE = 200, INCLUDED_PAGES = 5, PAGE_PRICE = 50;
 
     const state = { fancy: false, math: false, db: false, cms: false, shop: false, login: false };
     const pages = $('pages');
@@ -326,10 +326,9 @@
         el.classList.remove('mandatory');
       }
 
-      // Standard is $300 — no minimum trick, it's just the price.
-      // Pulled-in tiles (auto) are included at $0; extras always add.
+      // plain additive pricing: Standard $200 + every selected tile's price
       let total = BASE;
-      for (const id of Object.keys(state)) if (state[id] && !auto.has(id)) total += PRICES[id];
+      for (const id of Object.keys(state)) if (state[id]) total += PRICES[id];
       const p = Math.max(1, parseInt(pages.value || '1', 10));
       pages.value = p;
       total += Math.max(0, p - INCLUDED_PAGES) * PAGE_PRICE;
@@ -337,7 +336,7 @@
       setTotal(total);
 
       // panel prices: flat and constant; pulled-in tiles show "included"
-      const STATIC_LABELS = { fancy: '+$100', math: '+$100', db: '+$100', cms: '+$100', shop: '+$100', login: '$0' };
+      const STATIC_LABELS = { fancy: '+$200', math: '+$100', db: '+$100', cms: '+$100', shop: '+$100', login: '+$100' };
       for (const id of Object.keys(PRICES)) {
         const em = document.querySelector('[data-feature="' + id + '"] .feature-head em');
         if (!em) continue;
