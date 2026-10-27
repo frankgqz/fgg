@@ -49,6 +49,29 @@
     .chip:active { transform: scale(0.95); }
     .chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
     .chip.plus-chip { border-style: dashed; font-weight: 700; padding: 0.42rem 1.05rem; }
+
+    /* five-dot sliders */
+    .slider-row { margin-bottom: 1.65rem; }
+    .slider-row .s-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.55rem; }
+    .slider { display: flex; align-items: center; gap: 0.85rem; }
+    .s-end { font-size: 0.88rem; font-weight: 600; color: var(--ink-soft); min-width: 5.25rem; }
+    .s-end.right { text-align: right; }
+    .s-dots { display: flex; flex: 1; align-items: center; position: relative; }
+    .s-dots::before { content: ""; position: absolute; left: 0.6rem; right: 0.6rem; height: 3px; background: var(--line); border-radius: 2px; }
+    .s-dot { position: relative; flex: 1; height: 1.6rem; background: none; border: 0; cursor: pointer; padding: 0; }
+    .s-dot::after {
+      content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 0.85rem; height: 0.85rem; border-radius: 999px;
+      background: var(--surface); border: 2px solid var(--line);
+      transition: transform 140ms cubic-bezier(.2,1.4,.4,1), background 140ms ease, border-color 140ms ease;
+    }
+    .s-dot:hover::after { transform: translate(-50%, -50%) scale(1.25); }
+    .s-dot.on::after { background: var(--accent); border-color: var(--accent); }
+    .s-mid { display: flex; margin-top: 0.3rem; padding: 0 calc(5.25rem + 0.85rem); font-size: 0.78rem; color: var(--ink-soft); }
+    .s-mid span { flex: 1; text-align: center; }
+    .s-mid span:first-child { text-align: left; }
+    .s-mid span:last-child { text-align: right; }
+
     .step-nav { display: flex; gap: 0.75rem; align-items: center; margin-top: 1.75rem; }
     .design-fold { border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.15rem; margin: 1.75rem 0; background: var(--surface); }
     .design-fold summary { cursor: pointer; font-weight: 600; font-size: 0.95rem; }
@@ -82,17 +105,17 @@
         <label class="field">Your name<input name="name" autocomplete="name"></label>
         <label class="field">Business name<input name="business" autocomplete="organization"></label>
         <label class="field">Email *<input type="email" name="email" autocomplete="email" required><small>I'll read this properly and reply here.</small></label>
-        <label class="field">What does the business do? (one line)<input name="about" maxlength="160"></label>
+        <label class="field">What does the business do?<input name="about" maxlength="160"></label>
+        <label class="field">Who are your customers?<input name="customers" maxlength="160"></label>
+        <label class="field">What should the site achieve?<input name="goal" maxlength="160"></label>
         <fieldset class="chips-field">
           <legend>Site language</legend>
-          <div class="chips" data-name="languages" data-multi="1">
+          <div class="chips" data-name="languages" data-multi="1" id="langGroup">
             <button type="button" class="chip on">English</button>
-            <button type="button" class="chip">Tiếng Việt</button>
-            <button type="button" class="chip">Both</button>
             <button type="button" class="chip plus-chip" data-reveal="otherLangField">+</button>
           </div>
         </fieldset>
-        <label class="field" id="otherLangField" style="display:none">Other languages<input name="languagesExtra" maxlength="120"></label>
+        <label class="field" id="otherLangField" style="display:none">Add a language — press Enter to add it to the list<input name="languagesExtra" maxlength="60"></label>
       </section>
 
       <section class="step">
@@ -102,11 +125,13 @@
           <div class="chips" data-name="actions" data-multi="1">
             <button type="button" class="chip">Call</button>
             <button type="button" class="chip">Book</button>
+            <button type="button" class="chip">Make an appointment</button>
             <button type="button" class="chip">Buy Online</button>
             <button type="button" class="chip">Message</button>
+            <button type="button" class="chip">Live chat</button>
             <button type="button" class="chip">Look at information</button>
             <button type="button" class="chip">Sign up</button>
-            <button type="button" class="chip">Physically visit</button>
+            <button type="button" class="chip">Prepare for visit</button>
           </div>
         </fieldset>
         <fieldset class="chips-field">
@@ -128,6 +153,9 @@
             <button type="button" class="chip">Natural</button>
             <button type="button" class="chip">Youthful</button>
             <button type="button" class="chip">Reassuring</button>
+            <button type="button" class="chip">Fresh</button>
+            <button type="button" class="chip">Cozy</button>
+            <button type="button" class="chip">Sophisticated</button>
           </div>
         </fieldset>
         <label class="field">What should visitors not feel or think?<input name="notfeel" maxlength="160"></label>
@@ -141,12 +169,12 @@
         </fieldset>
         <label class="field">Where are they? (links — Drive, Instagram, anywhere)<textarea name="assets" maxlength="600"></textarea></label>
         <fieldset class="chips-field">
-          <legend>The normal delivery time is 3 weeks, with first revision after a week. Your timing?</legend>
+          <legend>How soon do you want the site? The normal delivery time is 3 weeks, with first revision after a week.</legend>
           <div class="chips" data-name="timing">
-            <button type="button" class="chip">I want it quick</button>
+            <button type="button" class="chip">Within 1 week (+$100)</button>
             <button type="button" class="chip" data-reveal="dateField">There's a date</button>
             <button type="button" class="chip">Normal timeframe</button>
-            <button type="button" class="chip">Whenever</button>
+            <button type="button" class="chip">No Rush</button>
           </div>
         </fieldset>
         <label class="field" id="dateField" style="display:none">Your date<input type="date" name="deadline"></label>
@@ -154,6 +182,15 @@
 
       <section class="step">
         <h2>Details</h2>
+        <fieldset class="chips-field">
+          <legend>What's your budget?</legend>
+          <div class="chips" data-name="budget">
+            <button type="button" class="chip">$200–$500</button>
+            <button type="button" class="chip">$500–$1,000</button>
+            <button type="button" class="chip">$1,000+</button>
+            <button type="button" class="chip">Not sure yet</button>
+          </div>
+        </fieldset>
         <label class="field">What do you want and love? Examples — any website template, menu, sign. Anything.<textarea name="love" maxlength="2000"></textarea></label>
         <label class="field">What do you want to avoid?<textarea name="avoid" maxlength="2000"></textarea><small>Screenshot and circle what you like, cross out what you don't.</small></label>
         <label class="field">What do you want in your own words to be included?<textarea name="ownwords" maxlength="2000"></textarea></label>
@@ -161,7 +198,6 @@
         <details class="design-fold">
           <summary>Detailed design</summary>
           <div class="inner">
-            <label class="field">Colors or hex #ffffff<input name="colors" maxlength="300"><small>Links, photos, signs — anything with your colors.</small></label>
             <fieldset class="chips-field">
               <legend>Theme</legend>
               <div class="chips" data-name="theme">
@@ -173,27 +209,72 @@
                 <button type="button" class="chip">Bold</button>
               </div>
             </fieldset>
-            <fieldset class="chips-field">
-              <legend>Layout</legend>
-              <div class="chips" data-name="layout">
-                <button type="button" class="chip">Big photos</button>
-                <button type="button" class="chip">Lots of info</button>
-                <button type="button" class="chip">Balanced</button>
-                <button type="button" class="chip">You decide</button>
+
+            <div class="slider-row" data-name="lightdark" data-q="Light or dark?">
+              <div class="s-q">Light or dark?</div>
+              <div class="slider">
+                <span class="s-end">Light</span>
+                <div class="s-dots">
+                  <button type="button" class="s-dot" data-v="1"></button>
+                  <button type="button" class="s-dot" data-v="2"></button>
+                  <button type="button" class="s-dot" data-v="3"></button>
+                  <button type="button" class="s-dot" data-v="4"></button>
+                  <button type="button" class="s-dot" data-v="5"></button>
+                </div>
+                <span class="s-end right">Dark</span>
               </div>
-            </fieldset>
-            <fieldset class="chips-field">
-              <legend>Light or dark?</legend>
-              <div class="chips" data-name="lightdark">
-                <button type="button" class="chip">Light</button>
-                <button type="button" class="chip">In between</button>
-                <button type="button" class="chip">Dark</button>
+            </div>
+
+            <div class="slider-row" data-name="vibrantmono" data-q="Vibrant or monochrome?">
+              <div class="s-q">Vibrant or monochrome?</div>
+              <div class="slider">
+                <span class="s-end">Vibrant</span>
+                <div class="s-dots">
+                  <button type="button" class="s-dot" data-v="1"></button>
+                  <button type="button" class="s-dot" data-v="2"></button>
+                  <button type="button" class="s-dot" data-v="3"></button>
+                  <button type="button" class="s-dot" data-v="4"></button>
+                  <button type="button" class="s-dot" data-v="5"></button>
+                </div>
+                <span class="s-end right">Monochrome</span>
               </div>
-            </fieldset>
+            </div>
+
+            <div class="slider-row" data-name="warmcool" data-q="Warm or cool?">
+              <div class="s-q">Warm or cool?</div>
+              <div class="slider">
+                <span class="s-end">Warm</span>
+                <div class="s-dots">
+                  <button type="button" class="s-dot" data-v="1"></button>
+                  <button type="button" class="s-dot" data-v="2"></button>
+                  <button type="button" class="s-dot" data-v="3"></button>
+                  <button type="button" class="s-dot" data-v="4"></button>
+                  <button type="button" class="s-dot" data-v="5"></button>
+                </div>
+                <span class="s-end right">Cool</span>
+              </div>
+            </div>
+
+            <div class="slider-row" data-name="infoweight" data-q="Photos or info?">
+              <div class="s-q">Photos or info?</div>
+              <div class="slider">
+                <span class="s-end">Photos</span>
+                <div class="s-dots">
+                  <button type="button" class="s-dot" data-v="1"></button>
+                  <button type="button" class="s-dot" data-v="2"></button>
+                  <button type="button" class="s-dot" data-v="3"></button>
+                  <button type="button" class="s-dot" data-v="4"></button>
+                  <button type="button" class="s-dot" data-v="5"></button>
+                </div>
+                <span class="s-end right">Lots of info</span>
+              </div>
+              <div class="s-mid"><span>Photos</span><span>Balanced</span><span>Lots of info</span></div>
+            </div>
           </div>
         </details>
 
         <label class="field">Anything else? Any questions for me?<textarea name="anything" maxlength="2000"></textarea></label>
+        <label class="field">Specific colors<input name="colors" maxlength="300"><small>Hex, names, or a link — anything with your colors.</small></label>
 
         <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
 
@@ -225,7 +306,6 @@
       $('qsTotal').innerHTML = total ? 'Build estimate: <b>$' + total.replace(/[^0-9]/g, '') + '</b> · Care $200/y' : '';
     })();
 
-    // only email is required
     function validateStep() {
       const el = document.querySelector('[name="email"]');
       if (!el.value.trim()) {
@@ -237,7 +317,6 @@
       return true;
     }
 
-    // + chip opens an input; "There's a date" opens the date box
     function applyReveals() {
       document.querySelectorAll('[data-reveal]').forEach((chip) => {
         if (chip.classList.contains('plus-chip')) return;
@@ -246,6 +325,7 @@
       });
     }
 
+    // chips
     document.querySelectorAll('.chips').forEach((group) => {
       const multi = group.dataset.multi === '1';
       group.addEventListener('click', (e) => {
@@ -271,14 +351,49 @@
       });
     });
 
+    // language add: Enter turns the typed language into a selectable chip
+    (function () {
+      const field = $('otherLangField');
+      const input = field.querySelector('input');
+      const plus = document.querySelector('#langGroup .plus-chip');
+      input.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter') return;
+        e.preventDefault();
+        const v = input.value.trim();
+        if (!v) return;
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'chip on';
+        chip.textContent = v;
+        plus.parentNode.insertBefore(chip, plus);
+        input.value = '';
+        save();
+      });
+    })();
+
+    // five-dot sliders
+    document.querySelectorAll('.slider-row').forEach((row) => {
+      row.querySelectorAll('.s-dot').forEach((dot) => {
+        dot.addEventListener('click', () => {
+          const v = Number(dot.dataset.v);
+          row.querySelectorAll('.s-dot').forEach((d) => d.classList.toggle('on', Number(d.dataset.v) <= v));
+          row.dataset.value = String(v);
+          save();
+        });
+      });
+    });
+
     // question/answer list for the email — every question, unanswered as ""
     function collectQA() {
       const qa = [];
-      document.querySelectorAll('.field, .chips-field').forEach((el) => {
+      document.querySelectorAll('.field, .chips-field, .slider-row').forEach((el) => {
         if (el.classList.contains('chips-field')) {
           const q = el.querySelector('legend').textContent.trim();
           const on = [...el.querySelectorAll('.chip.on')].filter((c) => !c.classList.contains('plus-chip')).map((c) => c.textContent.trim());
           qa.push([q, on.join(' · ')]);
+        } else if (el.classList.contains('slider-row')) {
+          const v = el.dataset.value;
+          qa.push([el.dataset.q || 'Slider', v ? v + '/5' : '']);
         } else {
           const input = el.querySelector('input[name], textarea[name]');
           if (!input || input.name === 'website') return;
@@ -297,6 +412,9 @@
       document.querySelectorAll('.chips').forEach((group) => {
         const on = [...group.querySelectorAll('.chip.on')].filter((c) => !c.classList.contains('plus-chip')).map((c) => c.textContent.trim());
         if (on.length) answers[group.dataset.name] = on;
+      });
+      document.querySelectorAll('.slider-row').forEach((row) => {
+        if (row.dataset.value) answers[row.dataset.name] = row.dataset.value;
       });
       return answers;
     }
@@ -318,6 +436,12 @@
             if (c.classList.contains('plus-chip')) return;
             c.classList.toggle('on', sel.includes(c.textContent.trim()));
           });
+        });
+        document.querySelectorAll('.slider-row').forEach((row) => {
+          const v = (d.answers || {})[row.dataset.name];
+          if (!v) return;
+          row.dataset.value = String(v);
+          row.querySelectorAll('.s-dot').forEach((dot) => dot.classList.toggle('on', Number(dot.dataset.v) <= Number(v)));
         });
         if ((d.answers || {}).languagesExtra) {
           const f = document.getElementById('otherLangField');
