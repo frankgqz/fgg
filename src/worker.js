@@ -144,7 +144,7 @@ export default {
         }
         return json({ ok: true, emailed, confirmed });
       }
-      return env.ASSETS.fetch(req);
+      return env.ASSETS ? env.ASSETS.fetch(req) : new Response("Not found", { status: 404 });
     } catch (err) {
       return json({ error: String(err) }, 500);
     }
