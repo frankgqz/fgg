@@ -129,12 +129,12 @@
       } else {
         card.innerHTML = '<p class="qs-label">From intake</p>'
           + '<p style="margin:0 0 1rem;font-weight:600;">Haven\'t told me about your project yet?</p>'
-          + '<a class="button" href="' + toIntake + '">Tell me your preferences</a>';
+          + '<a class="button" href="' + toIntake + '">Your preferences</a>';
       }
       if (q.get('paid') === '1' && !sent) {
         setTimeout(() => {
           const note = $('payNote');
-          note.innerHTML = note.textContent + ' <a href="' + toIntake + '">Next: tell me your preferences \u2192</a>';
+          note.innerHTML = note.textContent + ' <a href="' + toIntake + '">Next: your preferences \u2192</a>';
         }, 0);
       }
     })();

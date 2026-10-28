@@ -1221,7 +1221,7 @@ html.fancy :focus-visible { outline-color: var(--accent); }
   width: 1.15rem; height: 1.15rem; border-radius: 50%;
   border: 1px solid var(--line); background: transparent;
   color: var(--ink-soft); font: inherit; font-size: 0.889rem; font-weight: 700;
-  cursor: pointer; margin-top: 0.55rem;
+  cursor: pointer; margin-left: 0.4rem; vertical-align: 0.12rem;
 }
 .info-pop {
   position: absolute; top: 3.4rem; left: 1.25rem; right: 1.25rem; z-index: 320;
