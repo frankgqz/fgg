@@ -56,13 +56,13 @@
     <nav class="dots" aria-label="journey">
     <a class="dot on" href="/"></a>
     <a class="dot" href="/intake"></a>
-    <a class="dot" href="/pay"></a>
+    <a class="dot" href="/payment"></a>
   </nav>
 
 <main>
     <section class="hero">
       <h1>Websites, build and care.</h1>
-      <p class="lede">I'm Frank Gao, a web developer in Melbourne. I build websites and apps for businesses.</p>
+      <p class="lede">Hi, I'm Frank Gao. I'm from Melbourne and I build custom websites and apps for hospitality/shops/events/trades.</p>
       <a class="button" href="#quote">Try it</a>
     </section>
 
@@ -216,7 +216,7 @@
       <h2>Work</h2>
       <div class="work-panels">
 
-        <article class="card work-card" data-desc="A fast, modern site for Australia's largest Bigo agency — gallery, live prices, and a contact form, all editable by the team.">
+        <article class="card work-card" data-shot="/works/gg-agency.png" data-desc="A fast, modern site for Australia's largest Bigo agency — gallery, live prices, and a contact form, all editable by the team.">
           <h3>GG Agency</h3>
           <p class="meta">Livestreaming · Content Creation</p>
           <p><a href="https://ggagency.com.au">ggagency.com.au</a></p>
@@ -227,7 +227,7 @@
           <p class="meta">Apps · experiments · games</p>
           <p><a href="https://gqz.app/">gqz.app</a></p>
         </article>
-        <article class="card work-card" data-desc="A bright, playful class site — full timetable, packages, and tap-to-copy payment details, made phone-first.">
+        <article class="card work-card" data-shot="/works/lumidance.png" data-desc="A bright, playful class site — full timetable, packages, and tap-to-copy payment details, made phone-first.">
           <h3>Lumi Dance Studio</h3>
           <p class="meta">Dance studio · Deer Park</p>
           <p><a href="https://lumidance.frankgqz.workers.dev">lumidance.com.au</a></p>
@@ -248,10 +248,12 @@
 
   <footer>
     <p>FGG Pty Ltd · Melbourne · ACN 647590369</p>
+    <p><a href="/legal">Privacy &amp; Terms</a></p>
   </footer>
 
   <div class="work-detail" id="workDetail" hidden>
     <div class="work-detail-card">
+      <img id="wdShot" class="wd-shot" alt="" hidden>
       <h3 id="wdTitle"></h3>
       <p class="meta" id="wdMeta"></p>
       <p id="wdBody"></p>
@@ -662,7 +664,7 @@
     const VI = {
       "Preferences": "Sở thích",
       "Websites, build and care.": "Website: dựng và chăm sóc.",
-      "I'm Frank Gao, a web developer in Melbourne. I build websites and apps for businesses.": "Tôi là Frank Gao, lập trình viên web tại Melbourne. Tôi làm website và ứng dụng cho doanh nghiệp.",
+      "Hi, I'm Frank Gao. I'm from Melbourne and I build custom websites and apps for hospitality/shops/events/trades.": "Chào, tôi là Frank Gao. Tôi ở Melbourne và tôi làm website và ứng dụng riêng cho nhà hàng/cửa hàng/sự kiện/thợ.",
       "Try it": "Dùng thử",
       "Build your package": "Tạo báo giá",
       "Standard": "Tiêu chuẩn",
@@ -873,6 +875,9 @@
     const detailCard = workDetail.querySelector('.work-detail-card');
     let lastCard = null;
     function openWork(card) {
+      const shot = $('wdShot');
+      shot.hidden = !card.dataset.shot;
+      if (card.dataset.shot) shot.src = card.dataset.shot; else shot.removeAttribute('src');
       lastCard = card;
       $('wdTitle').textContent = card.querySelector('h3').textContent;
       $('wdMeta').textContent = card.querySelector('.meta').textContent;

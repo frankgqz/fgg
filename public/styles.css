@@ -843,7 +843,7 @@ h3 { font-size: var(--fs-h5); }
 .work-detail[hidden] { display: none; }
 .work-detail-card {
   background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
-  box-shadow: var(--shadow); padding: 1.75rem 1.9rem; max-width: 32rem; width: 100%;
+  box-shadow: var(--shadow); padding: 1.75rem 1.9rem; max-width: 48rem; width: 100%;
 }
 .wd-actions { display: flex; gap: 0.75rem; align-items: center; margin: 1.15rem 0 0; }
 body.modal-open { overflow: hidden; }
@@ -1176,3 +1176,5 @@ html.fancy :focus-visible { outline-color: var(--accent); }
 }
 .dot:hover { transform: scale(1.35); background: var(--ink-soft); }
 .dot.on { background: var(--accent); }
+
+.wd-shot { width: 100%; border-radius: 12px; margin: 0 0 1.15rem; display: block; }

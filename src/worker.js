@@ -60,6 +60,12 @@ export default {
       if (url.pathname === "/intake" || url.pathname === "/intake/") {
         return env.ASSETS.fetch(new Request(new URL("/intake.html", url.origin), req));
       }
+      if (url.pathname === "/pay" || url.pathname === "/pay/") {
+        return Response.redirect(url.origin + "/payment" + url.search, 301);
+      }
+      if (url.pathname === "/payment" || url.pathname === "/payment/") {
+        return env.ASSETS.fetch(new Request(new URL("/payment.html", url.origin), req));
+      }
       if (url.pathname === "/api/checkout" && req.method === "GET") {
         // three modes: deposit (fixed $200) - full (server-computed) - custom (clamped)
         const mode = String(url.searchParams.get("mode") || "deposit");
@@ -76,19 +82,19 @@ export default {
         if (mode === "full") { amount = full; what = "website build \u2014 paid in full"; }
         else if (mode === "custom") {
           const n = Math.round(Number(url.searchParams.get("amount") || "0"));
-          if (!(n >= 1 && n <= 20000)) return Response.redirect(url.origin + "/pay?pay=cancelled", 302);
+          if (!(n >= 1 && n <= 20000)) return Response.redirect(url.origin + "/payment?pay=cancelled", 302);
           amount = n; what = "website build \u2014 custom amount";
         } else { amount = 200; what = "website build deposit (balance billed later)"; }
         const origin = url.origin;
-        if (!env.STRIPE_SECRET_KEY) return Response.redirect(origin + "/pay?pay=unavailable", 302);
+        if (!env.STRIPE_SECRET_KEY) return Response.redirect(origin + "/payment?pay=unavailable", 302);
         const body = new URLSearchParams({
           mode: "payment",
           "line_items[0][quantity]": "1",
           "line_items[0][price_data][currency]": "aud",
           "line_items[0][price_data][unit_amount]": String(amount * 100),
           "line_items[0][price_data][product_data][name]": "FGG \u2014 " + what,
-          success_url: origin + "/pay?paid=1",
-          cancel_url: origin + "/pay?pay=cancelled",
+          success_url: origin + "/payment?paid=1",
+          cancel_url: origin + "/payment?pay=cancelled",
         });
         const r = await fetch("https://api.stripe.com/v1/checkout/sessions", {
           method: "POST",
@@ -99,7 +105,7 @@ export default {
           body,
         });
         const sess = await r.json().catch(() => null);
-        if (!sess || !sess.url) return Response.redirect(origin + "/pay?pay=unavailable", 302);
+        if (!sess || !sess.url) return Response.redirect(origin + "/payment?pay=unavailable", 302);
         return Response.redirect(sess.url, 302);
       }
       if (url.pathname === "/api/intake" && req.method === "POST") {
