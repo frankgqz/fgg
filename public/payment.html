@@ -82,12 +82,26 @@
     // payment modes: $200 deposit · in full · custom amount
     let mode = 'deposit';
     let rush = false;
+    // recompute the package from the real parts — the total param is display-only noise
+    const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 100, login: 100 };
+    function computePackage() {
+      const ids = (q.get('ids') || '').split(',').filter((x) => x in PRICES);
+      const rev = Math.min(20, Math.max(0, parseInt(q.get('rev') || '2', 10) || 2));
+      const pages = Math.min(50, Math.max(1, parseInt(q.get('pages') || '1', 10) || 1));
+      let pkg = 200 + ids.reduce((a, k) => a + PRICES[k], 0);
+      pkg += Math.max(0, rev - (ids.includes('fancy') ? 3 : 2)) * 75;
+      pkg += Math.max(0, pages - 5) * 50;
+      return pkg;
+    }
     function updateBtn() {
-      const totalN = Number((q.get('total') || '200').replace(/[^0-9]/g, '')) || 200;
-      const pkg = totalN + (rush ? 100 : 0);
+      const pkg = computePackage() + (rush ? 100 : 0);
       $('payTotal').innerHTML = 'Build <b>$' + pkg + '</b> · Care $200/y';
       const params = new URLSearchParams();
-      for (const k of ['ids', 'rev', 'pages']) if (q.get(k)) params.set(k, q.get(k));
+      const rev = Math.min(20, Math.max(0, parseInt(q.get('rev') || '2', 10) || 2));
+      const pages = Math.min(50, Math.max(1, parseInt(q.get('pages') || '1', 10) || 1));
+      if (q.get('ids')) params.set('ids', q.get('ids'));
+      params.set('rev', String(rev));
+      params.set('pages', String(pages));
       params.set('mode', mode);
       if (rush) params.set('rush', '1');
       const btn = $('payBtn');
