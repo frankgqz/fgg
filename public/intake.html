@@ -110,7 +110,7 @@
       <section class="step">
         <h2>The Website</h2>
         <label class="field">What does the business do?<input name="about" maxlength="160"></label>
-        <label class="field">Who are your customers?<input name="customers" maxlength="160"></label>
+        <label class="field">What are your customers like?<input name="customers" maxlength="160"></label>
         <fieldset class="chips-field">
           <legend>What should people do on the site?</legend>
           <div class="chips" data-name="actions" data-multi="1">
@@ -135,14 +135,16 @@
         </fieldset>
         <label class="field" id="otherLangField" style="display:none">Add a language — press Enter to add it to the list<input name="languagesExtra" maxlength="60"></label>
         <fieldset class="chips-field">
-          <legend>Have photos &amp; logo?</legend>
-          <div class="chips" data-name="photos">
-            <button type="button" class="chip">Have some</button>
-            <button type="button" class="chip">Not yet</button>
-            <button type="button" class="chip">Have everything</button>
+          <legend>Have videos, photos, words, logos already?</legend>
+          <div class="chips" data-name="photos" data-multi="1">
+            <button type="button" class="chip">Videos</button>
+            <button type="button" class="chip">Photos</button>
+            <button type="button" class="chip">Slogan</button>
+            <button type="button" class="chip">Copy</button>
+            <button type="button" class="chip">Logos</button>
           </div>
         </fieldset>
-        <label class="field">Where are they? (links — Drive, Facebook, anywhere)<textarea name="assets" maxlength="600"></textarea></label>
+        <label class="field">Where are they? What are the links? (Drive, Facebook, anywhere)<textarea name="assets" maxlength="600"></textarea></label>
         <label class="field">What words/paragraphs do you want included on the website?<textarea name="ownwords" maxlength="2000" style="min-height:7.25rem"></textarea></label>
         
         <fieldset class="chips-field">
@@ -183,8 +185,7 @@
             <button type="button" class="chip">Sophisticated</button>
           </div>
         </fieldset>
-        <label class="field">What should visitors not feel or think?<input name="notfeel" maxlength="160"></label>
-        <label class="field">What do you want on the site? Examples — any website template, photo, menu. Anything.<textarea name="love" maxlength="2000"></textarea><small>Web design tools for inspiration: <a href="https://recent.design" target="_blank" rel="noopener">recent.design — fancy sites</a> · <a href="https://onepagelove.com" target="_blank" rel="noopener">one page love — simple sites</a></small></label>
+        <label class="field">What do you want on the site? Examples — any website template, photo, menu. Anything.<textarea name="love" maxlength="2000"></textarea><small>Web design tools for inspiration: <a href="https://recent.design" target="_blank" rel="noopener">recent.design — fancy sites</a> · <a href="https://onepagelove.com" target="_blank" rel="noopener">one page love — simple sites</a> · <a href="https://www.lapa.ninja" target="_blank" rel="noopener">lapa.ninja — layouts</a></small></label>
         <label class="field">What do you want to avoid?<textarea name="avoid" maxlength="2000"></textarea><small>Screenshot and circle what you like, cross out what you don't.</small></label>
 
         <details class="design-fold">

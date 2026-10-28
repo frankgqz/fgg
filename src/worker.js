@@ -61,23 +61,32 @@ export default {
         return env.ASSETS.fetch(new Request(new URL("/intake.html", url.origin), req));
       }
       if (url.pathname === "/api/checkout" && req.method === "GET") {
-        const PRICES = { fancy: 100, math: 100, db: 100, cms: 100, shop: 100, login: 0 };
+        // three modes: deposit (fixed $200) - full (server-computed) - custom (clamped)
+        const mode = String(url.searchParams.get("mode") || "deposit");
+        const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 100, login: 100 };
         const ids = String(url.searchParams.get("ids") || "").split(",").map((x) => x.trim()).filter(Boolean);
         const rev = Math.max(0, parseInt(url.searchParams.get("rev") || "2", 10) || 0);
         const pages = Math.max(1, parseInt(url.searchParams.get("pages") || "1", 10) || 1);
-        let total = 200;
-        for (const id of ids) if (PRICES[id]) total += PRICES[id];
-        total += Math.max(0, rev - (ids.includes("fancy") ? 3 : 2)) * 75;
-        total += Math.max(0, pages - 5) * 50;
-        total = Math.max(300, total);
+        let full = 200;
+        for (const id of ids) if (PRICES[id]) full += PRICES[id];
+        full += Math.max(0, rev - (ids.includes("fancy") ? 3 : 2)) * 75;
+        full += Math.max(0, pages - 5) * 50;
+        if (url.searchParams.get("rush") === "1") full += 100;
+        let amount, what;
+        if (mode === "full") { amount = full; what = "website build \u2014 paid in full"; }
+        else if (mode === "custom") {
+          const n = Math.round(Number(url.searchParams.get("amount") || "0"));
+          if (!(n >= 5 && n <= 20000)) return Response.redirect(url.origin + "/pay?pay=cancelled", 302);
+          amount = n; what = "website build \u2014 custom amount";
+        } else { amount = 200; what = "website build deposit (balance billed later)"; }
         const origin = url.origin;
         if (!env.STRIPE_SECRET_KEY) return Response.redirect(origin + "/pay?pay=unavailable", 302);
         const body = new URLSearchParams({
           mode: "payment",
           "line_items[0][quantity]": "1",
           "line_items[0][price_data][currency]": "aud",
-          "line_items[0][price_data][unit_amount]": String(20000),
-          "line_items[0][price_data][product_data][name]": "FGG \u2014 website build deposit (balance billed later)",
+          "line_items[0][price_data][unit_amount]": String(amount * 100),
+          "line_items[0][price_data][product_data][name]": "FGG \u2014 " + what,
           success_url: origin + "/pay?paid=1",
           cancel_url: origin + "/pay?pay=cancelled",
         });
