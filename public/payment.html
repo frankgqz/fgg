@@ -53,6 +53,7 @@
       <div class="pay-modes" id="payModes">
         <button type="button" class="pay-mode on" data-mode="deposit"><b>$200 deposit</b><small>refundable at the end of the 1st revision · balance billed later</small></button>
         <button type="button" class="pay-mode" data-mode="full"><b>Pay in full</b><small>the whole build in one go</small></button>
+        <button type="button" class="pay-mode" data-mode="care"><b>Care $200/y</b><small>yearly subscription — renews each year</small></button>
         <button type="button" class="pay-mode" data-mode="custom"><b>Custom amount</b><small>an invoice balance or part payment</small></button>
       </div>
       <input class="pay-custom" id="payCustom" type="number" min="1" max="20000" step="1" placeholder="Amount in $" hidden>
@@ -92,6 +93,8 @@
       const btn = $('payBtn');
       if (mode === 'deposit') {
         btn.textContent = '$200 — deposit';
+      } else if (mode === 'care') {
+        btn.textContent = '$200/y — yearly';
       } else if (mode === 'full') {
         btn.textContent = '$' + pkg + ' — in full';
       } else {

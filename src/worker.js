@@ -80,7 +80,8 @@ export default {
         full += Math.max(0, pages - 5) * 50;
         if (url.searchParams.get("rush") === "1") full += 100;
         let amount, what;
-        if (mode === "full") { amount = full; what = "website build \u2014 paid in full"; }
+        if (mode === "care") { amount = 200; what = "care \u2014 billed yearly"; }
+        else if (mode === "full") { amount = full; what = "website build \u2014 paid in full"; }
         else if (mode === "custom") {
           const n = Math.round(Number(url.searchParams.get("amount") || "0"));
           if (!(n >= 1 && n <= 20000)) return Response.redirect(url.origin + "/payment?pay=cancelled", 302);
@@ -89,7 +90,7 @@ export default {
         const origin = url.origin;
         if (!env.STRIPE_SECRET_KEY) return Response.redirect(origin + "/payment?pay=unavailable", 302);
         const body = new URLSearchParams({
-          mode: "payment",
+          mode: mode === "care" ? "subscription" : "payment",
           "line_items[0][quantity]": "1",
           "line_items[0][price_data][currency]": "aud",
           "line_items[0][price_data][unit_amount]": String(amount * 100),
@@ -97,6 +98,7 @@ export default {
           success_url: origin + "/payment?paid=1",
           cancel_url: origin + "/payment?pay=cancelled",
         });
+        if (mode === "care") body.set("line_items[0][price_data][recurring][interval]", "year");
         const r = await fetch("https://api.stripe.com/v1/checkout/sessions", {
           method: "POST",
           headers: {
