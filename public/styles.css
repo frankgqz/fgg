@@ -36,9 +36,9 @@ h1, h2, h3, h4 {
   margin: 0 0 0.5rem;
 }
 
-h1 { font-size: clamp(2.1rem, 5vw, 3.25rem); letter-spacing: -0.01em; }
-h2 { font-size: 1.65rem; }
-h3 { font-size: 1.25rem; }
+h1 { font-size: 2.027rem; letter-spacing: -0.01em; }
+h2 { font-size: 1.602rem; }
+h3 { font-size: 1.266rem; }
 h4 { font-size: 1.1rem; margin: 0 0 0.35rem; }
 
 p { margin: 0 0 1rem; }
@@ -48,7 +48,7 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
 
 /* —— hero —— */
 .hero { padding: 5rem 0 4rem; max-width: 42rem; }
-.lede { font-size: 1.15rem; color: var(--ink-soft); }
+.lede { font-size: 1.125rem; color: var(--ink-soft); }
 
 .meta {
   font-size: 0.95rem;
@@ -605,9 +605,9 @@ body.fancy .lesson-bar {
   box-shadow: var(--shadow); padding: 1rem 1.15rem; display: grid; gap: 0.35rem;
   text-align: right;
 }
-.pw-line { margin: 0; font-size: 0.95rem; color: var(--ink-soft); }
-.pw-line b { color: var(--ink); font-family: "Figtree", "Inter", sans-serif; font-size: 0.95rem; }
-.pw-line.care { font-size: 0.95rem; }
+.pw-line { margin: 0; font-size: 0.889rem; color: var(--ink-soft); }
+.pw-line b { color: var(--ink); font-family: "Figtree", "Inter", sans-serif; font-size: 0.889rem; }
+.pw-line.care { font-size: 0.889rem; }
 .price-widget .button { margin-top: 0.35rem; justify-self: end; }
 
 /* locked panels (standard + yearly — always selected) */
