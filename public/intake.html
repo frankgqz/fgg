@@ -79,6 +79,16 @@
     .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
     .done { text-align: left; border: 1px solid var(--line); border-radius: 16px; padding: 2rem; background: var(--surface); }
     .done h3 { margin-bottom: 0.5rem; }
+    .up-block { margin-top: 0.85rem; font-size: 0.889rem; font-weight: 600; }
+    .up-row { margin-top: 0.55rem; }
+    .up-thumbs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.65rem; }
+    .up-thumb { position: relative; width: 4.5rem; height: 4.5rem; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+    .up-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .up-x {
+      position: absolute; top: 2px; right: 2px; width: 1.25rem; height: 1.25rem;
+      border-radius: 50%; border: 0; background: rgba(0, 0, 0, 0.55); color: #fff;
+      cursor: pointer; font-size: 0.889rem; line-height: 1;
+    }
   </style>
 </head>
 <body>
@@ -143,6 +153,14 @@
             <button type="button" class="chip">Logos</button>
             <button type="button" class="chip">Legal</button>
             <button type="button" class="chip">Other</button>
+          </div>
+          <div class="up-block">
+            <span>Uploads — screenshots, logos, photos (shrink automatically)</span>
+            <div class="up-row">
+              <button type="button" class="button small" id="upBtn">Choose images</button>
+              <input type="file" id="upInput" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden>
+            </div>
+            <div class="up-thumbs" id="upThumbs"></div>
           </div>
         </fieldset>
         <label class="field">Where are they? What are the links? (Drive, Facebook, anywhere)<textarea name="assets" maxlength="600"></textarea></label>
@@ -338,6 +356,60 @@
 
   <script>
     const $ = (id) => document.getElementById(id);
+    const uploads = [];
+
+    function shrink(file) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          const max = 1600;
+          const scale = Math.min(1, max / Math.max(img.width, img.height));
+          const c = document.createElement('canvas');
+          c.width = Math.round(img.width * scale);
+          c.height = Math.round(img.height * scale);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          resolve(c.toDataURL('image/jpeg', 0.82));
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('not an image')); };
+        img.src = url;
+      });
+    }
+
+    (function () {
+      const upInput = $('upInput');
+      $('upBtn').addEventListener('click', () => upInput.click());
+      upInput.addEventListener('change', async () => {
+        const files = [...upInput.files].slice(0, 6);
+        upInput.value = '';
+        for (const f of files) {
+          try {
+            const dataUrl = await shrink(f);
+            const r = await fetch('/api/upload', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify({ type: 'image/jpeg', data: dataUrl.split(',')[1] }),
+            });
+            const j = await r.json();
+            if (!j.ok) throw new Error(j.error || 'upload failed');
+            uploads.push(j.key);
+            const div = document.createElement('div');
+            div.className = 'up-thumb';
+            div.innerHTML = '<img alt=""><button type="button" class="up-x" title="remove">\u00d7</button>';
+            div.querySelector('img').src = dataUrl;
+            div.querySelector('.up-x').addEventListener('click', () => {
+              const i = uploads.indexOf(j.key);
+              if (i >= 0) uploads.splice(i, 1);
+              div.remove();
+            });
+            $('upThumbs').appendChild(div);
+          } catch (e) {
+            alert('Could not upload ' + f.name + ' — ' + e.message);
+          }
+        }
+      });
+    })();
     const loadedAt = Date.now();
     document.querySelectorAll('.dots .dot').forEach((a) => { a.href += location.search; });
 
@@ -527,6 +599,7 @@
             business: document.querySelector('[name="business"]').value.trim(),
             about: document.querySelector('[name="about"]').value.trim(),
             rush: [...document.querySelectorAll('[data-name="timing"] .chip.on')].some((c) => c.textContent.trim().startsWith('Within 1 week')),
+            files: uploads.slice(0, 6),
           }));
           localStorage.removeItem('fgg-intake');
         } catch {}

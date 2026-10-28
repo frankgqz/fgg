@@ -111,6 +111,17 @@ export default {
         if (!sess || !sess.url) return Response.redirect(origin + "/payment?pay=unavailable", 302);
         return Response.redirect(sess.url, 302);
       }
+      if (url.pathname.startsWith("/files/") && req.method === "GET") {
+        if (!env.FILES) return json({ error: "storage not ready" }, 503);
+        const key = decodeURIComponent(url.pathname.slice("/files/".length));
+        if (!key.startsWith("intake/")) return json({ error: "not found" }, 404);
+        const obj = await env.FILES.get(key);
+        if (!obj) return json({ error: "not found" }, 404);
+        return new Response(obj.body, { headers: {
+          "content-type": (obj.httpMetadata && obj.httpMetadata.contentType) || "image/jpeg",
+          "cache-control": "private, max-age=3600",
+        } });
+      }
       if (url.pathname === "/api/upload" && req.method === "POST") {
         if (!env.FILES) return json({ error: "storage not ready" }, 503);
         const d = await req.json().catch(() => ({}));
@@ -140,7 +151,8 @@ export default {
         const business = String(d.business || "").trim().slice(0, 200);
         if (!email) return json({ error: "email required" }, 400);
         const qa = Array.isArray(d.qa) ? d.qa : [];
-        const record = { qa, quote: String(d.quote || "") };
+        const files = Array.isArray(d.files) ? d.files.slice(0, 6).map((k) => String(k).slice(0, 120)) : [];
+        const record = { qa, quote: String(d.quote || ""), files };
         const answers = JSON.stringify(record);
         await env.DB.prepare("INSERT INTO submissions (name, email, business, answers) VALUES (?, ?, ?, ?)")
           .bind(name, email, business, answers).run();
@@ -150,7 +162,7 @@ export default {
         let emailed = false, confirmed = false;
         if (env.RESEND_API_KEY) {
           try {
-            const body = (name || "there") + " (" + email + ") \u2014 " + (business || "no business name") + "\n\n" + (lines || "(no answers)");
+            const body = (name || "there") + " (" + email + ") \u2014 " + (business || "no business name") + "\n\n" + (lines || "(no answers)") + (files.length ? "\n\nFiles:\n" + files.map((k) => "https://frankg.com.au/files/" + k).join("\n") : "");
             const r = await fetch("https://api.resend.com/emails", {
               method: "POST",
               headers: { "content-type": "application/json", authorization: "Bearer " + env.RESEND_API_KEY },
