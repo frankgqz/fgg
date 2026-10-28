@@ -60,6 +60,7 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
 .button {
   display: inline-block;
   font: inherit;
+  line-height: 1.2;
   appearance: none;
   border: 0;
   cursor: pointer;
