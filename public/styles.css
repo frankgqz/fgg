@@ -1188,3 +1188,9 @@ html.fancy :focus-visible { outline-color: var(--accent); }
   .price-widget { bottom: 1.15rem; }
   footer { padding-bottom: 10rem; }
 }
+
+/* page nav buttons: same line as the journey dots */
+.p2-nav {
+  position: fixed; top: 1.15rem; left: 1.15rem; right: 1.15rem;
+  display: flex; justify-content: space-between; z-index: 260;
+}
