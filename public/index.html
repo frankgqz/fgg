@@ -49,7 +49,7 @@
     <p class="pw-line care">Care $200/y</p>
     <div class="pw-actions">
       <a class="button small" href="/intake" id="pwPrefs">Preferences</a>
-      <a class="button small" id="pwStart" href="/intake">Start</a>
+      <a class="button small" id="pwStart" href="/payment">Start</a>
     </div>
   </aside>
 
@@ -241,8 +241,7 @@
   </main>
 
   <footer>
-    <p>FGG Pty Ltd · Melbourne · ACN 647590369</p>
-    <p><a href="/legal">Privacy &amp; Terms</a></p>
+    <p>FGG Pty Ltd · Melbourne · ACN 647590369 · <a href="/legal">Privacy &amp; Terms</a></p>
   </footer>
 
   <div class="work-detail" id="workDetail" hidden>
@@ -347,7 +346,7 @@
       const q = new URLSearchParams({ f: picked.join(', '), total: String(total), ids: pickedIds.join(','), rev: String(revSessions), pages: String(p) });
       document.querySelectorAll('.dots .dot').forEach((a) => { const base = a.href.split('?')[0]; a.href = base + (q.toString() ? '?' + q.toString() : ''); });
       const startEl = $('pwStart');
-      if (startEl) startEl.href = '/intake?' + q.toString();
+      if (startEl) startEl.href = '/payment?' + q.toString();
 
       document.body.classList.toggle('fancy', state.fancy);
       document.documentElement.classList.toggle('fancy', state.fancy);

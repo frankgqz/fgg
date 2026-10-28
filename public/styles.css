@@ -600,7 +600,7 @@ body.fancy .lesson-bar {
 /* ============ hero full height + always-there price widget ============ */
 .hero { min-height: calc(100vh - 7rem); display: flex; flex-direction: column; justify-content: center; }
 .price-widget {
-  position: fixed; right: 1.15rem; bottom: 1.15rem; z-index: 250;
+  position: fixed; right: 1.15rem; bottom: 5.25rem; z-index: 250;
   background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
   box-shadow: var(--shadow); padding: 1rem 1.15rem; display: grid; gap: 0.35rem;
   text-align: right;
@@ -1182,3 +1182,9 @@ html.fancy :focus-visible { outline-color: var(--accent); }
 .dot.on { background: var(--accent); }
 
 .wd-shot { width: 100%; border-radius: 12px; margin: 0 0 1.15rem; display: block; }
+
+/* footer clears the fixed price panel */
+@media (max-width: 720px) {
+  .price-widget { bottom: 1.15rem; }
+  footer { padding-bottom: 10rem; }
+}
