@@ -1184,8 +1184,12 @@ html.fancy :focus-visible { outline-color: var(--accent); }
 .wd-shot { width: 100%; border-radius: 12px; margin: 0 0 1.15rem; display: block; }
 
 /* footer clears the fixed price panel */
-@media (max-width: 720px) {
+@media (max-width: 900px) {
   .price-widget { bottom: 1.15rem; }
-  footer { padding-bottom: 10rem; }
+  footer { padding-bottom: 7rem; }
 }
+
+/* long site links truncate inside the popover */
+.wd-actions { display: flex; flex-wrap: wrap; gap: 0.55rem; align-items: center; }
+#wdLink { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
