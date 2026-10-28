@@ -1198,11 +1198,11 @@ html.fancy :focus-visible { outline-color: var(--accent); }
     border-radius: 0; border-left: 0; border-right: 0; border-bottom: 0;
     padding: 0.65rem 1rem;
   }
-  .pw-line { display: inline; }
+  .pw-line { display: inline; line-height: 1.2; }
   .pw-sep { display: inline; }
   .care-word { display: none; }
-  .pw-actions { margin-left: auto; display: flex; gap: 0.45rem; }
-  .price-widget .button { margin-top: 0; }
+  .pw-actions { margin-left: auto; display: flex; gap: 0.45rem; align-items: center; }
+  .price-widget .button { margin: 0; }
   footer { padding-bottom: 4.25rem; }
 }
 
