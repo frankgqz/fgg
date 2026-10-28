@@ -606,8 +606,8 @@ body.fancy .lesson-bar {
   text-align: right;
 }
 .pw-line { margin: 0; font-size: 0.95rem; color: var(--ink-soft); }
-.pw-line b { color: var(--ink); font-family: "Figtree", "Inter", sans-serif; font-size: 1.45rem; }
-.pw-line.care { font-size: 0.85rem; }
+.pw-line b { color: var(--ink); font-family: "Figtree", "Inter", sans-serif; font-size: 0.95rem; }
+.pw-line.care { font-size: 0.95rem; }
 .price-widget .button { margin-top: 0.35rem; justify-self: end; }
 
 /* locked panels (standard + yearly — always selected) */
