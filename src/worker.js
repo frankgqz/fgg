@@ -125,9 +125,16 @@ export default {
       if (url.pathname === "/api/upload" && req.method === "POST") {
         if (!env.FILES) return json({ error: "storage not ready" }, 503);
         const d = await req.json().catch(() => ({}));
-        const type = String(d.type || "");
         const b64 = String(d.data || "");
-        if (!/^image\/(png|jpe?g|webp|gif)$/.test(type)) return json({ error: "images only" }, 415);
+        const rawExt = String(d.ext || "").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 5);
+        const ext = rawExt === "jpeg" ? "jpg" : rawExt;
+        const TYPES = {
+          jpg: "image/jpeg", png: "image/png", webp: "image/webp", gif: "image/gif",
+          pdf: "application/pdf", txt: "text/plain",
+          docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        };
+        if (!TYPES[ext]) return json({ error: "images or pdf/txt/docx/xlsx only" }, 415);
         const size = Math.floor(b64.length * 3 / 4);
         if (!size || size > 5 * 1024 * 1024) return json({ error: "max 5MB per image" }, 413);
         await ensureDb(env);
@@ -135,9 +142,8 @@ export default {
         const row = await env.DB.prepare("SELECT n FROM upload_counts WHERE day = ?").bind(day).first();
         if ((row && row.n ? row.n : 0) >= 100) return json({ error: "upload limit reached today" }, 429);
         await env.DB.prepare("INSERT INTO upload_counts (day, n) VALUES (?, 1) ON CONFLICT(day) DO UPDATE SET n = n + 1").bind(day).run();
-        const ext = type.split("/")[1].replace("jpeg", "jpg");
         const key = "intake/" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
-        await env.FILES.put(key, Uint8Array.from(atob(b64), (c) => c.charCodeAt(0)), { httpMetadata: { contentType: type } });
+        await env.FILES.put(key, Uint8Array.from(atob(b64), (c) => c.charCodeAt(0)), { httpMetadata: { contentType: TYPES[ext] } });
         return json({ ok: true, key });
       }
       if (url.pathname === "/api/intake" && req.method === "POST") {
