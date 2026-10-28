@@ -94,7 +94,7 @@
     <p class="lede">Know what you want? Tell me as much detail as you like — it really helps me. Not sure yet? Just answer what feels right and skip what you don't know.</p>
 
     <div class="quote-summary" id="quoteSummary" hidden>
-      <p class="qs-label">From your quote</p>
+      <p class="qs-label">From your package</p>
       <div class="qs-chips" id="qsChips"></div>
       <p class="qs-total" id="qsTotal"></p>
     </div>
@@ -347,9 +347,9 @@
       const f = (q.get('f') || '').split(',').map((x) => x.trim()).filter(Boolean);
       if (!f.length) return;
       $('quoteSummary').hidden = false;
-      $('qsChips').innerHTML = f.map((x) => '<span class="qs-chip">' + x.replace(/[<>&"]/g, '') + '</span>').join('');
+      $('qsChips').innerHTML = ['Standard'].concat(f).map((x) => '<span class="qs-chip">' + x.replace(/[<>&"]/g, '') + '</span>').join('');
       const total = q.get('total');
-      $('qsTotal').innerHTML = total ? 'Build estimate: <b>$' + total.replace(/[^0-9]/g, '') + '</b> · Care $200/y' : '';
+      $('qsTotal').innerHTML = total ? 'Build <b>$' + total.replace(/[^0-9]/g, '') + '</b> · Care $200/y' : '';
     })();
 
     function validateStep() {
