@@ -11,3 +11,7 @@ binding = "DB"
 database_name = "fgg-db"
 database_id = "44b03801-3a7b-4d5e-9090-3884bc9bb9a5"
 
+
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "fgg-intake"

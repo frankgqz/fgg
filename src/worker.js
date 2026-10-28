@@ -15,6 +15,7 @@ function ensureDb(env) {
       await env.DB.exec("CREATE TABLE IF NOT EXISTS likes (id INTEGER PRIMARY KEY CHECK (id = 1), n INTEGER NOT NULL DEFAULT 0)");
       await env.DB.exec("CREATE TABLE IF NOT EXISTS submissions (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, business TEXT NOT NULL, answers TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')))");
       await env.DB.exec("INSERT OR IGNORE INTO likes (id, n) VALUES (1, 0)");
+      await env.DB.exec("CREATE TABLE IF NOT EXISTS upload_counts (day TEXT PRIMARY KEY, n INTEGER NOT NULL DEFAULT 0)");
     })();
   }
   return dbReady;
@@ -107,6 +108,24 @@ export default {
         const sess = await r.json().catch(() => null);
         if (!sess || !sess.url) return Response.redirect(origin + "/payment?pay=unavailable", 302);
         return Response.redirect(sess.url, 302);
+      }
+      if (url.pathname === "/api/upload" && req.method === "POST") {
+        if (!env.FILES) return json({ error: "storage not ready" }, 503);
+        const d = await req.json().catch(() => ({}));
+        const type = String(d.type || "");
+        const b64 = String(d.data || "");
+        if (!/^image\/(png|jpe?g|webp|gif)$/.test(type)) return json({ error: "images only" }, 415);
+        const size = Math.floor(b64.length * 3 / 4);
+        if (!size || size > 5 * 1024 * 1024) return json({ error: "max 5MB per image" }, 413);
+        await ensureDb(env);
+        const day = new Date().toISOString().slice(0, 10);
+        const row = await env.DB.prepare("SELECT n FROM upload_counts WHERE day = ?").bind(day).first();
+        if ((row && row.n ? row.n : 0) >= 100) return json({ error: "upload limit reached today" }, 429);
+        await env.DB.prepare("INSERT INTO upload_counts (day, n) VALUES (?, 1) ON CONFLICT(day) DO UPDATE SET n = n + 1").bind(day).run();
+        const ext = type.split("/")[1].replace("jpeg", "jpg");
+        const key = "intake/" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
+        await env.FILES.put(key, Uint8Array.from(atob(b64), (c) => c.charCodeAt(0)), { httpMetadata: { contentType: type } });
+        return json({ ok: true, key });
       }
       if (url.pathname === "/api/intake" && req.method === "POST") {
         await ensureDb(env);

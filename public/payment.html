@@ -13,7 +13,7 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="stylesheet" href="/styles.css">
   <style>
-    .pay-page { max-width: 40rem; margin: 0 auto; padding: 4.75rem 1.25rem 6rem; }
+    .pay-page { max-width: 40rem; margin: 0 auto; padding: 2.5rem 1.25rem 6rem; }
     .pay-page h1 { margin-bottom: 0.75rem; font-size: 2.1rem; }
     .pay-card {
       border: 1px solid var(--line); border-radius: 16px; padding: 1.5rem;
@@ -43,7 +43,6 @@
   </nav>
 
   <main class="pay-page">
-    <div class="p2-nav"><a class="button small" href="/">Package</a></div>
     <h1>Start your build</h1>
     <p class="lede">After the deposit, you will get a confirmation email. I will look at your preferences and build a demo site for your revision. At this point, if you are not happy, you can get a refund. After revisions and additional work on the site, the website will be launched onto its domain, at which point the balance including the yearly fee is due.</p>
 
@@ -72,7 +71,7 @@
     const q = new URLSearchParams(location.search);
 
     // carry the journey's quote across the dots
-    document.querySelectorAll('.dots .dot, .p2-nav a').forEach((a) => { a.href += location.search; });
+    document.querySelectorAll('.dots .dot').forEach((a) => { a.href += location.search; });
 
     (function () {
       const f = (q.get('f') || '').split(',').map((x) => x.trim()).filter(Boolean);
