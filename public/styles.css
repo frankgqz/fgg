@@ -58,6 +58,10 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
 
 .button {
   display: inline-block;
+  font: inherit;
+  appearance: none;
+  border: 0;
+  cursor: pointer;
   background-color: var(--accent);
   background-image: linear-gradient(168deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.05));
   color: var(--accent-ink);

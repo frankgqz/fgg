@@ -152,7 +152,7 @@ export default {
                 to: [email],
                 reply_to: "frank@frankg.com.au",
                 subject: "Thank you for submitting \u2014 FGG",
-                text: "Hi " + (name || "there") + ",\n\nThank you for submitting the form \u2014 I have your answers and I will read them properly.\n\nI will reply to " + email + " within a day.\n\n\u2014 Frank\nFGG \u00b7 frankg.com.au",
+                text: "Hi " + (name || "there") + ",\n\nThank you for submitting the form \u2014 I have your answers and I will read them properly.\n\nI will reply to " + email + " within a day.\n\nKnow someone who needs a website? Send them my way \u2014 $100 off your next care year for every referral.\n\n\u2014 Frank\nFGG \u00b7 frankg.com.au",
               }),
             });
             confirmed = r2.ok;

@@ -62,7 +62,7 @@
 <main>
     <section class="hero">
       <h1>Websites, build and care.</h1>
-      <p class="lede">Hi, I'm Frank Gao. I'm from Melbourne and I build custom websites and apps for hospitality/shops/events/trades.</p>
+      <p class="lede">Hi, I'm Frank Gao. I build custom websites and apps for Melbourne Businesses.</p>
       <a class="button" href="#quote">Try it</a>
     </section>
 
@@ -216,21 +216,15 @@
       <h2>Work</h2>
       <div class="work-panels">
 
-        <article class="card work-card" data-shot="/works/gg-agency.png" data-desc="A fast, modern site for Australia's largest Bigo agency — gallery, live prices, and a contact form, all editable by the team.">
+        <article class="card work-card" data-shot="/works/gg-agency.png" data-meta="Livestreaming · Content Creation" data-url="https://ggagency.com.au" data-desc="A fast, modern site for Australia's largest Bigo agency — gallery, live prices, and a contact form, all editable by the team.">
           <h3>GG Agency</h3>
-          <p class="meta">Livestreaming · Content Creation</p>
-          <p><a href="https://ggagency.com.au">ggagency.com.au</a></p>
         </article>
 
-        <article class="card work-card" data-desc="Tools and experiments built for the joy of it — live at gqz.app.">
+        <article class="card work-card" data-meta="Apps · experiments · games" data-url="https://gqz.app/" data-desc="Tools and experiments built for the joy of it — live at gqz.app.">
           <h3>Hobby projects</h3>
-          <p class="meta">Apps · experiments · games</p>
-          <p><a href="https://gqz.app/">gqz.app</a></p>
         </article>
-        <article class="card work-card" data-shot="/works/lumidance.png" data-desc="A bright, playful class site — full timetable, packages, and tap-to-copy payment details, made phone-first.">
+        <article class="card work-card" data-shot="/works/lumidance.png" data-meta="Dance studio · Deer Park" data-url="https://lumidance.frankgqz.workers.dev" data-desc="A bright, playful class site — full timetable, packages, and tap-to-copy payment details, made phone-first.">
           <h3>Lumi Dance Studio</h3>
-          <p class="meta">Dance studio · Deer Park</p>
-          <p><a href="https://lumidance.frankgqz.workers.dev">lumidance.com.au</a></p>
         </article>
 
       </div>
@@ -664,7 +658,7 @@
     const VI = {
       "Preferences": "Sở thích",
       "Websites, build and care.": "Website: dựng và chăm sóc.",
-      "Hi, I'm Frank Gao. I'm from Melbourne and I build custom websites and apps for hospitality/shops/events/trades.": "Chào, tôi là Frank Gao. Tôi ở Melbourne và tôi làm website và ứng dụng riêng cho nhà hàng/cửa hàng/sự kiện/thợ.",
+      "Hi, I'm Frank Gao. I build custom websites and apps for Melbourne Businesses.": "Chào, tôi là Frank Gao. Tôi làm website và ứng dụng riêng cho doanh nghiệp ở Melbourne.",
       "Try it": "Dùng thử",
       "Build your package": "Tạo báo giá",
       "Standard": "Tiêu chuẩn",
@@ -880,11 +874,10 @@
       if (card.dataset.shot) shot.src = card.dataset.shot; else shot.removeAttribute('src');
       lastCard = card;
       $('wdTitle').textContent = card.querySelector('h3').textContent;
-      $('wdMeta').textContent = card.querySelector('.meta').textContent;
+      $('wdMeta').textContent = card.dataset.meta || '';
       $('wdBody').textContent = t(card.dataset.desc || '');
-      const link = card.querySelector('a');
-      $('wdLink').href = link.href;
-      $('wdLink').textContent = link.textContent;
+      $('wdLink').href = card.dataset.url || '#';
+      $('wdLink').textContent = (card.dataset.url || '').replace(/^https?:\/\//, '');
       const show = () => { workDetail.hidden = false; document.body.classList.add('modal-open'); };
       if (document.startViewTransition) {
         card.style.viewTransitionName = 'work-hero';
