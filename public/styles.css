@@ -1192,11 +1192,18 @@ html.fancy :focus-visible { outline-color: var(--accent); }
 
 /* footer clears the fixed price panel */
 @media (max-width: 900px) {
-  .price-widget { bottom: 0; display: block; text-align: right; }
+  .price-widget {
+    bottom: 0; left: 0; right: 0;
+    display: flex; align-items: center; gap: 0.55rem;
+    border-radius: 0; border-left: 0; border-right: 0; border-bottom: 0;
+    padding: 0.65rem 1rem;
+  }
   .pw-line { display: inline; }
   .pw-sep { display: inline; }
   .care-word { display: none; }
-  footer { padding-bottom: 7.75rem; }
+  .pw-actions { margin-left: auto; display: flex; gap: 0.45rem; }
+  .price-widget .button { margin-top: 0; }
+  footer { padding-bottom: 4.25rem; }
 }
 
 /* long site links truncate inside the popover */
