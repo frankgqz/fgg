@@ -26,7 +26,7 @@
     .qs-total { margin: 0.75rem 0 0; font-size: 0.889rem; color: var(--ink-soft); }
     .qs-total b { color: var(--ink); }
     .step { display: block; margin-bottom: 2.75rem; }
-    .step h2 { margin-bottom: 1.15rem; }
+    .step h3 { margin-bottom: 1.15rem; }
     .field { display: block; margin-bottom: 1.35rem; font-size: 0.95rem; font-weight: 600; }
     .field small { display: block; font-weight: 400; color: var(--ink-soft); font-size: 0.82rem; margin-top: 0.3rem; }
     .field input, .field textarea {
@@ -78,7 +78,7 @@
     .design-fold .inner { margin-top: 1.25rem; }
     .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
     .done { text-align: left; border: 1px solid var(--line); border-radius: 16px; padding: 2rem; background: var(--surface); }
-    .done h2 { margin-bottom: 0.5rem; }
+    .done h3 { margin-bottom: 0.5rem; }
   </style>
 </head>
 <body>
@@ -100,7 +100,7 @@
 
     <form id="intakeForm" novalidate>
       <section class="step">
-        <h2>You &amp; your business</h2>
+        <h3>You &amp; your business</h3>
         <label class="field">Your name<input name="name" autocomplete="name"></label>
         <label class="field">Phone<input name="phone" autocomplete="tel" inputmode="tel"></label>
         <label class="field">Email *<input type="email" name="email" autocomplete="email" required></label>
@@ -108,7 +108,7 @@
               </section>
 
       <section class="step">
-        <h2>The Website</h2>
+        <h3>The Website</h3>
                 <label class="field">What are your customers like?<input name="customers" maxlength="160"></label>
         <fieldset class="chips-field">
           <legend>What should people do on the site?</legend>
@@ -161,7 +161,7 @@
       </section>
 
       <section class="step">
-        <h2>Details</h2>
+        <h3>Details</h3>
         <label class="field">What do you want on the site? Example — website template, photo, menu. Anything.<textarea name="love" maxlength="2000"></textarea><small>For inspiration: <a href="https://onepagelove.com" target="_blank" rel="noopener">one page love — websites</a> · <a href="https://recent.design" target="_blank" rel="noopener">recent.design — fancy and 3d</a></small></label>
         <label class="field">What do you want to avoid?<textarea name="avoid" maxlength="2000"></textarea><small>Screenshot and circle what you like, cross out what you don't.</small></label>
         <fieldset class="chips-field">
@@ -330,7 +330,7 @@
     </form>
 
     <div class="done" id="done" hidden>
-      <h2>Got it — it's in.</h2>
+      <h3>Got it — it's in.</h3>
       <p>Thanks. I'll read it properly and reply to <b id="doneEmail"></b> within a day.</p>
       <a class="button small" href="/">&larr; Back to FGG</a>
     </div>

@@ -68,7 +68,7 @@
 
     <!-- ============ THE QUOTE BUILDER (compact bento) ============ -->
     <section id="quote" class="band">
-      <h2>Select your package</h2>
+      <h3>Select your package</h3>
       <div class="top-row">
 
         <div class="feature locked">
@@ -213,25 +213,25 @@
     </section>
 
     <section id="work" class="band">
-      <h2>Work</h2>
+      <h3>Work</h3>
       <div class="work-panels">
 
         <article class="card work-card" data-shot="/works/gg-agency.png" data-meta="Livestreaming · Content Creation" data-url="https://ggagency.com.au" data-desc="A fast, modern site for Australia's largest Bigo agency — gallery, live prices, and a contact form, all editable by the team.">
-          <h3>GG Agency</h3>
+          <h5>GG Agency</h5>
         </article>
 
         <article class="card work-card" data-meta="Apps · experiments · games" data-url="https://gqz.app/" data-desc="Tools and experiments built for the joy of it — live at gqz.app.">
-          <h3>Hobby projects</h3>
+          <h5>Hobby projects</h5>
         </article>
         <article class="card work-card" data-shot="/works/lumidance.png" data-meta="Dance studio · Deer Park" data-url="https://lumidance.com.au" data-desc="A bright, playful class site — full timetable, packages, and tap-to-copy payment details, made phone-first.">
-          <h3>Lumi Dance Studio</h3>
+          <h5>Lumi Dance Studio</h5>
         </article>
 
       </div>
     </section>
 
     <section id="contact" class="band">
-      <h2>Contact</h2>
+      <h3>Contact</h3>
       <p class="lede">Contact me to discuss your business, and what you want in the site. We can talk about what's possible, the process, timelines, and what works for your situation.</p>
       <p class="contact-row">
         <a class="button" href="mailto:frank@frankg.com.au">Email</a>
@@ -247,7 +247,7 @@
   <div class="work-detail" id="workDetail" hidden>
     <div class="work-detail-card">
       <img id="wdShot" class="wd-shot" alt="" hidden>
-      <h3 id="wdTitle"></h3>
+      <h5 id="wdTitle"></h5>
       <p class="meta" id="wdMeta"></p>
       <p id="wdBody"></p>
       <p class="wd-actions">
@@ -872,7 +872,7 @@
       shot.hidden = !card.dataset.shot;
       if (card.dataset.shot) shot.src = card.dataset.shot; else shot.removeAttribute('src');
       lastCard = card;
-      $('wdTitle').textContent = card.querySelector('h3').textContent;
+      $('wdTitle').textContent = card.querySelector('h5').textContent;
       $('wdMeta').textContent = card.dataset.meta || '';
       $('wdBody').textContent = t(card.dataset.desc || '');
       $('wdLink').href = card.dataset.url || '#';

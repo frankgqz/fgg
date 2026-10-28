@@ -29,7 +29,7 @@ body {
   transition: none;
 }
 
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5, h6 {
   font-family: "Figtree", "Inter", sans-serif;
   font-weight: 600;
   line-height: 1.15;
@@ -37,8 +37,9 @@ h1, h2, h3, h4 {
 }
 
 h1 { font-size: 2.027rem; letter-spacing: -0.01em; }
-h2 { font-size: 1.602rem; }
-h3 { font-size: 1.266rem; }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+h5 { font-size: var(--fs-h5); }
 h4 { font-size: 1.1rem; margin: 0 0 0.35rem; }
 
 p { margin: 0 0 1rem; }
@@ -727,14 +728,17 @@ body.logged-in .wish { display: flex; }
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 
-/* ============ type scale — minor third (1.2) ============ */
-:root { --fs-small: 0.833rem; --fs-p: 1rem; --fs-h6: 1.2rem; --fs-h5: 1.44rem; }
+/* ============ type scale — major second (1.125) ============ */
+:root {
+  --fs-small: 0.889rem; --fs-p: 1rem; --fs-h6: 1.125rem; --fs-h5: 1.266rem;
+  --fs-h4: 1.424rem; --fs-h3: 1.602rem; --fs-h2: 1.802rem; --fs-h1: 2.027rem;
+}
 .meta, .note, .ex-hint, .shop-note, .wall-count, .tag, .flip-hint, .rev-hours, .shop-note {
   font-size: var(--fs-small);
 }
 .feature-desc, .ev-text, .wall-item p, .wall-form input { font-size: var(--fs-p); }
 h4, .feature-head b, .lede { font-size: var(--fs-h6); }
-h3 { font-size: var(--fs-h5); }
+h5 { font-size: var(--fs-h5); }
 
 /* ============ work panels ============ */
 .work-panels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
