@@ -400,8 +400,10 @@
           try {
             const isImg = f.type.startsWith('image/');
             const nameExt = (f.name.split('.').pop() || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 5);
-            const ext = isImg ? 'jpg' : nameExt;
-            const data = isImg ? (await shrink(f)).split(',')[1] : await rawBase64(f);
+            // small PNGs pass through untouched — logos keep their transparency
+            const passthrough = (f.type === 'image/png' && f.size <= 2 * 1024 * 1024) || !isImg;
+            const ext = passthrough ? (nameExt || 'bin') : 'jpg';
+            const data = passthrough ? await rawBase64(f) : (await shrink(f)).split(',')[1];
             const r = await fetch('/api/upload', {
               method: 'POST',
               headers: { 'content-type': 'application/json' },
