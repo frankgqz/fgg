@@ -76,7 +76,7 @@ export default {
         if (mode === "full") { amount = full; what = "website build \u2014 paid in full"; }
         else if (mode === "custom") {
           const n = Math.round(Number(url.searchParams.get("amount") || "0"));
-          if (!(n >= 5 && n <= 20000)) return Response.redirect(url.origin + "/pay?pay=cancelled", 302);
+          if (!(n >= 1 && n <= 20000)) return Response.redirect(url.origin + "/pay?pay=cancelled", 302);
           amount = n; what = "website build \u2014 custom amount";
         } else { amount = 200; what = "website build deposit (balance billed later)"; }
         const origin = url.origin;

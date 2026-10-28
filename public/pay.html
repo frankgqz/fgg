@@ -54,7 +54,7 @@
         <button type="button" class="pay-mode" data-mode="full"><b>Pay in full</b><small>the whole build in one go</small></button>
         <button type="button" class="pay-mode" data-mode="custom"><b>Custom amount</b><small>an invoice balance or part payment</small></button>
       </div>
-      <input class="pay-custom" id="payCustom" type="number" min="5" max="20000" step="1" placeholder="Amount in $" hidden>
+      <input class="pay-custom" id="payCustom" type="number" min="1" max="20000" step="1" placeholder="Amount in $" hidden>
       <a class="button" id="payBtn" href="/api/checkout?mode=deposit">Pay $200 — deposit</a>
     </div>
 
@@ -95,8 +95,8 @@
         btn.textContent = 'Pay $' + pkg + ' — in full';
       } else {
         const n = Math.round(Number($('payCustom').value || '0'));
-        btn.textContent = n >= 5 ? 'Pay $' + n : 'Pay';
-        params.set('amount', String(n >= 5 ? n : 5));
+        btn.textContent = n >= 1 ? 'Pay $' + n : 'Pay';
+        params.set('amount', String(n >= 1 ? n : 1));
       }
       btn.href = '/api/checkout?' + params.toString();
     }

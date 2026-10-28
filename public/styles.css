@@ -381,21 +381,21 @@ footer p { margin: 0; font-size: 0.9rem; color: var(--ink-soft); }
   transition: opacity 700ms ease;
 }
 
-.aurora i:nth-child(1) { background: #e0703a; top: -12vw; left: -10vw; }
-.aurora i:nth-child(2) { background: #c98a5e; top: 30vh; right: -14vw; }
-.aurora i:nth-child(3) { background: #7a4a3c; bottom: -16vw; left: 22vw; }
+.aurora i:nth-child(1) { background: #ff8a3d; top: -12vw; left: -10vw; }
+.aurora i:nth-child(2) { background: #e8641f; top: 30vh; right: -14vw; }
+.aurora i:nth-child(3) { background: #a04a1e; bottom: -16vw; left: 22vw; }
 
 html.fancy, body.fancy {
-  --paper: #121013;
+  --paper: #000000;
   --surface: rgba(255, 255, 255, 0.06);
-  --ink: #f6eef1;
-  --ink-soft: #b3aca4;
-  --accent: #dd7a4f;
+  --ink: #ffffff;
+  --ink-soft: #a5a5ad;
+  --accent: #ff7a35;
   --accent-ink: #2b1408;
   --line: rgba(255, 255, 255, 0.12);
   --shadow:
     0 1px 2px rgba(0, 0, 0, 0.35),
-    0 10px 30px rgba(24, 14, 10, 0.55);
+    0 10px 30px rgba(0, 0, 0, 0.55);
 }
 
 body.fancy .aurora i { opacity: 0.5; animation: drift 22s ease-in-out infinite alternate; }
@@ -411,7 +411,7 @@ body.fancy h1,
 body.fancy h2,
 body.fancy h3,
 body.fancy .total {
-  background: linear-gradient(180deg, #ffffff 0%, #f6dcd2 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f4c4a4 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -429,13 +429,13 @@ body.fancy .mini-card {
 }
 
 body.fancy .button {
-  background: linear-gradient(135deg, #e08256, #c96a3e);
-  color: #1c0f08;
-  box-shadow: 0 6px 24px rgba(221, 122, 79, 0.35);
+  background: linear-gradient(135deg, #ff8a4d, #e0601f);
+  color: #1a0c04;
+  box-shadow: 0 6px 24px rgba(255, 122, 53, 0.35);
 }
 
 body.fancy .lesson-bar {
-  background: rgba(18, 16, 19, 0.55);
+  background: rgba(0, 0, 0, 0.55);
   border-color: rgba(255, 255, 255, 0.14);
 }
 
@@ -861,7 +861,7 @@ body.fancy { background: transparent; }
   border-color: rgba(120, 90, 200, 0.25);
 }
 html.fancy .event-demo {
-  background: linear-gradient(135deg, rgba(221, 122, 79, 0.22), rgba(217, 161, 132, 0.12));
+  background: linear-gradient(135deg, rgba(255, 122, 53, 0.20), rgba(224, 144, 102, 0.10));
   border-color: rgba(255, 255, 255, 0.14);
 }
 
@@ -895,35 +895,35 @@ body.fancy .upload-btn, body.fancy .av, body.fancy .cal-day, body.fancy .lang-to
     0 2px 3px rgba(0, 0, 0, 0.18),
     0 12px 26px -8px rgba(20, 20, 40, 0.45);
 }
-body.fancy .feature { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 30px rgba(24, 14, 10, 0.55); }
+body.fancy .feature { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 30px rgba(0, 0, 0, 0.55); }
 
 /* ============ fancy mode: selection rings survive AND glow ============ */
 body.fancy .feature.selected {
-  border-color: #dd7a4f;
+  border-color: #ff7a35;
   animation: fancyRingGreen 2.8s ease-in-out infinite alternate;
 }
 body.fancy .feature.auto {
-  border-color: #d9a184;
+  border-color: #e09066;
   animation: fancyRingAmber 2.8s ease-in-out infinite alternate;
 }
 body.fancy .feature.locked {
-  border-color: #dd7a4f;
+  border-color: #ff7a35;
   animation: fancyRingGreen 2.8s ease-in-out infinite alternate;
 }
 @keyframes fancyRingGreen {
-  from { box-shadow: 0 0 0 2px rgba(221, 122, 79, 0.85), 0 0 12px rgba(221, 122, 79, 0.30), 0 10px 30px rgba(24, 14, 10, 0.55); }
-  to   { box-shadow: 0 0 0 2px rgba(221, 122, 79, 1),    0 0 30px rgba(221, 122, 79, 0.60), 0 10px 30px rgba(24, 14, 10, 0.55); }
+  from { box-shadow: 0 0 0 2px rgba(255, 122, 53, 0.85), 0 0 12px rgba(255, 122, 53, 0.30), 0 10px 30px rgba(0, 0, 0, 0.55); }
+  to   { box-shadow: 0 0 0 2px rgba(255, 122, 53, 1),    0 0 30px rgba(255, 122, 53, 0.60), 0 10px 30px rgba(0, 0, 0, 0.55); }
 }
 @keyframes fancyRingAmber {
-  from { box-shadow: 0 0 0 2px rgba(217, 161, 132, 0.85), 0 0 12px rgba(217, 161, 132, 0.28), 0 10px 30px rgba(24, 14, 10, 0.55); }
-  to   { box-shadow: 0 0 0 2px rgba(217, 161, 132, 1),    0 0 30px rgba(217, 161, 132, 0.55), 0 10px 30px rgba(24, 14, 10, 0.55); }
+  from { box-shadow: 0 0 0 2px rgba(224, 144, 102, 0.85), 0 0 12px rgba(224, 144, 102, 0.28), 0 10px 30px rgba(0, 0, 0, 0.55); }
+  to   { box-shadow: 0 0 0 2px rgba(224, 144, 102, 1),    0 0 30px rgba(224, 144, 102, 0.55), 0 10px 30px rgba(0, 0, 0, 0.55); }
 }
 @media (prefers-reduced-motion: reduce) {
   body.fancy .feature.selected, body.fancy .feature.auto, body.fancy .feature.locked {
     animation: none;
-    box-shadow: 0 0 0 2px rgba(221, 122, 79, 0.9), 0 0 18px rgba(221, 122, 79, 0.4), 0 10px 30px rgba(24, 14, 10, 0.55);
+    box-shadow: 0 0 0 2px rgba(255, 122, 53, 0.9), 0 0 18px rgba(255, 122, 53, 0.4), 0 10px 30px rgba(0, 0, 0, 0.55);
   }
-  body.fancy .feature.auto { box-shadow: 0 0 0 2px rgba(217, 161, 132, 0.9), 0 0 18px rgba(217, 161, 132, 0.4), 0 10px 30px rgba(24, 14, 10, 0.55); }
+  body.fancy .feature.auto { box-shadow: 0 0 0 2px rgba(224, 144, 102, 0.9), 0 0 18px rgba(224, 144, 102, 0.4), 0 10px 30px rgba(0, 0, 0, 0.55); }
 }
 
 /* language toggle: segmented, both labels visible */
@@ -953,8 +953,8 @@ body.fancy .feature.locked {
 /* editing demo: color in the title + date rows */
 #evName { color: #6b2fb5; font-size: 0.9rem; }
 #evDate { color: #1f7a70; }
-html.fancy #evName { color: #f0925f; }
-html.fancy #evDate { color: #d9a184; }
+html.fancy #evName { color: #ff8a4d; }
+html.fancy #evDate { color: #e09066; }
 
 /* paragraph size: one value (0.95rem) */
 .plain-ex { font-size: 0.95rem; }
@@ -966,7 +966,7 @@ html.fancy #evDate { color: #d9a184; }
   width: 100%; height: 8.5rem;
   background: rgba(18, 16, 28, 0.92); border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 12px; overflow: hidden; cursor: pointer;
-  box-shadow: 0 6px 18px rgba(24, 14, 10, 0.45);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 }
 .piano-panel[hidden] { display: none; }
 .piano-panel canvas { width: 100%; height: 100%; display: block; }
@@ -977,8 +977,8 @@ html.fancy #evDate { color: #d9a184; }
   transition: color 200ms ease, text-shadow 200ms ease;
 }
 .piano-panel.playing .piano-display {
-  color: #f0925f;
-  text-shadow: 0 0 12px rgba(240, 146, 95, 0.85);
+  color: #ff8a4d;
+  text-shadow: 0 0 12px rgba(255, 138, 77, 0.85);
 }
 
 /* steppers: slimmer */
@@ -1049,10 +1049,10 @@ html.fancy .price-widget {
   backdrop-filter: blur(22px) saturate(1.5);
   -webkit-backdrop-filter: blur(22px) saturate(1.5);
   border: 1px solid rgba(255, 255, 255, 0.22);
-  box-shadow: 0 10px 30px rgba(24, 14, 10, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 html.fancy .price-widget .button {
-  background-color: rgba(221, 122, 79, 0.30);
+  background-color: rgba(255, 122, 53, 0.30);
   border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
