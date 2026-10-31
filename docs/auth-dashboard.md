@@ -160,3 +160,107 @@ phase change Frank taps (phase 2.5 — the client-portal form comes later).
 Same build, same phases. The door = **Access with "Sign in with Google"**
 (dashboard-config, not code). The room = ours, fed by D1 + Stripe webhooks.
 Nothing about the product itself lives in Cloudflare.
+
+---
+## Part 3 · 2026-10-28 — one auth, and the database shape
+
+**Verdict: your call lands well — one auth mechanism (Better Auth) with an
+admin flag, no Cloudflare Access. The schema below builds ON the D1 that
+already exists (fgg is not starting from zero).**
+
+### First, a correction: fgg already has a database
+
+D1 `fgg-db` is live with four tables:
+
+    wall           the demo message board (name, avatar, body, created_at)
+    likes          the demo counter
+    submissions    every intake (name, email, business, answers JSON, created_at)
+    upload_counts  the daily upload abuse cap
+
+The dashboard's job is to make `submissions` legible and surround it with
+the tables below. Uploaded files live in R2 (`fgg-intake`/`intake/*`) with
+`/files/…` links in the intake email — there is no gallery yet; the
+dashboard's feed + client rows become their home.
+
+### Better Auth's own tables (generated — do not reinvent)
+
+    user       id, name, email, emailVerified, image, **role**, createdAt
+    session    token, expiresAt, userId
+    account    providerId, accountId (the Google link), userId
+    verification  one-time tokens (email verification, etc)
+
+The **admin flag** = `user.role` ('admin' | 'client'). Role checks are our
+code: one `requireAdmin()` helper, one scoped-query helper.
+
+### New tables (the dashboard's data)
+
+**clients** — one row per business; the spine everything hangs on
+
+    id            integer pk
+    business      text
+    contact_name  text
+    email         text
+    phone         text
+    domain        text (nullable — the live site when it exists)
+    phase         text: intake -> quoted -> deposit_paid -> building
+                  -> revision -> launched -> care        (the pill)
+    user_id       text nullable -> Better Auth user (wired at phase 4)
+    created_at, launched_at
+
+**payments** — every Stripe event, fed by webhook, idempotent
+
+    id                integer pk
+    client_id         fk
+    stripe_session_id text unique (the idempotency key)
+    subscription_id   text nullable
+    mode              text: deposit | full | balance | yearly | custom
+    amount_cents      integer (cents — never dollars, never floats)
+    status            text: paid | refunded | disputed
+    paid_at           datetime
+
+**revisions** — the "revision requests" you named
+
+    id          integer pk
+    client_id   fk
+    summary     text (what they asked for)
+    status      text: open | done
+    created_at, closed_at
+
+**events** — the activity feed, append-only
+
+    id          integer pk
+    client_id   fk nullable
+    type        text: intake_received | payment | revision_requested
+                | phase_changed | file_uploaded | note
+    payload     json (small: amount, label, file key…)
+    created_at
+
+The feed is `SELECT * FROM events ORDER BY created_at DESC` — every other
+table's writes also append one line here. That pattern keeps the feed free
+forever and makes "when did anything happen?" one query.
+
+**files** (phase 2.5, optional at first)
+
+    id, client_id, key (r2), original_name, kind, uploaded_by, created_at
+    Phase 1 derives files from `submissions.answers.files[]` as it does
+    today; the table earns its place when the client portal uploads.
+
+### Design rules for the schema
+
+- Money in **cents**, integers only.
+- Timestamps in UTC; render in Melbourne.
+- Statuses as TEXT (app-enforced vocabulary) — D1 doesn't need enums.
+- Append-only `events`; mutable state lives in `clients`/`payments`/`revisions`.
+- A new intake **auto-creates a client row** (phase 'intake') + an event —
+  the intake desk is then free. If a lead dies, the row just sits there.
+
+### Revised build order (auth moved to the front)
+
+1. **Better Auth** (its 4 tables + login page + role) + `clients` +
+   `events` + the dashboard reading `submissions` → ~2 sessions
+2. **Stripe webhook** → `payments` + `care` columns (+ renewal dates)
+3. **revisions** + the care clock (cron nudge 30 days out)
+4. **Client portal** pages (user_id wiring, scoped queries)
+
+Risks kept from Part 1: webhook misfires (idempotency keys), scope leaks
+(the two helpers are the whole defense), and scope creep into phase 4.
