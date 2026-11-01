@@ -11,7 +11,7 @@ let dbReady = null;
 async function dashToken(key) {
   const enc = new TextEncoder();
   const k = await crypto.subtle.importKey("raw", enc.encode(String(key)), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-  const sig = await crypto.subtle.sign("HMAC", k, enc.encode("fgdash-v1"));
+  const sig = await crypto.subtle.sign("HMAC", k, enc.encode("fgauth-v1"));
   return [...new Uint8Array(sig)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
@@ -28,10 +28,10 @@ async function safeEq(a, b) {
 }
 
 async function dashOk(req, env) {
-  if (!env.DASH_KEY) return false;
-  const m = (req.headers.get("cookie") || "").match(/fgdash=([a-f0-9]{64})/);
+  if (!env.AUTH_KEY) return false;
+  const m = (req.headers.get("cookie") || "").match(/fgauth=([a-f0-9]{64})/);
   if (!m) return false;
-  return safeEq(m[1], await dashToken(env.DASH_KEY));
+  return safeEq(m[1], await dashToken(env.AUTH_KEY));
 }
 
 function ensureDb(env) {
@@ -141,13 +141,13 @@ export default {
         return env.ASSETS.fetch(new Request(new URL("/dashboard.html", url.origin), req));
       }
       if (url.pathname === "/api/dash-login" && req.method === "POST") {
-        if (!env.DASH_KEY) return json({ error: "dashboard not configured" }, 503);
+        if (!env.AUTH_KEY) return json({ error: "dashboard not configured" }, 503);
         const d = await req.json().catch(() => ({}));
-        if (!(await safeEq(String(d.key || ""), env.DASH_KEY))) return json({ error: "nope" }, 401);
-        const token = await dashToken(env.DASH_KEY);
+        if (!(await safeEq(String(d.key || ""), env.AUTH_KEY))) return json({ error: "nope" }, 401);
+        const token = await dashToken(env.AUTH_KEY);
         return new Response(JSON.stringify({ ok: true }), { status: 200, headers: {
           "content-type": "application/json",
-          "set-cookie": "fgdash=" + token + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000",
+          "set-cookie": "fgauth=" + token + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000",
         } });
       }
       if (url.pathname === "/api/dashboard" && req.method === "GET") {
