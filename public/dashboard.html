@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard — FGG</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .dash { max-width: 52rem; margin: 0 auto; padding: 2.5rem 1.25rem 6rem; }
+    .dash h1 { margin-bottom: 0.75rem; font-size: 2.027rem; }
+    .login-card {
+      border: 1px solid var(--line); border-radius: 16px; padding: 1.5rem;
+      background: var(--surface); margin: 1.75rem 0; max-width: 24rem;
+    }
+    .login-card input {
+      width: 100%; padding: 0.75rem 0.95rem; border: 1px solid var(--line);
+      border-radius: 12px; background: var(--paper); color: var(--ink);
+      font: inherit; margin: 0.75rem 0;
+    }
+
+    /* thin strips: dot + count + label, expand in place */
+    .strips { display: grid; gap: 0.55rem; margin: 1.25rem 0; }
+    .strip { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: hidden; }
+    .strip-head {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.85rem 1.15rem; cursor: pointer; user-select: none;
+    }
+    .strip-head .dot { width: 0.65rem; height: 0.65rem; border-radius: 50%; flex-shrink: 0; background: var(--ink-soft); }
+    .strip-head .count { font-variant-numeric: tabular-nums; font-weight: 700; min-width: 1.6rem; }
+    .strip-head .label { font-weight: 600; letter-spacing: 0.04em; }
+    .strip-head .who { color: var(--ink-soft); font-size: 0.889rem; margin-left: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 45%; }
+    .strip-head .chev { color: var(--ink-soft); transition: transform 140ms ease; flex-shrink: 0; }
+    .strip.open .chev { transform: rotate(90deg); }
+    .strip-body { display: none; padding: 0 1.15rem 1.15rem; }
+    .strip.open .strip-body { display: block; }
+
+    .phase-intake { background: #6b8fd6; }
+    .phase-quoted { background: #c9a227; }
+    .phase-deposit_paid { background: #7e9c82; }
+    .phase-building { background: #dd7a4f; }
+    .phase-revision { background: #b07cc6; }
+    .phase-launched { background: #2e9e5b; }
+    .phase-care { background: #4aa3a3; }
+
+    .kv { margin: 0.35rem 0; font-size: 0.889rem; }
+    .kv b { display: inline-block; min-width: 5.5rem; color: var(--ink-soft); font-weight: 500; }
+    .qa-row { margin: 0.55rem 0; font-size: 0.889rem; }
+    .qa-row .q { color: var(--ink-soft); }
+    .files-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0.55rem 0; }
+    .files-row a { font-size: 0.85rem; padding: 0.25rem 0.75rem; border: 1px solid var(--line); border-radius: 999px; }
+    .empty { color: var(--ink-soft); font-size: 0.889rem; font-style: italic; }
+    .stats { display: flex; gap: 1.25rem; margin: 0.5rem 0 1.25rem; color: var(--ink-soft); font-size: 0.889rem; }
+    .stats b { color: var(--ink); }
+  </style>
+</head>
+<body>
+  <main class="dash">
+    <h1>Dashboard</h1>
+
+    <div class="login-card" id="loginCard" hidden>
+      <b>Sign in</b>
+      <input type="password" id="dashKey" placeholder="dashboard key" autocomplete="current-password">
+      <button class="button small" id="dashLogin" type="button">Enter</button>
+      <p class="empty" id="loginMsg"></p>
+    </div>
+
+    <div id="app" hidden>
+      <div class="stats" id="stats"></div>
+      <div class="strips" id="clients"></div>
+    </div>
+    <p class="empty" id="loading">loading…</p>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[<>&"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
+    }
+
+    function clientStrip(c) {
+      const files = (c.files || []).map((f) => '<a href="/files/' + esc(f) + '" target="_blank" rel="noopener">file</a>').join('');
+      const qa = (c.qa || []).map((row) => {
+        const q = Array.isArray(row) ? row[0] : '';
+        const a = Array.isArray(row) ? row[1] : '';
+        return a ? '<div class="qa-row"><div class="q">' + esc(q) + '</div><div>' + esc(a) + '</div></div>' : '';
+      }).join('');
+      return '' +
+        '<div class="strip" data-id="' + c.id + '">' +
+          '<div class="strip-head" onclick="this.parentNode.classList.toggle(\'open\')">' +
+            '<span class="dot phase-' + esc(c.phase) + '"></span>' +
+            '<span class="count">' + (c.payCount || 0) + '</span>' +
+            '<span class="label">' + esc(c.business || c.name || 'no name') + '</span>' +
+            '<span class="who">' + esc(c.email || '') + '</span>' +
+            '<span class="chev">&rsaquo;</span>' +
+          '</div>' +
+          '<div class="strip-body">' +
+            '<div class="kv"><b>contact</b>' + esc(c.name) + '</div>' +
+            '<div class="kv"><b>email</b>' + esc(c.email) + '</div>' +
+            '<div class="kv"><b>phone</b>' + esc(c.phone || '—') + '</div>' +
+            '<div class="kv"><b>phase</b>' + esc((c.phase || '').replace('_', ' ')) + '</div>' +
+            '<div class="kv"><b>received</b>' + esc(c.created) + '</div>' +
+            '<div class="kv"><b>heard via</b>' + esc(c.heard || '—') + '</div>' +
+            '<p class="qs-label" style="margin-top:0.95rem">Preferences / brief</p>' +
+            (qa || '<p class="empty">no answers yet</p>') +
+            '<p class="qs-label" style="margin-top:0.95rem">Files</p>' +
+            '<div class="files-row">' + (files || '<span class="empty">no uploads</span>') + '</div>' +
+            '<p class="qs-label" style="margin-top:0.95rem">Orders / invoices</p>' +
+            '<p class="empty">payments arrive with the Stripe webhook (next slice)</p>' +
+            '<p class="qs-label" style="margin-top:0.95rem">Revisions</p>' +
+            '<p class="empty">no revision requests yet</p>' +
+            '<p class="qs-label" style="margin-top:0.95rem">Care</p>' +
+            '<p class="empty">care status arrives with subscriptions (next slice)</p>' +
+          '</div>' +
+        '</div>';
+    }
+
+    async function load() {
+      const r = await fetch('/api/dashboard');
+      $('loading').hidden = true;
+      if (r.status === 401 || r.status === 403) {
+        $('loginCard').hidden = false;
+        return;
+      }
+      const j = await r.json();
+      if (!j.ok) {
+        $('loginCard').hidden = false;
+        $('loginMsg').textContent = j.error || 'could not load';
+        return;
+      }
+      $('app').hidden = false;
+      $('stats').innerHTML = '<span><b>' + j.clients.length + '</b> clients</span>' +
+        '<span><b>' + j.intakes + '</b> intakes total</span>' +
+        '<span>updated ' + esc(j.now) + '</span>';
+      $('clients').innerHTML = j.clients.map(clientStrip).join('') || '<p class="empty">no clients yet</p>';
+    }
+
+    $('dashLogin').addEventListener('click', async () => {
+      const r = await fetch('/api/dash-login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ key: $('dashKey').value }),
+      });
+      const j = await r.json();
+      if (j.ok) { $('loginCard').hidden = true; load(); }
+      else $('loginMsg').textContent = 'nope';
+    });
+
+    load();
+  </script>
+</body>
+</html>

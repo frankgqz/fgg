@@ -8,6 +8,32 @@ const json = (data, status = 200) =>
 const AVATARS = ["🙂", "🌟", "💃", "🚀", "🎨", "🦊"];
 
 let dbReady = null;
+async function dashToken(key) {
+  const enc = new TextEncoder();
+  const k = await crypto.subtle.importKey("raw", enc.encode(String(key)), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", k, enc.encode("fgdash-v1"));
+  return [...new Uint8Array(sig)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function safeEq(a, b) {
+  const enc = new TextEncoder();
+  const [ha, hb] = await Promise.all([
+    crypto.subtle.digest("SHA-256", enc.encode(String(a))),
+    crypto.subtle.digest("SHA-256", enc.encode(String(b))),
+  ]);
+  const va = new Uint8Array(ha), vb = new Uint8Array(hb);
+  let diff = 0;
+  for (let i = 0; i < va.length; i++) diff |= va[i] ^ vb[i];
+  return diff === 0;
+}
+
+async function dashOk(req, env) {
+  if (!env.DASH_KEY) return false;
+  const m = (req.headers.get("cookie") || "").match(/fgdash=([a-f0-9]{64})/);
+  if (!m) return false;
+  return safeEq(m[1], await dashToken(env.DASH_KEY));
+}
+
 function ensureDb(env) {
   if (!dbReady) {
     dbReady = (async () => {
@@ -110,6 +136,40 @@ export default {
         const sess = await r.json().catch(() => null);
         if (!sess || !sess.url) return Response.redirect(origin + "/payment?pay=unavailable", 302);
         return Response.redirect(sess.url, 302);
+      }
+      if (url.pathname === "/dashboard" || url.pathname === "/dashboard/") {
+        return env.ASSETS.fetch(new Request(new URL("/dashboard.html", url.origin), req));
+      }
+      if (url.pathname === "/api/dash-login" && req.method === "POST") {
+        if (!env.DASH_KEY) return json({ error: "dashboard not configured" }, 503);
+        const d = await req.json().catch(() => ({}));
+        if (!(await safeEq(String(d.key || ""), env.DASH_KEY))) return json({ error: "nope" }, 401);
+        const token = await dashToken(env.DASH_KEY);
+        return new Response(JSON.stringify({ ok: true }), { status: 200, headers: {
+          "content-type": "application/json",
+          "set-cookie": "fgdash=" + token + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000",
+        } });
+      }
+      if (url.pathname === "/api/dashboard" && req.method === "GET") {
+        if (!(await dashOk(req, env))) return json({ error: "unauthorized" }, 401);
+        await ensureDb(env);
+        const rows = await env.DB.prepare("SELECT id, name, email, business, answers, created_at FROM submissions ORDER BY created_at DESC, id DESC LIMIT 200").all();
+        const clients = (rows.results || []).map((r) => {
+          let a = {};
+          try { a = JSON.parse(r.answers || "{}"); } catch {}
+          const qa = Array.isArray(a.qa) ? a.qa : [];
+          const find = (frag) => {
+            const row = qa.find((x) => Array.isArray(x) && String(x[0] || "").toLowerCase().includes(frag));
+            return row ? String(row[1] || "") : "";
+          };
+          return {
+            id: r.id, name: r.name, email: r.email, business: r.business,
+            phone: find("phone"), heard: find("hear"), created: r.created_at,
+            phase: "intake", qa, quote: String(a.quote || ""),
+            files: Array.isArray(a.files) ? a.files : [], payCount: 0,
+          };
+        });
+        return json({ ok: true, clients, intakes: clients.length, now: new Date().toISOString().slice(0, 10) });
       }
       if (url.pathname.startsWith("/files/") && req.method === "GET") {
         if (!env.FILES) return json({ error: "storage not ready" }, 503);
