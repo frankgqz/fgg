@@ -949,6 +949,7 @@
           setOut();
         };
       };
+      ctl.textContent = '';
       const setOut = () => {
         ctl.textContent = 'Log in';
         ctl.onclick = async (e) => {
@@ -966,10 +967,9 @@
           if (!popup) location.href = u.toString();
         };
       };
-      setOut();
       fetch('/api/me').then((r) => r.json()).then((j) => {
-        if (j && j.user) setIn();
-      }).catch(() => {});
+        if (j && j.user) setIn(); else setOut();
+      }).catch(() => setOut());
       window.addEventListener('message', (e) => {
         if (e.origin !== location.origin || e.data !== 'fgg-auth-done') return;
         setIn();

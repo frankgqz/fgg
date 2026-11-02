@@ -244,10 +244,10 @@ export default {
         return getAuth(env).handler(req);
       }
       if (url.pathname === "/api/dash-logout" && req.method === "POST") {
-        return new Response(JSON.stringify({ ok: true }), { status: 200, headers: {
-          "content-type": "application/json",
-          "set-cookie": "fgauth=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0, __Secure-better-auth.session_token=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0",
-        } });
+        const h = new Headers({ "content-type": "application/json" });
+        h.append("set-cookie", "fgauth=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0");
+        h.append("set-cookie", "__Secure-better-auth.session_token=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0");
+        return new Response(JSON.stringify({ ok: true }), { status: 200, headers: h });
       }
       if (url.pathname === "/api/dash-login" && req.method === "POST") {
         if (!env.AUTH_KEY) return json({ error: "dashboard not configured" }, 503);
