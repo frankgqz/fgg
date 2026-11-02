@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth";
+import { magicLink } from "better-auth/plugins/magic-link";
 
 // FGG worker: static assets first, plus a tiny D1-backed wall API.
 const json = (data, status = 200) =>
@@ -48,6 +49,30 @@ function getAuth(env) {
         google: { clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET },
       },
       emailAndPassword: { enabled: true },
+      plugins: [
+        magicLink({
+          expiresIn: 60 * 15,
+          disableSignUp: true,
+          sendMagicLink: async ({ email, url }) => {
+            const known = await env.DB.prepare("SELECT id FROM user WHERE lower(email) = lower(?)").bind(String(email)).first();
+            if (!known) return;
+            const html = '<p>Hi \u2014 here is your sign-in link for the FGG dashboard.</p>' +
+              '<p><a href="' + url + '">Sign in to your dashboard</a></p>' +
+              '<p>The link works once and expires in 15 minutes. If you did not ask for it, you can ignore this email.</p>';
+            await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { "content-type": "application/json", authorization: "Bearer " + env.RESEND_API_KEY },
+              body: JSON.stringify({
+                from: "Frank Gao <frank@frankg.com.au>",
+                to: [email],
+                subject: "Your FGG dashboard link",
+                text: "Sign in to your FGG dashboard (works once, expires in 15 minutes): " + url,
+                html,
+              }),
+            });
+          },
+        }),
+      ],
       user: {
         validateUserInfo: (data) => {
           const admins = String(env.ADMIN_EMAILS || "").toLowerCase().split(",").map((s) => s.trim()).filter(Boolean);
