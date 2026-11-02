@@ -8,6 +8,12 @@ const json = (data, status = 200) =>
     headers: { "content-type": "application/json", "cache-control": "no-store" },
   });
 
+function noStore(resp) {
+  const h = new Headers(resp.headers);
+  h.set("cache-control", "no-store");
+  return new Response(resp.body, { status: resp.status, headers: h });
+}
+
 const AVATARS = ["🙂", "🌟", "💃", "🚀", "🎨", "🦊"];
 
 let dbReady = null;
@@ -172,7 +178,7 @@ export default {
         return json({ likes });
       }
       if (url.pathname === "/preferences" || url.pathname === "/preferences/") {
-        return env.ASSETS.fetch(new Request(new URL("/intake.html", url.origin), req));
+        return noStore(await env.ASSETS.fetch(new Request(new URL("/intake.html", url.origin), req)));
       }
       if (url.pathname === "/intake" || url.pathname === "/intake/") {
         return Response.redirect(url.origin + "/preferences" + url.search, 301);
@@ -181,7 +187,7 @@ export default {
         return Response.redirect(url.origin + "/payment" + url.search, 301);
       }
       if (url.pathname === "/payment" || url.pathname === "/payment/") {
-        return env.ASSETS.fetch(new Request(new URL("/payment.html", url.origin), req));
+        return noStore(await env.ASSETS.fetch(new Request(new URL("/payment.html", url.origin), req)));
       }
       if (url.pathname === "/api/checkout" && req.method === "GET") {
         // three modes: deposit (fixed $200) - full (server-computed) - custom (clamped)
@@ -228,7 +234,7 @@ export default {
         return Response.redirect(sess.url, 302);
       }
       if (url.pathname === "/dashboard" || url.pathname === "/dashboard/") {
-        return env.ASSETS.fetch(new Request(new URL("/dashboard.html", url.origin), req));
+        return noStore(await env.ASSETS.fetch(new Request(new URL("/dashboard.html", url.origin), req)));
       }
       if (url.pathname.startsWith("/api/auth/")) {
         await ensureDb(env);
@@ -237,7 +243,7 @@ export default {
       if (url.pathname === "/api/dash-logout" && req.method === "POST") {
         return new Response(JSON.stringify({ ok: true }), { status: 200, headers: {
           "content-type": "application/json",
-          "set-cookie": "fgauth=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0",
+          "set-cookie": "fgauth=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0, __Secure-better-auth.session_token=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0",
         } });
       }
       if (url.pathname === "/api/dash-login" && req.method === "POST") {
@@ -368,7 +374,9 @@ export default {
         }
         return json({ ok: true, emailed, confirmed });
       }
-      return env.ASSETS ? env.ASSETS.fetch(req) : new Response("Not found", { status: 404 });
+      const resp = env.ASSETS ? await env.ASSETS.fetch(req) : new Response("Not found", { status: 404 });
+      if ((resp.headers.get("content-type") || "").includes("text/html")) return noStore(resp);
+      return resp;
     } catch (err) {
       return json({ error: String(err) }, 500);
     }

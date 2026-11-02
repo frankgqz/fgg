@@ -57,6 +57,13 @@
   </style>
 </head>
 <body>
+  <nav class="dots" aria-label="journey">
+    <a class="dot" href="/"></a>
+    <a class="dot" href="/preferences"></a>
+    <a class="dot" href="/payment"></a>
+    <a class="dot on" href="/dashboard"></a>
+  </nav>
+
   <main class="dash">
     <h1>Dashboard</h1>
 
@@ -141,13 +148,13 @@
       $('stats').innerHTML = '<span><b>' + j.clients.length + '</b> clients</span>' +
         '<span><b>' + j.intakes + '</b> intakes total</span>' +
         '<span>updated ' + esc(j.now) + '</span>' +
-        '<span>' + esc((j.user && j.user.email) || '') + '</span>' +
+        '<span>via ' + esc((j.user && j.user.email) === 'key' ? 'backup key' : ((j.user && j.user.email) || '—')) + '</span>' +
         '<button class="button small" id="logoutBtn" type="button">Log out</button>';
       const lo = $('logoutBtn');
       if (lo) lo.addEventListener('click', async () => {
-        await fetch('/api/auth/sign-out', { method: 'POST' });
-        await fetch('/api/dash-logout', { method: 'POST' });
-        location.reload();
+        try { await fetch('/api/auth/sign-out', { method: 'POST' }); } catch {}
+        try { await fetch('/api/dash-logout', { method: 'POST' }); } catch {}
+        location.replace('/dashboard?fresh=' + Date.now());
       });
       $('clients').innerHTML = j.clients.map(clientStrip).join('') || '<p class="empty">no clients yet</p>';
     }
