@@ -96,7 +96,7 @@
   </style>
 </head>
 <body>
-  <a class="login-link" href="/dashboard">Log in</a>
+  <a class="login-link" id="authCtl" href="/dashboard?from=/preferences">Log in</a>
   <nav class="dots" aria-label="journey">
     <a class="dot" href="/"></a>
     <a class="dot on" href="/preferences"></a>
@@ -654,5 +654,32 @@
     }
   }).catch(() => {});
 </script>
+
+  <script>
+    // top-left auth control: Log in / Log out in place
+    (function () {
+      const ctl = document.getElementById('authCtl');
+      if (!ctl) return;
+      const here = location.pathname + location.search;
+      const setIn = () => {
+        ctl.textContent = 'Log out';
+        ctl.addEventListener('click', async (e) => {
+          e.preventDefault();
+          try { await fetch('/api/auth/sign-out', { method: 'POST' }); } catch {}
+          try { await fetch('/api/dash-logout', { method: 'POST' }); } catch {}
+          setOut();
+        }, { once: true });
+      };
+      const setOut = () => {
+        ctl.textContent = 'Log in';
+        ctl.href = '/dashboard?from=' + encodeURIComponent(here);
+      };
+      setOut();
+      fetch('/api/me').then((r) => r.json()).then((j) => {
+        if (j && j.user) { setIn(); }
+      }).catch(() => {});
+    })();
+  </script>
+
 </body>
 </html>

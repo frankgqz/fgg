@@ -52,11 +52,11 @@
     .files-row a { font-size: 0.85rem; padding: 0.25rem 0.75rem; border: 1px solid var(--line); border-radius: 999px; }
     .empty { color: var(--ink-soft); font-size: 0.889rem; font-style: italic; }
     .stats { display: flex; flex-wrap: wrap; align-items: center; gap: 0.85rem 1.25rem; margin: 0.5rem 0 1.25rem; color: var(--ink-soft); font-size: 0.889rem; }
-    .stats #logoutBtn { margin-left: auto; }
     .stats b { color: var(--ink); }
   </style>
 </head>
 <body>
+  <a class="login-link" id="authCtl" href="/dashboard">Log in</a>
   <nav class="dots" aria-label="journey">
     <a class="dot" href="/"></a>
     <a class="dot" href="/preferences"></a>
@@ -89,6 +89,9 @@
 
   <script>
     const $ = (id) => document.getElementById(id);
+    const q0 = new URLSearchParams(location.search);
+    const rawBack = q0.get('from') || '/dashboard';
+    const safeBack = (rawBack.startsWith('/') && !rawBack.startsWith('//')) ? rawBack : '/dashboard';
 
     function esc(s) {
       return String(s == null ? '' : s).replace(/[<>&"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
@@ -136,35 +139,46 @@
       $('loading').hidden = true;
       if (r.status === 401 || r.status === 403) {
         $('loginCard').hidden = false;
+        $('authCtl').textContent = 'Log in';
         return;
       }
       const j = await r.json();
       if (!j.ok) {
         $('loginCard').hidden = false;
+        $('authCtl').textContent = 'Log in';
         $('loginMsg').textContent = j.error || 'could not load';
         return;
       }
       $('app').hidden = false;
+      $('authCtl').textContent = 'Log out';
       $('stats').innerHTML = '<span><b>' + j.clients.length + '</b> clients</span>' +
         '<span><b>' + j.intakes + '</b> intakes total</span>' +
         '<span>updated ' + esc(j.now) + '</span>' +
-        '<span>via ' + esc((j.user && j.user.email) === 'key' ? 'backup key' : ((j.user && j.user.email) || '—')) + '</span>' +
-        '<button class="button small" id="logoutBtn" type="button">Log out</button>';
-      const lo = $('logoutBtn');
-      if (lo) lo.addEventListener('click', async () => {
-        try { await fetch('/api/auth/sign-out', { method: 'POST' }); } catch {}
-        try { await fetch('/api/dash-logout', { method: 'POST' }); } catch {}
-        location.replace('/dashboard?fresh=' + Date.now());
-      });
+        '<span>via ' + esc((j.user && j.user.email) === 'key' ? 'backup key' : ((j.user && j.user.email) || '—')) + '</span>';
       $('clients').innerHTML = j.clients.map(clientStrip).join('') || '<p class="empty">no clients yet</p>';
     }
+
+    const authCtl = $('authCtl');
+    authCtl.addEventListener('click', async (e) => {
+      e.preventDefault();
+      if (authCtl.textContent === 'Log out') {
+        try { await fetch('/api/auth/sign-out', { method: 'POST' }); } catch {}
+        try { await fetch('/api/dash-logout', { method: 'POST' }); } catch {}
+        $('app').hidden = true;
+        $('loginCard').hidden = false;
+        $('loginMsg').textContent = '';
+        authCtl.textContent = 'Log in';
+      } else {
+        $('loginCard').hidden = false;
+      }
+    });
 
     $('googleBtn').addEventListener('click', async () => {
       $('loginMsg').textContent = '';
       const r = await fetch('/api/auth/sign-in/social', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ provider: 'google', callbackURL: '/dashboard' }),
+        body: JSON.stringify({ provider: 'google', callbackURL: safeBack }),
       });
       const j = await r.json().catch(() => null);
       if (j && j.url) window.location.href = j.url;
@@ -176,7 +190,7 @@
       const r = await fetch('/api/auth/sign-in/magic-link', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ email: $('mailEmail').value, callbackURL: '/dashboard' }),
+        body: JSON.stringify({ email: $('mailEmail').value, callbackURL: safeBack }),
       });
       if (r.ok) $('loginMsg').textContent = 'sent — check your email for the link';
       else $('loginMsg').textContent = 'could not send — is the email right?';
@@ -189,7 +203,10 @@
         body: JSON.stringify({ key: $('dashKey').value }),
       });
       const j = await r.json();
-      if (j.ok) { $('loginCard').hidden = true; load(); }
+      if (j.ok) {
+        if (safeBack !== '/dashboard') location.replace(safeBack);
+        else { $('loginCard').hidden = true; load(); }
+      }
       else $('loginMsg').textContent = 'nope';
     });
 
