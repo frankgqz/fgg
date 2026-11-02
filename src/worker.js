@@ -1,3 +1,5 @@
+import { betterAuth } from "better-auth";
+
 // FGG worker: static assets first, plus a tiny D1-backed wall API.
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), {
@@ -34,6 +36,39 @@ async function dashOk(req, env) {
   return safeEq(m[1], await dashToken(env.AUTH_KEY));
 }
 
+let authInst = null;
+function getAuth(env) {
+  if (!authInst) {
+    authInst = betterAuth({
+      database: env.DB,
+      secret: env.BETTER_AUTH_SECRET,
+      baseURL: "https://frankg.com.au",
+      trustedOrigins: ["https://frankg.com.au", "https://www.frankg.com.au", "https://fgg.frankgqz.workers.dev"],
+      socialProviders: {
+        google: { clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET },
+      },
+      emailAndPassword: { enabled: true },
+      user: {
+        validateUserInfo: (data) => {
+          const admins = String(env.ADMIN_EMAILS || "").toLowerCase().split(",").map((s) => s.trim()).filter(Boolean);
+          const email = String((data.user && data.user.email) || "").toLowerCase();
+          return admins.includes(email) ? undefined : { error: "not_allowed" };
+        },
+      },
+    });
+  }
+  return authInst;
+}
+
+async function adminOk(req, env) {
+  if (env.BETTER_AUTH_SECRET && env.GOOGLE_CLIENT_ID) {
+    const s = await getAuth(env).api.getSession({ headers: req.headers }).catch(() => null);
+    if (s && s.user) return s.user;
+  }
+  if (await dashOk(req, env)) return { email: "key", name: "backup key" };
+  return null;
+}
+
 function ensureDb(env) {
   if (!dbReady) {
     dbReady = (async () => {
@@ -42,6 +77,13 @@ function ensureDb(env) {
       await env.DB.exec("CREATE TABLE IF NOT EXISTS submissions (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, business TEXT NOT NULL, answers TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')))");
       await env.DB.exec("INSERT OR IGNORE INTO likes (id, n) VALUES (1, 0)");
       await env.DB.exec("CREATE TABLE IF NOT EXISTS upload_counts (day TEXT PRIMARY KEY, n INTEGER NOT NULL DEFAULT 0)");
+      await env.DB.exec("create table if not exists \"user\" (\"id\" text not null primary key, \"name\" text not null, \"email\" text not null unique, \"emailVerified\" integer not null, \"image\" text, \"createdAt\" date not null, \"updatedAt\" date not null)");
+      await env.DB.exec("create table if not exists \"session\" (\"id\" text not null primary key, \"expiresAt\" date not null, \"token\" text not null unique, \"createdAt\" date not null, \"updatedAt\" date not null, \"ipAddress\" text, \"userAgent\" text, \"userId\" text not null references \"user\" (\"id\") on delete cascade)");
+      await env.DB.exec("create table if not exists \"account\" (\"id\" text not null primary key, \"accountId\" text not null, \"providerId\" text not null, \"userId\" text not null references \"user\" (\"id\") on delete cascade, \"accessToken\" text, \"refreshToken\" text, \"idToken\" text, \"accessTokenExpiresAt\" date, \"refreshTokenExpiresAt\" date, \"scope\" text, \"password\" text, \"createdAt\" date not null, \"updatedAt\" date not null)");
+      await env.DB.exec("create table if not exists \"verification\" (\"id\" text not null primary key, \"identifier\" text not null, \"value\" text not null, \"expiresAt\" date not null, \"createdAt\" date not null, \"updatedAt\" date not null)");
+      await env.DB.exec("create index if not exists \"session_userId_idx\" on \"session\" (\"userId\")");
+      await env.DB.exec("create index if not exists \"account_userId_idx\" on \"account\" (\"userId\")");
+      await env.DB.exec("create index if not exists \"verification_identifier_idx\" on \"verification\" (\"identifier\")");
     })();
   }
   return dbReady;
@@ -140,6 +182,10 @@ export default {
       if (url.pathname === "/dashboard" || url.pathname === "/dashboard/") {
         return env.ASSETS.fetch(new Request(new URL("/dashboard.html", url.origin), req));
       }
+      if (url.pathname.startsWith("/api/auth/")) {
+        await ensureDb(env);
+        return getAuth(env).handler(req);
+      }
       if (url.pathname === "/api/dash-login" && req.method === "POST") {
         if (!env.AUTH_KEY) return json({ error: "dashboard not configured" }, 503);
         const d = await req.json().catch(() => ({}));
@@ -151,7 +197,9 @@ export default {
         } });
       }
       if (url.pathname === "/api/dashboard" && req.method === "GET") {
-        if (!(await dashOk(req, env))) return json({ error: "unauthorized" }, 401);
+        await ensureDb(env);
+        const who = await adminOk(req, env);
+        if (!who) return json({ error: "unauthorized" }, 401);
         await ensureDb(env);
         const rows = await env.DB.prepare("SELECT id, name, email, business, answers, created_at FROM submissions ORDER BY created_at DESC, id DESC LIMIT 200").all();
         const clients = (rows.results || []).map((r) => {
@@ -169,7 +217,7 @@ export default {
             files: Array.isArray(a.files) ? a.files : [], payCount: 0,
           };
         });
-        return json({ ok: true, clients, intakes: clients.length, now: new Date().toISOString().slice(0, 10) });
+        return json({ ok: true, clients, intakes: clients.length, now: new Date().toISOString().slice(0, 10), user: { email: who.email, name: who.name } });
       }
       if (url.pathname.startsWith("/files/") && req.method === "GET") {
         if (!env.FILES) return json({ error: "storage not ready" }, 503);

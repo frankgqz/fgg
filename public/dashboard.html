@@ -61,8 +61,12 @@
 
     <div class="login-card" id="loginCard" hidden>
       <b>Sign in</b>
-      <input type="password" id="dashKey" placeholder="dashboard key" autocomplete="current-password">
-      <button class="button small" id="dashLogin" type="button">Enter</button>
+      <button class="button" id="googleBtn" type="button" style="margin:0.9rem 0 0.55rem">Sign in with Google</button>
+      <details style="margin-top:0.65rem">
+        <summary class="empty" style="cursor:pointer">backup key</summary>
+        <input type="password" id="dashKey" placeholder="dashboard key" autocomplete="current-password">
+        <button class="button small" id="dashLogin" type="button">Enter</button>
+      </details>
       <p class="empty" id="loginMsg"></p>
     </div>
 
@@ -133,9 +137,28 @@
       $('app').hidden = false;
       $('stats').innerHTML = '<span><b>' + j.clients.length + '</b> clients</span>' +
         '<span><b>' + j.intakes + '</b> intakes total</span>' +
-        '<span>updated ' + esc(j.now) + '</span>';
+        '<span>updated ' + esc(j.now) + '</span>' +
+        '<span>' + esc((j.user && j.user.email) || '') + '</span>' +
+        '<button class="button small" id="logoutBtn" type="button">Log out</button>';
+      const lo = $('logoutBtn');
+      if (lo) lo.addEventListener('click', async () => {
+        await fetch('/api/auth/sign-out', { method: 'POST' });
+        location.reload();
+      });
       $('clients').innerHTML = j.clients.map(clientStrip).join('') || '<p class="empty">no clients yet</p>';
     }
+
+    $('googleBtn').addEventListener('click', async () => {
+      $('loginMsg').textContent = '';
+      const r = await fetch('/api/auth/sign-in/social', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ provider: 'google', callbackURL: '/dashboard' }),
+      });
+      const j = await r.json().catch(() => null);
+      if (j && j.url) window.location.href = j.url;
+      else $('loginMsg').textContent = 'google sign-in unavailable';
+    });
 
     $('dashLogin').addEventListener('click', async () => {
       const r = await fetch('/api/dash-login', {
