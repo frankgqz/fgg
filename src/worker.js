@@ -74,10 +74,14 @@ function getAuth(env) {
         }),
       ],
       user: {
+        additionalFields: {
+          role: { type: "string", defaultValue: "client", input: false },
+        },
         validateUserInfo: (data) => {
-          const admins = String(env.ADMIN_EMAILS || "").toLowerCase().split(",").map((s) => s.trim()).filter(Boolean);
+          const seed = adminSeed(env);
+          if (seed.length === 0) return undefined;
           const email = String((data.user && data.user.email) || "").toLowerCase();
-          return admins.includes(email) ? undefined : { error: "not_allowed" };
+          return seed.includes(email) ? undefined : { error: "not_allowed" };
         },
       },
     });
@@ -85,10 +89,25 @@ function getAuth(env) {
   return authInst;
 }
 
+function adminSeed(env) {
+  return String(env.ADMIN_EMAILS || "").toLowerCase().split(",").map((s) => s.trim()).filter(Boolean);
+}
+
 async function adminOk(req, env) {
   if (env.BETTER_AUTH_SECRET && env.GOOGLE_CLIENT_ID) {
     const s = await getAuth(env).api.getSession({ headers: req.headers }).catch(() => null);
-    if (s && s.user) return s.user;
+    if (s && s.user) {
+      if (s.user.role === "admin") return s.user;
+      const email = String(s.user.email || "").toLowerCase();
+      const promote = async () => {
+        await env.DB.prepare("UPDATE user SET role = 'admin' WHERE lower(email) = lower(?)").bind(email).run().catch(() => {});
+        return s.user;
+      };
+      if (adminSeed(env).includes(email)) return promote();
+      const n = await env.DB.prepare("SELECT count(*) AS n FROM user").first().catch(() => null);
+      if (n && Number(n.n) === 1) return promote();
+      return null;
+    }
   }
   if (await dashOk(req, env)) return { email: "key", name: "backup key" };
   return null;
@@ -102,10 +121,11 @@ function ensureDb(env) {
       await env.DB.exec("CREATE TABLE IF NOT EXISTS submissions (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, business TEXT NOT NULL, answers TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')))");
       await env.DB.exec("INSERT OR IGNORE INTO likes (id, n) VALUES (1, 0)");
       await env.DB.exec("CREATE TABLE IF NOT EXISTS upload_counts (day TEXT PRIMARY KEY, n INTEGER NOT NULL DEFAULT 0)");
-      await env.DB.exec("create table if not exists \"user\" (\"id\" text not null primary key, \"name\" text not null, \"email\" text not null unique, \"emailVerified\" integer not null, \"image\" text, \"createdAt\" date not null, \"updatedAt\" date not null)");
+      await env.DB.exec("create table if not exists \"user\" (\"id\" text not null primary key, \"name\" text not null, \"email\" text not null unique, \"emailVerified\" integer not null, \"image\" text, \"createdAt\" date not null, \"updatedAt\" date not null, \"role\" text not null default 'client')");
       await env.DB.exec("create table if not exists \"session\" (\"id\" text not null primary key, \"expiresAt\" date not null, \"token\" text not null unique, \"createdAt\" date not null, \"updatedAt\" date not null, \"ipAddress\" text, \"userAgent\" text, \"userId\" text not null references \"user\" (\"id\") on delete cascade)");
       await env.DB.exec("create table if not exists \"account\" (\"id\" text not null primary key, \"accountId\" text not null, \"providerId\" text not null, \"userId\" text not null references \"user\" (\"id\") on delete cascade, \"accessToken\" text, \"refreshToken\" text, \"idToken\" text, \"accessTokenExpiresAt\" date, \"refreshTokenExpiresAt\" date, \"scope\" text, \"password\" text, \"createdAt\" date not null, \"updatedAt\" date not null)");
       await env.DB.exec("create table if not exists \"verification\" (\"id\" text not null primary key, \"identifier\" text not null, \"value\" text not null, \"expiresAt\" date not null, \"createdAt\" date not null, \"updatedAt\" date not null)");
+      try { await env.DB.exec("alter table \"user\" add column \"role\" text not null default 'client'"); } catch {}
       await env.DB.exec("create index if not exists \"session_userId_idx\" on \"session\" (\"userId\")");
       await env.DB.exec("create index if not exists \"account_userId_idx\" on \"account\" (\"userId\")");
       await env.DB.exec("create index if not exists \"verification_identifier_idx\" on \"verification\" (\"identifier\")");
