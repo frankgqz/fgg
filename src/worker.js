@@ -110,8 +110,11 @@ async function adminOk(req, env) {
         return s.user;
       };
       if (adminSeed(env).includes(email)) return promote();
-      const n = await env.DB.prepare("SELECT count(*) AS n FROM user").first().catch(() => null);
-      if (n && Number(n.n) === 1) return promote();
+      const anyAdmin = await env.DB.prepare("SELECT count(*) AS n FROM user WHERE role = 'admin'").first().catch(() => null);
+      if (!anyAdmin || Number(anyAdmin.n) === 0) {
+        const oldest = await env.DB.prepare("SELECT email FROM user ORDER BY createdAt ASC, id ASC LIMIT 1").first().catch(() => null);
+        if (oldest && String(oldest.email).toLowerCase() === email) return promote();
+      }
       return null;
     }
   }

@@ -58,6 +58,9 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
 }
 
 .button {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
   display: inline-block;
   font: inherit;
   line-height: 1.2;
@@ -775,6 +778,9 @@ h5 { font-size: var(--fs-h5); }
 /* ============ the standard motion layer (100-200ms) ============ */
 .button:active, .rev-btn:active, .car-btn:active, .av:active,
 .book:active, .cal-day:active, .upload-btn:active, .fx:active, .login-link {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
   position: fixed;
   top: 1rem;
   left: 1.15rem;

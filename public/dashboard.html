@@ -138,8 +138,14 @@
       const r = await fetch('/api/dashboard');
       $('loading').hidden = true;
       if (r.status === 401 || r.status === 403) {
+        const me = await fetch('/api/me').then((x) => x.json()).catch(() => ({ user: null }));
         $('loginCard').hidden = false;
-        $('authCtl').textContent = 'Log in';
+        if (me && me.user) {
+          $('authCtl').textContent = 'Log out';
+          $('loginMsg').textContent = 'signed in as ' + me.user.email + ' — no dashboard access yet';
+        } else {
+          $('authCtl').textContent = 'Log in';
+        }
         return;
       }
       const j = await r.json();
@@ -178,14 +184,20 @@
       const r = await fetch('/api/auth/sign-in/social', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ provider: 'google', callbackURL: safeBack }),
+        body: JSON.stringify({ provider: 'google', callbackURL: '/auth-done.html' }),
       });
       const j = await r.json().catch(() => null);
       if (j && j.url) {
         const u = new URL(j.url, location.origin);
         if (!u.searchParams.has('prompt')) u.searchParams.set('prompt', 'select_account');
-        window.location.href = u.toString();
+        const popup = window.open(u.toString(), 'fggauth', 'width=520,height=640');
+        if (!popup) window.location.href = u.toString();
       } else $('loginMsg').textContent = 'google sign-in unavailable';
+    });
+    window.addEventListener('message', (e) => {
+      if (e.origin !== location.origin || e.data !== 'fgg-auth-done') return;
+      $('loginCard').hidden = true;
+      load();
     });
 
     $('magicBtn').addEventListener('click', async () => {
