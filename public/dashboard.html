@@ -146,6 +146,7 @@
       const lo = $('logoutBtn');
       if (lo) lo.addEventListener('click', async () => {
         await fetch('/api/auth/sign-out', { method: 'POST' });
+        await fetch('/api/dash-logout', { method: 'POST' });
         location.reload();
       });
       $('clients').innerHTML = j.clients.map(clientStrip).join('') || '<p class="empty">no clients yet</p>';

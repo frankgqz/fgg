@@ -231,6 +231,12 @@ export default {
         await ensureDb(env);
         return getAuth(env).handler(req);
       }
+      if (url.pathname === "/api/dash-logout" && req.method === "POST") {
+        return new Response(JSON.stringify({ ok: true }), { status: 200, headers: {
+          "content-type": "application/json",
+          "set-cookie": "fgauth=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0",
+        } });
+      }
       if (url.pathname === "/api/dash-login" && req.method === "POST") {
         if (!env.AUTH_KEY) return json({ error: "dashboard not configured" }, 503);
         const d = await req.json().catch(() => ({}));
