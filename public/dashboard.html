@@ -181,8 +181,11 @@
         body: JSON.stringify({ provider: 'google', callbackURL: safeBack }),
       });
       const j = await r.json().catch(() => null);
-      if (j && j.url) window.location.href = j.url;
-      else $('loginMsg').textContent = 'google sign-in unavailable';
+      if (j && j.url) {
+        const u = new URL(j.url, location.origin);
+        if (!u.searchParams.has('prompt')) u.searchParams.set('prompt', 'select_account');
+        window.location.href = u.toString();
+      } else $('loginMsg').textContent = 'google sign-in unavailable';
     });
 
     $('magicBtn').addEventListener('click', async () => {

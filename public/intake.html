@@ -644,40 +644,62 @@
       }
     });
   
-  // prefill from the signed-in account
-  fetch('/api/me').then((r) => r.json()).then((j) => {
-    if (j && j.user) {
-      const e = document.querySelector('input[name="email"]');
-      const n = document.querySelector('input[name="name"]');
-      if (e && !e.value) e.value = j.user.email || '';
-      if (n && !n.value) n.value = j.user.name || '';
-    }
-  }).catch(() => {});
+  // prefill from the signed-in account (and again after a popup login)
+  function prefillFromAccount() {
+    fetch('/api/me').then((r) => r.json()).then((j) => {
+      if (j && j.user) {
+        const e = document.querySelector('input[name="email"]');
+        const n = document.querySelector('input[name="name"]');
+        if (e && !e.value) e.value = j.user.email || '';
+        if (n && !n.value) n.value = j.user.name || '';
+      }
+    }).catch(() => {});
+  }
+  prefillFromAccount();
+  window.addEventListener('fgg-auth-changed', prefillFromAccount);
 </script>
 
-  <script>
-    // top-left auth control: Log in / Log out in place
+<script>
+    // top-left auth control: Google popup in place, Log out in place
     (function () {
       const ctl = document.getElementById('authCtl');
       if (!ctl) return;
       const here = location.pathname + location.search;
       const setIn = () => {
         ctl.textContent = 'Log out';
-        ctl.addEventListener('click', async (e) => {
+        ctl.onclick = async (e) => {
           e.preventDefault();
           try { await fetch('/api/auth/sign-out', { method: 'POST' }); } catch {}
           try { await fetch('/api/dash-logout', { method: 'POST' }); } catch {}
           setOut();
-        }, { once: true });
+        };
       };
       const setOut = () => {
         ctl.textContent = 'Log in';
-        ctl.href = '/dashboard?from=' + encodeURIComponent(here);
+        ctl.onclick = async (e) => {
+          e.preventDefault();
+          const r = await fetch('/api/auth/sign-in/social', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ provider: 'google', callbackURL: '/auth-done.html' }),
+          }).catch(() => null);
+          const j = r ? await r.json().catch(() => null) : null;
+          if (!j || !j.url) { location.href = '/dashboard?from=' + encodeURIComponent(here); return; }
+          const u = new URL(j.url, location.origin);
+          if (!u.searchParams.has('prompt')) u.searchParams.set('prompt', 'select_account');
+          const popup = window.open(u.toString(), 'fggauth', 'width=520,height=640');
+          if (!popup) location.href = u.toString();
+        };
       };
       setOut();
       fetch('/api/me').then((r) => r.json()).then((j) => {
-        if (j && j.user) { setIn(); }
+        if (j && j.user) setIn();
       }).catch(() => {});
+      window.addEventListener('message', (e) => {
+        if (e.origin !== location.origin || e.data !== 'fgg-auth-done') return;
+        setIn();
+        window.dispatchEvent(new CustomEvent('fgg-auth-changed'));
+      });
     })();
   </script>
 

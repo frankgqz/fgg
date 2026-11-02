@@ -52,7 +52,7 @@ function getAuth(env) {
       baseURL: "https://frankg.com.au",
       trustedOrigins: ["https://frankg.com.au", "https://www.frankg.com.au", "https://fgg.frankgqz.workers.dev"],
       socialProviders: {
-        google: { clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET },
+        google: { clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET, prompt: "select_account" },
       },
       emailAndPassword: { enabled: true },
       plugins: [

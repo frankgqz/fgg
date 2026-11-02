@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Signed in — FGG</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main style="max-width:26rem;margin:18vh auto 0;padding:1.25rem;">
+    <h1 style="font-size:1.602rem;">Signed in ✓</h1>
+    <p class="lede">You can close this window — or <a href="/">head back to the site</a>.</p>
+  </main>
+  <script>
+    try {
+      if (window.opener) {
+        window.opener.postMessage('fgg-auth-done', location.origin);
+        setTimeout(() => window.close(), 600);
+      }
+    } catch {}
+  </script>
+</body>
+</html>
