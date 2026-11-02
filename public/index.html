@@ -37,6 +37,7 @@
   </script>
 </head>
 <body>
+  <a class="login-link" href="/dashboard">Log in</a>
   <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
 
   <div class="lang-toggle" id="langToggle" role="group" aria-label="language">
@@ -48,15 +49,16 @@
     <p class="pw-line">Build <b id="pwTotal">$200</b></p>
     <p class="pw-line care"><span class="pw-sep">·</span> <span class="care-word">Care </span>$200/y</p>
     <div class="pw-actions">
-      <a class="button" href="/intake" id="pwPrefs">Preferences</a>
+      <a class="button" href="/preferences" id="pwPrefs">Preferences</a>
       <a class="button" id="pwStart" href="/payment">Start</a>
     </div>
   </aside>
 
     <nav class="dots" aria-label="journey">
     <a class="dot on" href="/"></a>
-    <a class="dot" href="/intake"></a>
+    <a class="dot" href="/preferences"></a>
     <a class="dot" href="/payment"></a>
+    <a class="dot" href="/dashboard" data-fixed></a>
   </nav>
 
 <main>
@@ -346,7 +348,7 @@
       if (p > 1) picked.push(p + ' pages');
       const pickedIds = Object.keys(state).filter((k) => state[k] && FEATURE_LABELS[k]);
       const q = new URLSearchParams({ f: picked.join(', '), total: String(total), ids: pickedIds.join(','), rev: String(revSessions), pages: String(p) });
-      document.querySelectorAll('.dots .dot').forEach((a) => { const base = a.href.split('?')[0]; a.href = base + (q.toString() ? '?' + q.toString() : ''); });
+      document.querySelectorAll('.dots .dot').forEach((a) => { if (a.hasAttribute('data-fixed')) return; const base = a.href.split('?')[0]; a.href = base + (q.toString() ? '?' + q.toString() : ''); });
       const startEl = $('pwStart');
       if (startEl) startEl.href = '/payment?' + q.toString();
 
@@ -657,6 +659,7 @@
 
     // ---- language toggle (EN / VI) ----
     const VI = {
+  "Log in": "Đăng nhập",
       "Preferences": "Sở thích",
       "Websites, build and care.": "Website: dựng và chăm sóc.",
       "Hi, I'm Frank Gao. I build custom websites and apps for Melbourne Businesses.": "Chào, tôi là Frank Gao. Tôi làm website và ứng dụng riêng cho doanh nghiệp ở Melbourne.",

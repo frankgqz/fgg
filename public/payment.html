@@ -37,10 +37,12 @@
   </style>
 </head>
 <body>
+  <a class="login-link" href="/dashboard">Log in</a>
   <nav class="dots" aria-label="journey">
     <a class="dot" href="/"></a>
-    <a class="dot" href="/intake"></a>
+    <a class="dot" href="/preferences"></a>
     <a class="dot on" href="/payment"></a>
+    <a class="dot" href="/dashboard" data-fixed></a>
   </nav>
 
   <main class="pay-page">
@@ -75,7 +77,7 @@
     const q = new URLSearchParams(location.search);
 
     // carry the journey's quote across the dots
-    document.querySelectorAll('.dots .dot').forEach((a) => { a.href += location.search; });
+    document.querySelectorAll('.dots .dot').forEach((a) => { if (!a.hasAttribute('data-fixed')) a.href += location.search; });
 
     (function () {
       const f = (q.get('f') || '').split(',').map((x) => x.trim()).filter(Boolean);
@@ -135,7 +137,7 @@
       const card = $('intakeCard');
       let sent = null;
       try { sent = JSON.parse(localStorage.getItem('fgg-intake-sent') || 'null'); } catch {}
-      const toIntake = '/intake' + location.search;
+      const toIntake = '/preferences' + location.search;
       if (sent) {
         const when = new Date(sent.at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
         const label = String(sent.business || sent.about || 'Received').replace(/[<>&"]/g, '');

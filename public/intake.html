@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Your Preferences — FGG</title>
   <meta name="description" content="Tell me about your business and what the site needs to do. Answer as much as you like — or just what feels right.">
-  <link rel="canonical" href="https://frankg.com.au/intake">
+  <link rel="canonical" href="https://frankg.com.au/preferences">
   <meta property="og:title" content="Your Preferences — FGG">
   <meta property="og:description" content="Tell me about your business and what the site needs to do.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://frankg.com.au/intake">
+  <meta property="og:url" content="https://frankg.com.au/preferences">
   <meta property="og:image" content="https://frankg.com.au/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="/favicon.png">
@@ -96,10 +96,12 @@
   </style>
 </head>
 <body>
+  <a class="login-link" href="/dashboard">Log in</a>
   <nav class="dots" aria-label="journey">
     <a class="dot" href="/"></a>
-    <a class="dot on" href="/intake"></a>
+    <a class="dot on" href="/preferences"></a>
     <a class="dot" href="/payment"></a>
+    <a class="dot" href="/dashboard" data-fixed></a>
   </nav>
 
   <main class="intake">
@@ -435,7 +437,7 @@
       });
     })();
     const loadedAt = Date.now();
-    document.querySelectorAll('.dots .dot').forEach((a) => { a.href += location.search; });
+    document.querySelectorAll('.dots .dot').forEach((a) => { if (!a.hasAttribute('data-fixed')) a.href += location.search; });
 
     (function () {
       const q = new URLSearchParams(location.search);
@@ -641,6 +643,16 @@
         alert('Something went wrong sending it — please try again, or just email me: frank@frankg.com.au');
       }
     });
-  </script>
+  
+  // prefill from the signed-in account
+  fetch('/api/me').then((r) => r.json()).then((j) => {
+    if (j && j.user) {
+      const e = document.querySelector('input[name="email"]');
+      const n = document.querySelector('input[name="name"]');
+      if (e && !e.value) e.value = j.user.email || '';
+      if (n && !n.value) n.value = j.user.name || '';
+    }
+  }).catch(() => {});
+</script>
 </body>
 </html>

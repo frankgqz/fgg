@@ -171,8 +171,11 @@ export default {
         const likes = (await env.DB.prepare("SELECT n FROM likes WHERE id = 1").first())?.n ?? 0;
         return json({ likes });
       }
-      if (url.pathname === "/intake" || url.pathname === "/intake/") {
+      if (url.pathname === "/preferences" || url.pathname === "/preferences/") {
         return env.ASSETS.fetch(new Request(new URL("/intake.html", url.origin), req));
+      }
+      if (url.pathname === "/intake" || url.pathname === "/intake/") {
+        return Response.redirect(url.origin + "/preferences" + url.search, 301);
       }
       if (url.pathname === "/pay" || url.pathname === "/pay/") {
         return Response.redirect(url.origin + "/payment" + url.search, 301);
@@ -246,6 +249,13 @@ export default {
           "content-type": "application/json",
           "set-cookie": "fgauth=" + token + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000",
         } });
+      }
+      if (url.pathname === "/api/me" && req.method === "GET") {
+        if (env.BETTER_AUTH_SECRET && env.GOOGLE_CLIENT_ID) {
+          const s = await getAuth(env).api.getSession({ headers: req.headers }).catch(() => null);
+          if (s && s.user) return json({ ok: true, user: { email: s.user.email || "", name: s.user.name || "" } });
+        }
+        return json({ ok: true, user: null });
       }
       if (url.pathname === "/api/dashboard" && req.method === "GET") {
         await ensureDb(env);
