@@ -142,12 +142,12 @@
         const when = new Date(sent.at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
         const label = String(sent.business || sent.about || 'Received').replace(/[<>&"]/g, '');
         if (sent.rush) { rush = true; updateBtn(); }
-        card.innerHTML = '<p class="qs-label">From intake</p><p style="margin:0;font-weight:600;">' + label + '</p>'
+        card.innerHTML = '<p class="qs-label">Your preferences</p><p style="margin:0;font-weight:600;">' + label + '</p>'
           + '<p class="qs-total" style="margin-top:.5rem;">Submitted ' + when + ' \u2713 \u2014 nothing more needed before we start.</p>';
       } else {
-        card.innerHTML = '<p class="qs-label">From intake</p>'
+        card.innerHTML = '<p class="qs-label">Your preferences</p>'
           + '<p style="margin:0 0 1rem;font-weight:600;">Haven\'t told me about your project yet?</p>'
-          + '<a class="button" href="' + toIntake + '">Your preferences</a>';
+          + '<a class="button" href="' + toIntake + '">Intake Form</a>';
       }
       if (q.get('paid') === '1' && !sent) {
         setTimeout(() => {
