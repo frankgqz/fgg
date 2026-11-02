@@ -526,6 +526,12 @@
       row.querySelectorAll('.s-dot').forEach((dot) => {
         dot.addEventListener('click', () => {
           const v = Number(dot.dataset.v);
+          if (v === 3 && row.dataset.value === '3') {
+            delete row.dataset.value;
+            row.querySelectorAll('.s-dot').forEach((d) => d.classList.remove('on'));
+            save();
+            return;
+          }
           row.querySelectorAll('.s-dot').forEach((d) => d.classList.toggle('on', Number(d.dataset.v) <= v));
           row.dataset.value = String(v);
           save();
