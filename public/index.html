@@ -277,7 +277,9 @@
     function money(n) { return '$' + n.toLocaleString('en-AU'); }
 
     // ---- the standard motion layer (100-200ms) ----
-    document.body.classList.add('motion');
+    // start the motion layer only once frames prove alive — if frames never
+    // flow (throttled tab), content must never hide behind an animation.
+    requestAnimationFrame(() => document.body.classList.add('motion'));
     const haptic = (ms = 6) => { try { navigator.vibrate && navigator.vibrate(ms); } catch { /* unsupported */ } };
     document.addEventListener('pointerdown', (e) => {
       if (e.target.closest('.rev-btn, .car-btn, .av, .book, .cal-day, .upload-btn, .fx, .feature[data-feature], .button')) haptic(6);
@@ -298,10 +300,27 @@
       tiles.forEach((t) => t.classList.add('in'));
     }
 
+    // animation must never gate content or function: if frames stall
+    // (throttled tab, occluded window, efficiency mode), reveal everything
+    // and compute synchronously instead of waiting on callbacks.
+    let framesAlive = false;
+    requestAnimationFrame(() => { framesAlive = true; });
+    const revealAll = () => tiles.forEach((tt) => tt.classList.add('in'));
+    setTimeout(() => {
+      if (!framesAlive) {
+        document.body.classList.remove('motion');
+        revealAll();
+      }
+    }, 700);
+    for (const ev of ['scroll', 'pointerdown', 'keydown']) {
+      window.addEventListener(ev, revealAll, { once: true, passive: true });
+    }
+
     let shownTotal = 200;
     function setTotal(value) {
       const from = shownTotal, t0 = performance.now();
       shownTotal = value;
+      if (!framesAlive) { $('pwTotal').textContent = money(value); return; }
       const step = (now) => {
         const k = Math.min(1, (now - t0) / 320);
         const e = 1 - Math.pow(1 - k, 3);
