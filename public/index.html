@@ -482,7 +482,7 @@
       const el = $('shopGrid');
       const slide = el.querySelector('.shop-slide');
       const step = slide ? slide.getBoundingClientRect().width + 16 : el.clientWidth * 0.85;
-      el.scrollBy({ left: Number(b.dataset.dir) * step, behavior: 'smooth' });
+      el.scrollBy({ left: Number(b.dataset.dir) * step, behavior: framesAlive ? 'smooth' : 'auto' });
     }));
     // pagination: only show the direction you can still go
     const shopGrid = $('shopGrid');
@@ -905,7 +905,7 @@
       $('wdLink').href = card.dataset.url || '#';
       $('wdLink').textContent = (card.dataset.url || '').replace(/^https?:\/\//, '');
       const show = () => { workDetail.hidden = false; document.body.classList.add('modal-open'); };
-      if (document.startViewTransition) {
+      if (document.startViewTransition && framesAlive) {
         card.style.viewTransitionName = 'work-hero';
         detailCard.style.viewTransitionName = 'work-hero';
         document.startViewTransition(show).finished.finally(() => {
