@@ -959,6 +959,9 @@
       document.addEventListener('dragstart', (e) => {
         if (e.target && e.target.closest && e.target.closest('a, button, .chip, .feature, .s-dot, .dot, .tab')) e.preventDefault();
       });
+      document.addEventListener('contextmenu', (e) => {
+        if (e.target && e.target.closest && e.target.closest('a, button, .chip, .feature, .s-dot, .dot, .tab, .login-link')) e.preventDefault();
+      });
       const ctl = document.getElementById('authCtl');
       if (!ctl) return;
       const here = location.pathname + location.search;

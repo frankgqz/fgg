@@ -181,7 +181,7 @@ export default {
         return json({ likes });
       }
       if (url.pathname === "/preferences" || url.pathname === "/preferences/") {
-        return noStore(await env.ASSETS.fetch(new Request(new URL("/intake.html", url.origin), req)));
+        return noStore(await env.ASSETS.fetch(new Request(new URL("/preferences.html", url.origin), req)));
       }
       if (url.pathname === "/intake" || url.pathname === "/intake/") {
         return Response.redirect(url.origin + "/preferences" + url.search, 301);
