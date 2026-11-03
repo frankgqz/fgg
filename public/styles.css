@@ -58,7 +58,7 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
 }
 
 /* controls must not turn a press into a drag on touch (eats clicks) */
-a, button, summary, label, select, [role="button"],
+a, button, summary, select, [role="button"],
 .chip, .s-dot, .dot, .av, .tab, .fx, .info-i, .car-btn, .rev-btn,
 .upload-btn, .wall-del, .feature, .flip-stage, .lang-toggle button {
   -webkit-user-select: none;
