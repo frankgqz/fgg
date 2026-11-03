@@ -89,6 +89,9 @@
 
   <script>
     const $ = (id) => document.getElementById(id);
+    document.addEventListener('dragstart', (e) => {
+      if (e.target && e.target.closest && e.target.closest('a, button, .chip, .feature, .s-dot, .dot, .tab')) e.preventDefault();
+    });
     const q0 = new URLSearchParams(location.search);
     const rawBack = q0.get('from') || '/dashboard';
     const safeBack = (rawBack.startsWith('/') && !rawBack.startsWith('//')) ? rawBack : '/dashboard';

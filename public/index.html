@@ -937,6 +937,9 @@
 <script>
     // top-left auth control: Google popup in place, Log out in place
     (function () {
+      document.addEventListener('dragstart', (e) => {
+        if (e.target && e.target.closest && e.target.closest('a, button, .chip, .feature, .s-dot, .dot, .tab')) e.preventDefault();
+      });
       const ctl = document.getElementById('authCtl');
       if (!ctl) return;
       const here = location.pathname + location.search;
