@@ -305,7 +305,7 @@
     // and compute synchronously instead of waiting on callbacks.
     let framesAlive = false;
     requestAnimationFrame(() => { framesAlive = true; });
-    const revealAll = () => tiles.forEach((tt) => tt.classList.add('in'));
+    const revealAll = () => tiles.forEach((tt) => { tt.style.transitionDelay = '0ms'; tt.classList.add('in'); });
     setTimeout(() => {
       if (!framesAlive) {
         document.body.classList.remove('motion');

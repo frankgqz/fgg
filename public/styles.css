@@ -793,7 +793,11 @@ h5 { font-size: var(--fs-h5); }
 
 /* ============ the standard motion layer (100-200ms) ============ */
 .button:active, .rev-btn:active, .car-btn:active, .av:active,
-.book:active, .cal-day:active, .upload-btn:active, .fx:active, .login-link {
+.book:active, .cal-day:active, .upload-btn:active, .fx:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.login-link {
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
@@ -814,9 +818,9 @@ h5 { font-size: var(--fs-h5); }
   transform: scale(0.96);
   transition: transform 90ms cubic-bezier(0.2, 0.9, 0.3, 1.25);
 }
-.motion .feature { opacity: 0; transform: translateY(10px); }
+.motion .feature { opacity: 0;  }
 .motion .feature.in {
-  opacity: 1; transform: none;
+  opacity: 1; 
   transition: opacity 420ms ease, transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .wall-skel { display: grid; gap: 0.65rem; }
