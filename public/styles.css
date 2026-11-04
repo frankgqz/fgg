@@ -1,5 +1,6 @@
 /* FGG one-pager — warm light default, dark aware, "fancy" showpiece mode. */
 :root {
+  --col: 60rem;
   --paper: #f4f4f5;
   --surface: #ffffff;
   --ink: #18181b;
@@ -849,7 +850,7 @@ h5 { font-size: var(--fs-h5); }
   -webkit-touch-callout: none;
   position: fixed;
   top: 1rem;
-  left: 1.15rem;
+  left: max(1.15rem, calc(50% - var(--col) / 2 + 1.25rem));
   z-index: 60;
   font-size: 0.889rem;
   color: var(--ink-soft);
@@ -859,6 +860,14 @@ h5 { font-size: var(--fs-h5); }
   transition: color 120ms ease, background 120ms ease;
 }
 .login-link:hover { color: var(--ink); background: var(--surface); }
+.auth-av {
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  margin-right: 0.4rem;
+  vertical-align: -0.28rem;
+  object-fit: cover;
+}
 
 .lang-toggle button:active {
   transform: scale(0.96);
@@ -1027,7 +1036,7 @@ body.fancy .feature.locked {
 
 /* language toggle: segmented, both labels visible */
 .lang-toggle {
-  position: fixed; top: 1rem; right: 1.15rem; z-index: 260;
+  position: fixed; top: 1rem; right: max(1.15rem, calc(50% - var(--col) / 2 + 1.25rem)); z-index: 260;
   display: flex; gap: 0.25rem; padding: 0.25rem;
   background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.10), 0 8px 24px -6px rgba(20, 20, 40, 0.18);

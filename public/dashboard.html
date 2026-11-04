@@ -8,6 +8,7 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="stylesheet" href="/styles.css">
   <style>
+    :root { --col: 52rem; }
     .dash { max-width: 52rem; margin: 0 auto; padding: 2.5rem 1.25rem 6rem; }
     .dash h1 { margin-bottom: 0.75rem; font-size: 2.027rem; }
     .login-card {
@@ -140,6 +141,20 @@
         '</div>';
     }
 
+    function setAuthLabel(label, user) {
+      const el = $('authCtl');
+      if (!el) return;
+      el.textContent = '';
+      if (user && user.image) {
+        const im = document.createElement('img');
+        im.className = 'auth-av';
+        im.src = user.image;
+        im.alt = '';
+        el.appendChild(im);
+      }
+      el.appendChild(document.createTextNode(label));
+    }
+
     async function load() {
       const r = await fetch('/api/dashboard');
       $('loading').hidden = true;
@@ -147,22 +162,23 @@
         const me = await fetch('/api/me').then((x) => x.json()).catch(() => ({ user: null }));
         $('loginCard').hidden = false;
         if (me && me.user) {
-          $('authCtl').textContent = 'Log out';
+          setAuthLabel('Log out', me.user);
           $('loginMsg').textContent = 'signed in as ' + me.user.email + ' — no dashboard access yet';
         } else {
-          $('authCtl').textContent = 'Log in';
+          setAuthLabel('Log in', null);
         }
         return;
       }
       const j = await r.json();
       if (!j.ok) {
         $('loginCard').hidden = false;
-        $('authCtl').textContent = 'Log in';
+        setAuthLabel('Log in', null);
         $('loginMsg').textContent = j.error || 'could not load';
         return;
       }
       $('app').hidden = false;
-      $('authCtl').textContent = 'Log out';
+      const me2 = await fetch('/api/me').then((x) => x.json()).catch(() => ({ user: null }));
+      setAuthLabel('Log out', me2.user);
       $('stats').innerHTML = '<span><b>' + j.clients.length + '</b> clients</span>' +
         '<span><b>' + j.intakes + '</b> intakes total</span>' +
         '<span>updated ' + esc(j.now) + '</span>' +
@@ -179,7 +195,7 @@
         $('app').hidden = true;
         $('loginCard').hidden = false;
         $('loginMsg').textContent = '';
-        authCtl.textContent = 'Log in';
+        setAuthLabel('Log in', null);
       } else {
         $('loginCard').hidden = false;
       }

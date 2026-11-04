@@ -1064,8 +1064,16 @@
       const ctl = document.getElementById('authCtl');
       if (!ctl) return;
       const here = location.pathname + location.search;
-      const setIn = () => {
-        ctl.textContent = 'Log out';
+      const setIn = (u) => {
+        ctl.textContent = '';
+        if (u && u.image) {
+          const im = document.createElement('img');
+          im.className = 'auth-av';
+          im.src = u.image;
+          im.alt = '';
+          ctl.appendChild(im);
+        }
+        ctl.appendChild(document.createTextNode('Log out'));
         ctl.onclick = async (e) => {
           e.preventDefault();
           try { await fetch('/api/auth/sign-out', { method: 'POST' }); } catch {}
@@ -1092,11 +1100,11 @@
         };
       };
       fetch('/api/me').then((r) => r.json()).then((j) => {
-        if (j && j.user) setIn(); else setOut();
+        if (j && j.user) setIn(j.user); else setOut();
       }).catch(() => setOut());
       window.addEventListener('message', (e) => {
         if (e.origin !== location.origin || e.data !== 'fgg-auth-done') return;
-        setIn();
+        fetch('/api/me').then((r) => r.json()).then((jj) => jj && jj.user ? setIn(jj.user) : setOut()).catch(() => {});
         window.dispatchEvent(new CustomEvent('fgg-auth-changed'));
       });
     })();
