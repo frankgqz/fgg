@@ -21,6 +21,24 @@
       font: inherit; margin: 0.75rem 0;
     }
 
+    .pay-section { margin-top: 2.25rem; }
+    .pay-row {
+      display: flex; gap: 0.65rem; align-items: baseline; flex-wrap: wrap;
+      padding: 0.45rem 0; border-bottom: 1px solid var(--line);
+      font-size: 0.889rem;
+    }
+    .pay-row:last-child { border-bottom: 0; }
+    .pay-row b { font-family: "Figtree", "Inter", sans-serif; }
+    .pay-row .st { color: var(--muted, var(--ink-soft)); }
+    .pay-row .st.paid { color: var(--accent); }
+    .pay-gen { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 0.75rem; }
+    .pay-gen input {
+      flex: 1 1 9rem; padding: 0.55rem 0.75rem;
+      border: 1px solid var(--line); border-radius: 10px;
+      background: var(--paper); color: var(--ink); font: inherit; font-size: 0.889rem;
+    }
+    #genOut { flex-basis: 100%; word-break: break-all; }
+
     /* thin strips: dot + count + label, expand in place */
     .strips { display: grid; gap: 0.55rem; margin: 1.25rem 0; }
     .strip { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: hidden; }
@@ -86,6 +104,18 @@
       <div class="strips" id="clients"></div>
     </div>
     <p class="empty" id="loading">loading…</p>
+    <section class="pay-section" id="paySection" hidden>
+      <p class="qs-label">Payments</p>
+      <div class="strip">
+        <div class="strip-body" id="payList"><p class="empty">no payments yet</p></div>
+      </div>
+      <div class="pay-gen">
+        <input type="number" id="genAmount" min="1" max="20000" step="1" placeholder="Amount in $">
+        <input type="text" id="genNote" maxlength="80" placeholder="what it's for (optional)">
+        <button class="button small" id="genBtn" type="button">Make payment link</button>
+        <p class="empty" id="genOut"></p>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -248,6 +278,37 @@
     });
 
     load();
+  </script>
+  <script>
+    // payments: what people have paid + a link maker for new requests
+    (function () {
+      const $ = (id) => document.getElementById(id);
+      fetch('/api/payments').then((r) => r.json()).then((j) => {
+        if (!j || !j.ok) return;
+        const rows = j.payments || [];
+        $('paySection').hidden = false;
+        if (!rows.length) return;
+        const paid = rows.filter((x) => x.status === 'paid');
+        const sum = paid.reduce((a, x) => a + (x.amount || 0), 0);
+        const esc = (x) => String(x || '').replace(/[<>&"]/g, '');
+        $('payList').innerHTML =
+          '<div class="pay-row"><b>$' + sum + '</b> paid · ' + paid.length + ' payments · ' + (rows.length - paid.length) + ' pending</div>' +
+          rows.map((x) => {
+            const when = String(x.paid_at || x.created_at || '').slice(0, 10);
+            return '<div class="pay-row"><b>$' + (x.amount || 0) + '</b><span>' + (esc(x.note) || esc(x.mode)) + '</span>' +
+              '<span>' + esc(x.email || x.name || '—') + '</span>' +
+              '<span class="st' + (x.status === 'paid' ? ' paid' : '') + '">' + esc(x.status) + ' · ' + when + '</span></div>';
+          }).join('');
+      }).catch(() => {});
+      $('genBtn').addEventListener('click', () => {
+        const n = Math.round(Number($('genAmount').value || '0'));
+        if (!(n >= 1 && n <= 20000)) { $('genOut').textContent = 'enter an amount first'; return; }
+        const note = $('genNote').value.trim().replace(/[<>&"]/g, '').slice(0, 80);
+        const link = location.origin + '/payment?amount=' + n + (note ? '&for=' + encodeURIComponent(note) : '');
+        $('genOut').textContent = link;
+        if (navigator.clipboard) navigator.clipboard.writeText(link).catch(() => {});
+      });
+    })();
   </script>
 </body>
 </html>

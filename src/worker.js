@@ -130,6 +130,7 @@ function ensureDb(env) {
       await env.DB.exec("CREATE TABLE IF NOT EXISTS submissions (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, business TEXT NOT NULL, answers TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')))");
       await env.DB.exec("INSERT OR IGNORE INTO likes (id, n) VALUES (1, 0)");
       await env.DB.exec("CREATE TABLE IF NOT EXISTS upload_counts (day TEXT PRIMARY KEY, n INTEGER NOT NULL DEFAULT 0)");
+      await env.DB.exec("CREATE TABLE IF NOT EXISTS payments (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL DEFAULT '', name TEXT NOT NULL DEFAULT '', note TEXT NOT NULL DEFAULT '', amount INTEGER NOT NULL, mode TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', session_id TEXT NOT NULL DEFAULT '', created_at TEXT DEFAULT (datetime('now')), paid_at TEXT)");
       await env.DB.exec("create table if not exists \"user\" (\"id\" text not null primary key, \"name\" text not null, \"email\" text not null unique, \"emailVerified\" integer not null, \"image\" text, \"createdAt\" date not null, \"updatedAt\" date not null, \"role\" text not null default 'client')");
       await env.DB.exec("create table if not exists \"session\" (\"id\" text not null primary key, \"expiresAt\" date not null, \"token\" text not null unique, \"createdAt\" date not null, \"updatedAt\" date not null, \"ipAddress\" text, \"userAgent\" text, \"userId\" text not null references \"user\" (\"id\") on delete cascade)");
       await env.DB.exec("create table if not exists \"account\" (\"id\" text not null primary key, \"accountId\" text not null, \"providerId\" text not null, \"userId\" text not null references \"user\" (\"id\") on delete cascade, \"accessToken\" text, \"refreshToken\" text, \"idToken\" text, \"accessTokenExpiresAt\" date, \"refreshTokenExpiresAt\" date, \"scope\" text, \"password\" text, \"createdAt\" date not null, \"updatedAt\" date not null)");
@@ -195,6 +196,9 @@ export default {
       if (url.pathname === "/api/checkout" && req.method === "GET") {
         // three modes: deposit (fixed $200) - full (server-computed) - custom (clamped)
         const mode = String(url.searchParams.get("mode") || "deposit");
+        const email = String(url.searchParams.get("email") || "").slice(0, 160);
+        const name = String(url.searchParams.get("name") || "").slice(0, 120);
+        const note = String(url.searchParams.get("note") || "").slice(0, 120);
         const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 100, login: 100 };
         const ids = String(url.searchParams.get("ids") || "").split(",").map((x) => x.trim()).filter(Boolean);
         const rev = Math.max(0, parseInt(url.searchParams.get("rev") || "2", 10) || 0);
@@ -212,6 +216,12 @@ export default {
           if (!(n >= 1 && n <= 20000)) return Response.redirect(url.origin + "/payment?pay=cancelled", 302);
           amount = n; what = "website build \u2014 custom amount";
         } else { amount = 200; what = "website build deposit (balance billed later)"; }
+        await ensureDb(env);
+        let payId = 0;
+        try {
+          const ins = await env.DB.prepare("INSERT INTO payments (email, name, note, amount, mode, status) VALUES (?, ?, ?, ?, ?, 'pending')").bind(email, name, note, amount, mode).run();
+          payId = ins && ins.meta && ins.meta.last_row_id;
+        } catch {}
         const origin = url.origin;
         if (!env.STRIPE_SECRET_KEY) return Response.redirect(origin + "/payment?pay=unavailable", 302);
         const body = new URLSearchParams({
@@ -219,11 +229,12 @@ export default {
           "line_items[0][quantity]": "1",
           "line_items[0][price_data][currency]": "aud",
           "line_items[0][price_data][unit_amount]": String(amount * 100),
-          "line_items[0][price_data][product_data][name]": "FGG \u2014 " + what,
-          success_url: origin + "/payment?paid=1",
+          "line_items[0][price_data][product_data][name]": "FGG \u2014 " + what + (note ? " (" + note + ")" : ""),
+          success_url: origin + "/paid?session={CHECKOUT_SESSION_ID}",
           cancel_url: origin + "/payment?pay=cancelled",
         });
         if (mode === "care") body.set("line_items[0][price_data][recurring][interval]", "year");
+        if (email) body.set("customer_email", email);
         const r = await fetch("https://api.stripe.com/v1/checkout/sessions", {
           method: "POST",
           headers: {
@@ -233,6 +244,9 @@ export default {
           body,
         });
         const sess = await r.json().catch(() => null);
+        if (sess && sess.id && payId) {
+          await env.DB.prepare("UPDATE payments SET session_id = ? WHERE id = ?").bind(String(sess.id), payId).run().catch(() => {});
+        }
         if (!sess || !sess.url) return Response.redirect(origin + "/payment?pay=unavailable", 302);
         return Response.redirect(sess.url, 302);
       }
@@ -258,6 +272,28 @@ export default {
           "content-type": "application/json",
           "set-cookie": "fgauth=" + token + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000",
         } });
+      }
+      if (url.pathname === "/paid") {
+        const sid = String(url.searchParams.get("session") || "");
+        if (sid && env.STRIPE_SECRET_KEY) {
+          const r = await fetch("https://api.stripe.com/v1/checkout/sessions/" + encodeURIComponent(sid), {
+            headers: { authorization: "Bearer " + env.STRIPE_SECRET_KEY },
+          });
+          const sess = await r.json().catch(() => null);
+          if (sess && sess.payment_status === "paid") {
+            await ensureDb(env);
+            await env.DB.prepare("UPDATE payments SET status = 'paid', paid_at = datetime('now') WHERE session_id = ?").bind(sid).run().catch(() => {});
+            return Response.redirect(url.origin + "/payment?paid=1", 302);
+          }
+        }
+        return Response.redirect(url.origin + "/payment?pay=cancelled", 302);
+      }
+      if (url.pathname === "/api/payments" && req.method === "GET") {
+        await ensureDb(env);
+        const who = await adminOk(req, env);
+        if (!who) return json({ error: "unauthorized" }, 401);
+        const rows = await env.DB.prepare("SELECT id, email, name, note, amount, mode, status, created_at, paid_at FROM payments ORDER BY id DESC LIMIT 200").all();
+        return json({ ok: true, payments: (rows && rows.results) || [] });
       }
       if (url.pathname === "/api/me" && req.method === "GET") {
         if (env.BETTER_AUTH_SECRET && env.GOOGLE_CLIENT_ID) {

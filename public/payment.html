@@ -87,6 +87,7 @@
     // payment modes: $200 deposit · in full · custom amount
     let mode = 'deposit';
     let rush = false;
+    let reqLock = false;
     // recompute the package from the real parts — the total param is display-only noise
     const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 100, login: 100 };
     function computePackage() {
@@ -105,6 +106,8 @@
       const rev = Math.min(20, Math.max(0, parseInt(q.get('rev') || '2', 10) || 2));
       const pages = Math.min(50, Math.max(1, parseInt(q.get('pages') || '1', 10) || 1));
       if (q.get('ids')) params.set('ids', q.get('ids'));
+      if (q.get('email')) params.set('email', q.get('email').slice(0, 160));
+      if (q.get('for')) params.set('note', q.get('for').replace(/[<>&"]/g, '').slice(0, 80));
       params.set('rev', String(rev));
       params.set('pages', String(pages));
       params.set('mode', mode);
@@ -124,6 +127,7 @@
     }
     $('payModes').addEventListener('click', (e) => {
       const b = e.target.closest('.pay-mode'); if (!b) return;
+      if (reqLock && b.dataset.mode !== 'custom') return;
       mode = b.dataset.mode;
       document.querySelectorAll('.pay-mode').forEach((x) => x.classList.toggle('on', x === b));
       $('payCustom').hidden = mode !== 'custom';
@@ -131,6 +135,26 @@
       updateBtn();
     });
     $('payCustom').addEventListener('input', updateBtn);
+
+    // payment request link: ?amount=400 (or bare ?400), optional &for=note &email=
+    (function () {
+      const bare = location.search.slice(1);
+      const amount = Math.round(Number(q.get('amount') || (/^\d+$/.test(bare) ? bare : '0')));
+      if (!(amount >= 1 && amount <= 20000)) return;
+      const note = (q.get('for') || '').replace(/[<>&"]/g, '').slice(0, 80);
+      reqLock = true;
+      mode = 'custom';
+      document.querySelectorAll('.pay-mode').forEach((x) => x.classList.toggle('on', x.dataset.mode === 'custom'));
+      const pc = $('payCustom');
+      pc.hidden = false;
+      pc.value = String(amount);
+      pc.readOnly = true;
+      const line = document.createElement('p');
+      line.className = 'pay-request';
+      line.textContent = note ? (note + ' — $' + amount) : ('This payment request is for $' + amount);
+      pc.insertAdjacentElement('afterend', line);
+      updateBtn();
+    })();
 
     // intake handshake: recognize a submission, or point to the form
     (function () {

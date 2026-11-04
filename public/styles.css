@@ -860,6 +860,12 @@ h5 { font-size: var(--fs-h5); }
   transition: color 120ms ease, background 120ms ease;
 }
 .login-link:hover { color: var(--ink); background: var(--surface); }
+.pay-request {
+  font-size: 0.889rem;
+  color: var(--ink-soft);
+  margin: 0.45rem 0 0;
+}
+.pay-custom[readonly] { color: var(--ink); }
 .auth-av {
   width: 1.35rem;
   height: 1.35rem;
