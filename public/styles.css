@@ -412,7 +412,7 @@ footer p { margin: 0; font-size: 0.889rem; color: var(--ink-soft); }
   pointer-events: none;
   transition: opacity 700ms ease;
 }
-body.fancy .fluid-bg { opacity: 0.55; }
+body.fancy .fluid-bg { opacity: 0.85; }
 body.fancy .aurora { display: none; }
 
 body.fancy .feature::before {
@@ -534,9 +534,6 @@ body.fancy .lesson-bar {
 .feature { display: flex; flex-direction: column; }
 .feature .feature-desc { margin-bottom: 0; }
 
-/* fluid-glass lens canvas */
-.lens-demo { margin-top: 0.65rem; }
-.lens { cursor: crosshair; }
 
 .lens {
   width: 100%; height: 4.5rem; margin-top: 0.6rem;
