@@ -1,6 +1,6 @@
 /* FGG one-pager — warm light default, dark aware, "fancy" showpiece mode. */
 :root {
-  --col: 60rem;
+  --header-col: 60rem;
   --paper: #f4f4f5;
   --surface: #ffffff;
   --ink: #18181b;
@@ -502,9 +502,14 @@ body.fancy .mini-card {
 }
 
 body.fancy .button {
-  background: linear-gradient(135deg, #ff8a4d, #e0601f);
-  color: #1a0c04;
-  box-shadow: 0 6px 24px rgba(255, 122, 53, 0.35);
+  background-color: #f2f0ec;
+  background-image: none;
+  color: #17171a;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18), 0 8px 24px -6px rgba(20, 20, 40, 0.45);
+}
+body.fancy .button.small {
+  background-color: rgba(255, 255, 255, 0.10);
+  color: #ffffff;
 }
 
 body.fancy .lesson-bar {
@@ -850,7 +855,7 @@ h5 { font-size: var(--fs-h5); }
   -webkit-touch-callout: none;
   position: fixed;
   top: 1rem;
-  left: max(1.15rem, calc(50% - var(--col) / 2 + 1.25rem));
+  left: max(1.15rem, calc(50% - var(--header-col) / 2 + 1.25rem));
   z-index: 60;
   font-size: 0.889rem;
   color: var(--ink-soft);
@@ -1002,10 +1007,10 @@ html.fancy .event-demo {
 body.fancy .button, body.fancy .button.small, body.fancy .button.yellow,
 body.fancy .rev-btn, body.fancy .car-btn, body.fancy .book,
 body.fancy .upload-btn, body.fancy .av, body.fancy .cal-day, body.fancy .lang-toggle button {
-  background-image: linear-gradient(165deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.10) 38%, rgba(90, 35, 5, 0.26) 100%);
+  background-image: linear-gradient(165deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.12) 38%, rgba(105, 108, 124, 0.22) 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.38),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.22),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.14),
     0 2px 3px rgba(0, 0, 0, 0.18),
     0 12px 26px -8px rgba(20, 20, 40, 0.45);
 }
@@ -1042,7 +1047,7 @@ body.fancy .feature.locked {
 
 /* language toggle: segmented, both labels visible */
 .lang-toggle {
-  position: fixed; top: 1rem; right: max(1.15rem, calc(50% - var(--col) / 2 + 1.25rem)); z-index: 260;
+  position: fixed; top: 1rem; right: max(1.15rem, calc(50% - var(--header-col) / 2 + 1.25rem)); z-index: 260;
   display: flex; gap: 0.25rem; padding: 0.25rem;
   background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.10), 0 8px 24px -6px rgba(20, 20, 40, 0.18);
