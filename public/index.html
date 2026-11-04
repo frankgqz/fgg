@@ -126,6 +126,10 @@
         <div class="feature t11" data-feature="fancy">
           <span class="feature-head"><b>Fancy design</b><em>+$100</em></span>
           <span class="feature-desc">Custom design direction, +1 revision.</span>
+          <div class="lens-demo" onclick="event.stopPropagation()">
+            <canvas class="lens" id="lensCv"></canvas>
+            <button type="button" class="fx" id="lensFx">new flow</button>
+          </div>
           <div class="piano-panel" id="pianoPanel" onclick="event.stopPropagation()" hidden>
             <canvas id="piano3d"></canvas>
             <div class="piano-display" id="pianoDisplay">♪ First Love</div>
@@ -700,6 +704,7 @@
       "Math, Calculations. Quote estimators.": "Toán, Tính toán. Ước tính báo giá.",
       "Fancy design": "Thiết kế cao cấp",
       "Custom design direction, +1 revision.": "Định hướng thiết kế riêng, +1 buổi hiệu chỉnh.",
+      "new flow": "luồng mới",
       "Editing": "Chỉnh sửa",
       "Edit your site anytime with a portal, or linked spreadsheet": "Chỉnh sửa trang bất cứ lúc nào qua cổng thông tin hoặc bảng tính liên kết.",
       "Accounts need somewhere to live — usernames, passwords, sessions. That’s the Database, and it comes with this.": "Tài khoản cần nơi lưu trữ — tên đăng nhập, mật khẩu, phiên đăng nhập. Đó là Database, và nó đi kèm.",
@@ -883,6 +888,110 @@
       loop(0);
     }
 
+    // ---- fancy: fluid-glass lens (client-side texture + magnifier) ----
+    (function () {
+      const cv = $('lensCv');
+      if (!cv) return;
+      const ctx = cv.getContext('2d');
+      const base = document.createElement('canvas');
+      const bctx = base.getContext('2d');
+      let seed = 7, W = 0, H = 0;
+      let lx = 0, ly = 0, tx = 0, ty = 0, over = false, raf = 0;
+
+      function hash(x, y) {
+        const s = Math.sin(x * 127.1 + y * 311.7 + seed * 74.7) * 43758.5453;
+        return s - Math.floor(s);
+      }
+      function vnoise(x, y) {
+        const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+        const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+        return hash(xi, yi) * (1 - u) * (1 - v) + hash(xi + 1, yi) * u * (1 - v)
+          + hash(xi, yi + 1) * (1 - u) * v + hash(xi + 1, yi + 1) * u * v;
+      }
+      function fbm(x, y) {
+        let a = 0.55, f = 1, sum = 0;
+        for (let i = 0; i < 4; i++) { sum += a * vnoise(x * f, y * f); f *= 2.03; a *= 0.5; }
+        return sum;
+      }
+      function drawBase() {
+        const img = bctx.createImageData(base.width, base.height);
+        const d = img.data;
+        const sc = 5.5 / base.width;
+        for (let y = 0; y < base.height; y++) {
+          for (let x = 0; x < base.width; x++) {
+            const px = x * sc * (base.width / Math.max(1, base.height)), py = y * sc;
+            const qx = fbm(px + 2.1, py + 4.3), qy = fbm(px + 7.7, py + 1.9);
+            const f = fbm(px + 2.2 * qx, py + 2.2 * qy);
+            const ridge = Math.pow(1 - Math.abs(2 * f - 1), 4);
+            const v = Math.round(10 + 52 * f + 120 * ridge);
+            const w = Math.round(14 + 58 * f + 132 * ridge);
+            const i4 = (y * base.width + x) * 4;
+            d[i4] = v; d[i4 + 1] = w; d[i4 + 2] = Math.min(255, w + 8); d[i4 + 3] = 255;
+          }
+        }
+        bctx.putImageData(img, 0, 0);
+      }
+      function fit() {
+        const r = cv.getBoundingClientRect();
+        if (!r.width) return;
+        W = cv.width = Math.round(r.width * 1.5);
+        H = cv.height = Math.round(r.height * 1.5);
+        base.width = W; base.height = H;
+        drawBase();
+        if (!over) frame(true);
+      }
+      function frame(once) {
+        lx += (tx - lx) * 0.25;
+        ly += (ty - ly) * 0.25;
+        ctx.clearRect(0, 0, W, H);
+        ctx.drawImage(base, 0, 0);
+        const R = Math.min(W, H) * 0.55, zoom = 1.35;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(lx, ly, R, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.translate(lx, ly);
+        ctx.rotate((lx / Math.max(1, W)) * 0.16);
+        ctx.scale(zoom, zoom);
+        ctx.drawImage(base, -lx, -ly);
+        ctx.restore();
+        const g = ctx.createRadialGradient(lx - R * 0.35, ly - R * 0.4, R * 0.1, lx, ly, R);
+        g.addColorStop(0, 'rgba(255,255,255,0.16)');
+        g.addColorStop(0.75, 'rgba(255,255,255,0)');
+        g.addColorStop(1, 'rgba(0,0,0,0.22)');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(lx, ly, R, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+        ctx.beginPath();
+        ctx.arc(lx, ly, R - 1, 0, Math.PI * 2);
+        ctx.stroke();
+        if (!once && over && !matchMedia('(prefers-reduced-motion: reduce)').matches) raf = requestAnimationFrame(() => frame(false));
+      }
+      cv.addEventListener('pointerenter', (e) => {
+        const r = cv.getBoundingClientRect();
+        tx = lx = (e.clientX - r.left) / r.width * W;
+        ty = ly = (e.clientY - r.top) / r.height * H;
+        over = true;
+        cancelAnimationFrame(raf);
+        frame(false);
+      });
+      cv.addEventListener('pointermove', (e) => {
+        const r = cv.getBoundingClientRect();
+        tx = (e.clientX - r.left) / r.width * W;
+        ty = (e.clientY - r.top) / r.height * H;
+      }, { passive: true });
+      cv.addEventListener('pointerleave', () => { over = false; cancelAnimationFrame(raf); frame(true); });
+      const reseed = () => { seed = Math.floor(Math.random() * 9999) + 1; drawBase(); frame(!over); };
+      cv.addEventListener('click', reseed);
+      const fx = $('lensFx');
+      if (fx) fx.addEventListener('click', (e) => { e.stopPropagation(); reseed(); });
+      addEventListener('resize', fit);
+      fit();
+    })();
+
     // ---- fancy: ferrofluid background (raw WebGL, decorative only) ----
     let fluidOn = false;
     function startFluid() {
@@ -924,9 +1033,9 @@
         '  float ridge = pow(1.0 - abs(2.0 * f - 1.0), 3.0);',
         '  vec2 m = uMouse * vec2(uRes.x / uRes.y, 1.0) * 2.2;',
         '  float glow = uMouseOn * smoothstep(1.1, 0.0, length(p - m)) * 0.5;',
-        '  vec3 col = mix(vec3(0.012, 0.012, 0.014), vec3(0.055, 0.055, 0.062), smoothstep(0.15, 0.85, f));',
-        '  col = mix(col, vec3(0.62, 0.63, 0.68), ridge * 0.42);',
-        '  col += vec3(0.85, 0.84, 0.80) * glow * 0.6;',
+        '  vec3 col = mix(vec3(0.008, 0.008, 0.010), vec3(0.030, 0.030, 0.034), smoothstep(0.15, 0.85, f));',
+        '  col = mix(col, vec3(0.62, 0.63, 0.68), ridge * 0.20);',
+        '  col += vec3(0.85, 0.84, 0.80) * glow * 0.35;',
         '  col *= 0.85 + 0.15 * sin(uT * 0.22 + f * 4.0);',
         '  gl_FragColor = vec4(col, 1.0);',
         '}'
