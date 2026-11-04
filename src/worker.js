@@ -83,12 +83,6 @@ function getAuth(env) {
         additionalFields: {
           role: { type: "string", defaultValue: "client", input: false },
         },
-        validateUserInfo: (data) => {
-          const seed = adminSeed(env);
-          if (seed.length === 0) return undefined;
-          const email = String((data.user && data.user.email) || "").toLowerCase();
-          return seed.includes(email) ? undefined : { error: "not_allowed" };
-        },
       },
     });
   }
