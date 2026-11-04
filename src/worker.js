@@ -298,7 +298,7 @@ export default {
       if (url.pathname === "/api/me" && req.method === "GET") {
         if (env.BETTER_AUTH_SECRET && env.GOOGLE_CLIENT_ID) {
           const s = await getAuth(env).api.getSession({ headers: req.headers }).catch(() => null);
-          if (s && s.user) return json({ ok: true, user: { email: s.user.email || "", name: s.user.name || "", image: s.user.image || "" } });
+          if (s && s.user) return json({ ok: true, user: { email: s.user.email || "", name: s.user.name || "", image: s.user.image || "", role: s.user.role || "client" } });
         }
         return json({ ok: true, user: null });
       }

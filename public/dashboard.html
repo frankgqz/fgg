@@ -9,7 +9,9 @@
   <link rel="stylesheet" href="/styles.css">
   <style>
     :root { --col: 52rem; }
-    .dash { max-width: 52rem; margin: 0 auto; padding: 2.5rem 1.25rem 6rem; }
+    .dash { max-width: 52rem; margin: 0 auto; padding: 5rem 1.25rem 6rem; }
+    .dash-section { margin-top: 2.25rem; }
+    .dash-section h3 { margin-bottom: 0.65rem; }
     .dash h1 { margin-bottom: 0.75rem; font-size: 2.027rem; }
     .login-card {
       border: 1px solid var(--line); border-radius: 16px; padding: 1.5rem;
@@ -99,13 +101,19 @@
       <p class="empty" id="loginMsg"></p>
     </div>
 
+    <section class="dash-section" id="meSection" hidden>
+      <h3>Personal information</h3>
+      <div class="strip"><div class="strip-body" id="meBody"></div></div>
+    </section>
+
     <div id="app" hidden>
+      <h3>Clients</h3>
       <div class="stats" id="stats"></div>
       <div class="strips" id="clients"></div>
     </div>
     <p class="empty" id="loading">loading…</p>
-    <section class="pay-section" id="paySection" hidden>
-      <p class="qs-label">Payments</p>
+    <section class="dash-section pay-section" id="paySection" hidden>
+      <h3>Payments</h3>
       <div class="strip">
         <div class="strip-body" id="payList"><p class="empty">no payments yet</p></div>
       </div>
@@ -299,6 +307,15 @@
               '<span>' + esc(x.email || x.name || '—') + '</span>' +
               '<span class="st' + (x.status === 'paid' ? ' paid' : '') + '">' + esc(x.status) + ' · ' + when + '</span></div>';
           }).join('');
+      }).catch(() => {});
+      fetch('/api/me').then((r) => r.json()).then((j) => {
+        if (!j || !j.user) return;
+        const u = j.user;
+        const esc = (x) => String(x || '').replace(/[<>&"]/g, '');
+        $('meSection').hidden = false;
+        $('meBody').innerHTML = '<div class="pay-row">' +
+          (u.image ? '<img class="auth-av" src="' + esc(u.image) + '" alt="">' : '') +
+          '<b>' + esc(u.name || '—') + '</b><span>' + esc(u.email) + '</span><span class="st">' + esc(u.role || 'client') + '</span></div>';
       }).catch(() => {});
       $('genBtn').addEventListener('click', () => {
         const n = Math.round(Number($('genAmount').value || '0'));
