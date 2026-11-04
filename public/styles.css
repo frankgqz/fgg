@@ -422,11 +422,11 @@ body.fancy .feature::before {
   border-radius: inherit;
   padding: 1px;
   background: conic-gradient(from var(--bl-ang),
-    rgba(255, 122, 53, 0) 0deg,
-    rgba(255, 122, 53, 0) 205deg,
-    rgba(255, 138, 77, 0.8) 280deg,
-    #ffd9c0 312deg,
-    rgba(255, 122, 53, 0) 355deg);
+    rgba(255, 255, 255, 0) 0deg,
+    rgba(255, 255, 255, 0) 205deg,
+    rgba(255, 255, 255, 0.45) 280deg,
+    rgba(255, 255, 255, 0.8) 312deg,
+    rgba(255, 255, 255, 0) 355deg);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
           mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
