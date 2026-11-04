@@ -198,12 +198,14 @@
       $('loading').hidden = true;
       if (r.status === 401 || r.status === 403) {
         const me = await fetch('/api/me').then((x) => x.json()).catch(() => ({ user: null }));
-        $('loginCard').hidden = false;
         if (me && me.user) {
           setAuthLabel('Log out', me.user);
-          $('loginMsg').textContent = 'signed in as ' + me.user.email + ' — no dashboard access yet';
+          $('loginCard').hidden = true;
+          $('loading').textContent = 'signed in as ' + String(me.user.email || '').replace(/[<>&"]/g, '') + ' — orders, invoices and revisions will show up here';
+          $('loading').hidden = false;
         } else {
           setAuthLabel('Log in', null);
+          $('loginCard').hidden = false;
         }
         return;
       }
