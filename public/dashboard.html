@@ -254,10 +254,11 @@
         setAuthLabel('Log in', null);
       } else {
         $('loginCard').hidden = false;
+        openGoogle();
       }
     });
 
-    $('googleBtn').addEventListener('click', async () => {
+    const openGoogle = async () => {
       $('loginMsg').textContent = '';
       const r = await fetch('/api/auth/sign-in/social', {
         method: 'POST',
@@ -271,7 +272,8 @@
         const popup = window.open(u.toString(), 'fggauth', 'width=520,height=640');
         if (!popup) window.location.href = u.toString();
       } else $('loginMsg').textContent = 'google sign-in unavailable';
-    });
+    };
+    $('googleBtn').addEventListener('click', openGoogle);
     window.addEventListener('message', (e) => {
       if (e.origin !== location.origin || e.data !== 'fgg-auth-done') return;
       $('loginCard').hidden = true;
