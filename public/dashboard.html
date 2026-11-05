@@ -105,6 +105,23 @@
       <div class="strip"><div class="strip-body" id="meBody"></div></div>
     </section>
 
+    <section class="dash-section" id="sitesSection" hidden>
+      <h3>Sites</h3>
+      <div class="strip">
+        <div class="strip-body" id="sitesList"><p class="empty">no sites yet</p></div>
+      </div>
+      <div class="pay-gen" id="siteForm">
+        <input type="email" id="siteEmail" placeholder="client email">
+        <input type="text" id="siteDomain" placeholder="domain (ggagency.com.au)">
+        <input type="number" id="siteBuild" placeholder="build $" min="0" step="1" value="200">
+        <input type="date" id="siteBuildPaid" title="build paid">
+        <input type="number" id="siteCare" placeholder="care $/y" min="0" step="1" value="200">
+        <input type="date" id="siteCareFrom" title="care from">
+        <button class="button small" id="siteAdd" type="button">Add site</button>
+        <p class="empty" id="siteMsg"></p>
+      </div>
+    </section>
+
     <div id="app" hidden>
       <h3>Clients</h3>
       <div class="stats" id="stats"></div>
@@ -308,6 +325,54 @@
               '<span>' + esc(x.email || x.name || '—') + '</span>' +
               '<span class="st' + (x.status === 'paid' ? ' paid' : '') + '">' + esc(x.status) + ' · ' + when + '</span></div>';
           }).join('');
+      }).catch(() => {});
+      const careRenews = (from) => {
+        if (!from) return '—';
+        const d = new Date(from);
+        d.setFullYear(d.getFullYear() + 1);
+        return 'renews ' + d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+      };
+      const siteRow = (x) => {
+        const esc = (v) => String(v || '—').replace(/[<>&"]/g, '');
+        return '<div class="pay-row"><b>' + esc(x.domain) + '</b>' +
+          '<span>build $' + (x.build_amount || 0) + ' · paid ' + esc(x.build_paid_at || '—') + '</span>' +
+          '<span class="st paid">care $' + (x.care_amount || 0) + '/y · ' + careRenews(x.care_from) + '</span></div>';
+      };
+      const renderAdminSites = (rows) => {
+        const by = {};
+        rows.forEach((x) => { (by[x.email] = by[x.email] || []).push(x); });
+        $('sitesList').innerHTML = Object.keys(by).map((em) =>
+          '<div class="pay-row"><b>' + em.replace(/[<>&"]/g, '') + '</b><span>' + by[em].length + ' site' + (by[em].length > 1 ? 's' : '') + '</span></div>' +
+          by[em].map(siteRow).join('')
+        ).join('');
+        $('sitesSection').hidden = false;
+      };
+      fetch('/api/sites').then((r) => r.ok ? r.json() : null).then((j) => {
+        if (j && j.ok) {
+          renderAdminSites(j.sites || []);
+          $('siteAdd').addEventListener('click', () => {
+            const body = {
+              email: $('siteEmail').value,
+              domain: $('siteDomain').value,
+              build_amount: $('siteBuild').value,
+              build_paid_at: $('siteBuildPaid').value,
+              care_amount: $('siteCare').value,
+              care_from: $('siteCareFrom').value,
+            };
+            fetch('/api/sites', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+              .then((r) => r.json()).then((jj) => {
+                $('siteMsg').textContent = jj && jj.ok ? 'added' : (jj && jj.error) || 'could not add';
+                if (jj && jj.ok) return fetch('/api/sites').then((r2) => r2.json()).then((j2) => renderAdminSites(j2.sites || []));
+              }).catch(() => { $('siteMsg').textContent = 'could not add'; });
+          });
+        } else {
+          fetch('/api/my-sites').then((r) => r.ok ? r.json() : null).then((mj) => {
+            if (!mj || !mj.ok) return;
+            $('siteForm').hidden = true;
+            $('sitesList').innerHTML = (mj.sites || []).map(siteRow).join('') || '<p class="empty">no sites yet</p>';
+            $('sitesSection').hidden = false;
+          }).catch(() => {});
+        }
       }).catch(() => {});
       fetch('/api/me').then((r) => r.json()).then((j) => {
         if (!j || !j.user) return;

@@ -125,6 +125,9 @@ function ensureDb(env) {
       await env.DB.exec("INSERT OR IGNORE INTO likes (id, n) VALUES (1, 0)");
       await env.DB.exec("CREATE TABLE IF NOT EXISTS upload_counts (day TEXT PRIMARY KEY, n INTEGER NOT NULL DEFAULT 0)");
       await env.DB.exec("CREATE TABLE IF NOT EXISTS payments (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL DEFAULT '', name TEXT NOT NULL DEFAULT '', note TEXT NOT NULL DEFAULT '', amount INTEGER NOT NULL, mode TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', session_id TEXT NOT NULL DEFAULT '', created_at TEXT DEFAULT (datetime('now')), paid_at TEXT)");
+      await env.DB.exec("CREATE TABLE IF NOT EXISTS sites (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL, domain TEXT NOT NULL UNIQUE, build_amount INTEGER NOT NULL DEFAULT 200, build_paid_at TEXT, care_amount INTEGER NOT NULL DEFAULT 200, care_from TEXT, created_at TEXT DEFAULT (datetime('now')))");
+      await env.DB.prepare("INSERT OR IGNORE INTO sites (email, domain, build_amount, build_paid_at, care_amount, care_from) VALUES (?, ?, 200, '2026-08-30', 200, '2026-08-30')").bind("haylee.trinh@gmail.com", "ggagency.com.au").run().catch(() => {});
+      await env.DB.prepare("INSERT OR IGNORE INTO sites (email, domain, build_amount, build_paid_at, care_amount, care_from) VALUES (?, ?, 200, '2026-10-27', 200, '2026-10-27')").bind("haylee.trinh@gmail.com", "lumidance.com.au").run().catch(() => {});
       await env.DB.exec("create table if not exists \"user\" (\"id\" text not null primary key, \"name\" text not null, \"email\" text not null unique, \"emailVerified\" integer not null, \"image\" text, \"createdAt\" date not null, \"updatedAt\" date not null, \"role\" text not null default 'client')");
       await env.DB.exec("create table if not exists \"session\" (\"id\" text not null primary key, \"expiresAt\" date not null, \"token\" text not null unique, \"createdAt\" date not null, \"updatedAt\" date not null, \"ipAddress\" text, \"userAgent\" text, \"userId\" text not null references \"user\" (\"id\") on delete cascade)");
       await env.DB.exec("create table if not exists \"account\" (\"id\" text not null primary key, \"accountId\" text not null, \"providerId\" text not null, \"userId\" text not null references \"user\" (\"id\") on delete cascade, \"accessToken\" text, \"refreshToken\" text, \"idToken\" text, \"accessTokenExpiresAt\" date, \"refreshTokenExpiresAt\" date, \"scope\" text, \"password\" text, \"createdAt\" date not null, \"updatedAt\" date not null)");
@@ -281,6 +284,39 @@ export default {
           }
         }
         return Response.redirect(url.origin + "/payment?pay=cancelled", 302);
+      }
+      if (url.pathname === "/api/sites" && req.method === "GET") {
+        await ensureDb(env);
+        const who = await adminOk(req, env);
+        if (!who) return json({ error: "unauthorized" }, 401);
+        const rows = await env.DB.prepare("SELECT id, email, domain, build_amount, build_paid_at, care_amount, care_from FROM sites ORDER BY lower(email), domain").all();
+        return json({ ok: true, sites: (rows && rows.results) || [] });
+      }
+      if (url.pathname === "/api/sites" && req.method === "POST") {
+        await ensureDb(env);
+        const who = await adminOk(req, env);
+        if (!who) return json({ error: "unauthorized" }, 401);
+        const b = await req.json().catch(() => ({}));
+        const email = String(b.email || "").trim().toLowerCase().slice(0, 160);
+        const domain = String(b.domain || "").trim().toLowerCase().slice(0, 160);
+        const buildAmount = Math.max(0, Math.round(Number(b.build_amount || 200)));
+        const buildPaidAt = String(b.build_paid_at || "").slice(0, 10);
+        const careAmount = Math.max(0, Math.round(Number(b.care_amount || 200)));
+        const careFrom = String(b.care_from || "").slice(0, 10);
+        if (!email.includes("@") || !domain) return json({ error: "email and domain required" }, 400);
+        await env.DB.prepare("INSERT OR IGNORE INTO sites (email, domain, build_amount, build_paid_at, care_amount, care_from) VALUES (?, ?, ?, ?, ?, ?)").bind(email, domain, buildAmount, buildPaidAt, careAmount, careFrom).run();
+        return json({ ok: true });
+      }
+      if (url.pathname === "/api/my-sites" && req.method === "GET") {
+        await ensureDb(env);
+        let email = null;
+        if (env.BETTER_AUTH_SECRET && env.GOOGLE_CLIENT_ID) {
+          const sess = await getAuth(env).api.getSession({ headers: req.headers }).catch(() => null);
+          if (sess && sess.user) email = String(sess.user.email || "").toLowerCase();
+        }
+        if (!email) return json({ error: "unauthorized" }, 401);
+        const rows = await env.DB.prepare("SELECT id, domain, build_amount, build_paid_at, care_amount, care_from FROM sites WHERE lower(email) = ? ORDER BY domain").bind(email).all();
+        return json({ ok: true, sites: (rows && rows.results) || [] });
       }
       if (url.pathname === "/api/payments" && req.method === "GET") {
         await ensureDb(env);
