@@ -187,6 +187,19 @@ export default {
       if (url.pathname === "/pay" || url.pathname === "/pay/") {
         return Response.redirect(url.origin + "/payment" + url.search, 301);
       }
+      if (url.pathname === "/intake.html") {
+        return Response.redirect(url.origin + "/preferences" + url.search, 301);
+      }
+      if (url.pathname === "/favicon.ico") {
+        return Response.redirect(url.origin + "/favicon.png", 301);
+      }
+      if (url.pathname === "/sitemap.xml") {
+        const pages = ["/", "/preferences", "/payment", "/legal"];
+        const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+          + pages.map((p) => "  <url><loc>" + url.origin + p + "</loc></url>").join("\n")
+          + "\n</urlset>\n";
+        return new Response(xml, { headers: { "content-type": "application/xml", "cache-control": "public, max-age=3600" } });
+      }
       if (url.pathname === "/payment" || url.pathname === "/payment/") {
         return noStore(await env.ASSETS.fetch(new Request(new URL("/payment.html", url.origin), req)));
       }
