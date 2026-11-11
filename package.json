@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "deploy": "npx wrangler deploy",
+    "dev": "npx wrangler dev"
+  },
   "dependencies": {
     "better-auth": "^1.7.14"
   }
