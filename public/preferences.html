@@ -66,6 +66,20 @@
       transition: transform 140ms cubic-bezier(.2,1.4,.4,1), background 140ms ease, border-color 140ms ease;
     }
     .s-dot:hover::after { transform: translate(-50%, -50%) scale(1.25); }
+    /* the middle dot carries the double ring: two clicks here clear the slider */
+    .s-dots .s-dot:nth-child(3)::before {
+      content: "";
+      position: absolute; top: 50%; left: 50%;
+      width: 1.32rem; height: 1.32rem;
+      transform: translate(-50%, -50%);
+      border: 1.5px solid var(--line);
+      border-radius: 999px;
+      transition: border-color 140ms ease, transform 140ms ease;
+    }
+    .s-dots .s-dot:nth-child(3):hover::before {
+      border-color: var(--accent);
+      transform: translate(-50%, -50%) scale(1.08);
+    }
     .s-dot.on::after { background: var(--accent); border-color: var(--accent); }
     .s-mid { display: flex; margin-top: 0.3rem; padding: 0 calc(5.25rem + 0.85rem); font-size: 0.889rem; color: var(--ink-soft); }
     .s-mid span { flex: 1; text-align: center; }
@@ -226,7 +240,7 @@
                 <div class="s-dots">
                   <button type="button" class="s-dot" data-v="1"></button>
                   <button type="button" class="s-dot" data-v="2"></button>
-                  <button type="button" class="s-dot" data-v="3"></button>
+                  <button type="button" class="s-dot" data-v="3" title="click twice to clear" aria-label="middle — click twice to clear"></button>
                   <button type="button" class="s-dot" data-v="4"></button>
                   <button type="button" class="s-dot" data-v="5"></button>
                 </div>
@@ -241,7 +255,7 @@
                 <div class="s-dots">
                   <button type="button" class="s-dot" data-v="1"></button>
                   <button type="button" class="s-dot" data-v="2"></button>
-                  <button type="button" class="s-dot" data-v="3"></button>
+                  <button type="button" class="s-dot" data-v="3" title="click twice to clear" aria-label="middle — click twice to clear"></button>
                   <button type="button" class="s-dot" data-v="4"></button>
                   <button type="button" class="s-dot" data-v="5"></button>
                 </div>
@@ -256,7 +270,7 @@
                 <div class="s-dots">
                   <button type="button" class="s-dot" data-v="1"></button>
                   <button type="button" class="s-dot" data-v="2"></button>
-                  <button type="button" class="s-dot" data-v="3"></button>
+                  <button type="button" class="s-dot" data-v="3" title="click twice to clear" aria-label="middle — click twice to clear"></button>
                   <button type="button" class="s-dot" data-v="4"></button>
                   <button type="button" class="s-dot" data-v="5"></button>
                 </div>
@@ -271,7 +285,7 @@
                 <div class="s-dots">
                   <button type="button" class="s-dot" data-v="1"></button>
                   <button type="button" class="s-dot" data-v="2"></button>
-                  <button type="button" class="s-dot" data-v="3"></button>
+                  <button type="button" class="s-dot" data-v="3" title="click twice to clear" aria-label="middle — click twice to clear"></button>
                   <button type="button" class="s-dot" data-v="4"></button>
                   <button type="button" class="s-dot" data-v="5"></button>
                 </div>
@@ -287,7 +301,7 @@
                 <div class="s-dots">
                   <button type="button" class="s-dot" data-v="1"></button>
                   <button type="button" class="s-dot" data-v="2"></button>
-                  <button type="button" class="s-dot" data-v="3"></button>
+                  <button type="button" class="s-dot" data-v="3" title="click twice to clear" aria-label="middle — click twice to clear"></button>
                   <button type="button" class="s-dot" data-v="4"></button>
                   <button type="button" class="s-dot" data-v="5"></button>
                 </div>
@@ -302,7 +316,7 @@
                 <div class="s-dots">
                   <button type="button" class="s-dot" data-v="1"></button>
                   <button type="button" class="s-dot" data-v="2"></button>
-                  <button type="button" class="s-dot" data-v="3"></button>
+                  <button type="button" class="s-dot" data-v="3" title="click twice to clear" aria-label="middle — click twice to clear"></button>
                   <button type="button" class="s-dot" data-v="4"></button>
                   <button type="button" class="s-dot" data-v="5"></button>
                 </div>
@@ -317,7 +331,7 @@
                 <div class="s-dots">
                   <button type="button" class="s-dot" data-v="1"></button>
                   <button type="button" class="s-dot" data-v="2"></button>
-                  <button type="button" class="s-dot" data-v="3"></button>
+                  <button type="button" class="s-dot" data-v="3" title="click twice to clear" aria-label="middle — click twice to clear"></button>
                   <button type="button" class="s-dot" data-v="4"></button>
                   <button type="button" class="s-dot" data-v="5"></button>
                 </div>
@@ -332,7 +346,7 @@
                 <div class="s-dots">
                   <button type="button" class="s-dot" data-v="1"></button>
                   <button type="button" class="s-dot" data-v="2"></button>
-                  <button type="button" class="s-dot" data-v="3"></button>
+                  <button type="button" class="s-dot" data-v="3" title="click twice to clear" aria-label="middle — click twice to clear"></button>
                   <button type="button" class="s-dot" data-v="4"></button>
                   <button type="button" class="s-dot" data-v="5"></button>
                 </div>
