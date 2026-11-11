@@ -134,6 +134,8 @@ function ensureDb(env) {
       await env.DB.exec("CREATE TABLE IF NOT EXISTS payments (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL DEFAULT '', name TEXT NOT NULL DEFAULT '', note TEXT NOT NULL DEFAULT '', amount INTEGER NOT NULL, mode TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', session_id TEXT NOT NULL DEFAULT '', created_at TEXT DEFAULT (datetime('now')), paid_at TEXT)");
       await env.DB.exec("CREATE TABLE IF NOT EXISTS sites (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL, domain TEXT NOT NULL UNIQUE, build_amount INTEGER NOT NULL DEFAULT 200, build_paid_at TEXT, care_amount INTEGER NOT NULL DEFAULT 200, care_from TEXT, created_at TEXT DEFAULT (datetime('now')))");
       await env.DB.exec("CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY AUTOINCREMENT, domain TEXT NOT NULL, period_start TEXT NOT NULL, period_end TEXT NOT NULL, recipients TEXT NOT NULL DEFAULT '', subject TEXT NOT NULL DEFAULT '', r2_key TEXT NOT NULL DEFAULT '', sent_at TEXT DEFAULT (datetime('now')))");
+      await env.DB.exec("ALTER TABLE reports ADD COLUMN token TEXT NOT NULL DEFAULT ''").catch(() => {});
+      await env.DB.exec("UPDATE reports SET token = lower(hex(randomblob(8))) WHERE token = ''").catch(() => {});
       await env.DB.prepare("INSERT OR IGNORE INTO sites (email, domain, build_amount, build_paid_at, care_amount, care_from) VALUES (?, ?, 200, '2026-08-30', 200, '2026-08-30')").bind("haylee.trinh@gmail.com", "ggagency.com.au").run().catch(() => {});
       await env.DB.prepare("INSERT OR IGNORE INTO sites (email, domain, build_amount, build_paid_at, care_amount, care_from) VALUES (?, ?, 200, '2026-10-27', 200, '2026-10-27')").bind("haylee.trinh@gmail.com", "lumidance.com.au").run().catch(() => {});
       await env.DB.exec("create table if not exists \"user\" (\"id\" text not null primary key, \"name\" text not null, \"email\" text not null unique, \"emailVerified\" integer not null, \"image\" text, \"createdAt\" date not null, \"updatedAt\" date not null, \"role\" text not null default 'client')");
@@ -397,21 +399,23 @@ export default {
         const key = "reports/" + domain + "/" + periodEnd + ".html";
         if (env.FILES) await env.FILES.put(key, html, { httpMetadata: { contentType: "text/html; charset=utf-8" } });
         // one row per site-period: re-archiving the same period replaces it
-        const existing = await env.DB.prepare("SELECT id FROM reports WHERE domain = ? AND period_end = ?")
+        const existing = await env.DB.prepare("SELECT id, token FROM reports WHERE domain = ? AND period_end = ?")
           .bind(domain, periodEnd).first();
-        let id;
+        let id, token;
         if (existing && existing.id) {
           id = existing.id;
-          await env.DB.prepare("UPDATE reports SET period_start = ?, recipients = ?, subject = ?, r2_key = ?, sent_at = datetime('now') WHERE id = ?")
-            .bind(periodStart, recipients.join(","), subject, key, id).run();
+          token = existing.token || crypto.randomUUID().replace(/-/g, "").slice(0, 16);
+          await env.DB.prepare("UPDATE reports SET period_start = ?, recipients = ?, subject = ?, r2_key = ?, token = ?, sent_at = datetime('now') WHERE id = ?")
+            .bind(periodStart, recipients.join(","), subject, key, token, id).run();
         } else {
-          const info = await env.DB.prepare("INSERT INTO reports (domain, period_start, period_end, recipients, subject, r2_key) VALUES (?, ?, ?, ?, ?, ?)")
-            .bind(domain, periodStart, periodEnd, recipients.join(","), subject, key).run();
+          token = crypto.randomUUID().replace(/-/g, "").slice(0, 16);
+          const info = await env.DB.prepare("INSERT INTO reports (domain, period_start, period_end, recipients, subject, r2_key, token) VALUES (?, ?, ?, ?, ?, ?, ?)")
+            .bind(domain, periodStart, periodEnd, recipients.join(","), subject, key, token).run();
           id = (info && info.meta && Number(info.meta.last_row_id)) || null;
         }
         let emailed = false;
         if (d.send && recipients.length && env.RESEND_API_KEY) {
-          const link = url.origin + "/reports/" + id;
+          const link = url.origin + "/reports/" + token;
           const wrap = '<div style="font-family:Helvetica,Arial,sans-serif">' + html + '</div>' +
             '<p style="font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#666">Saved on your FGG dashboard: <a href="' + link + '">' + link + '</a></p>';
           try {
@@ -429,7 +433,7 @@ export default {
         await ensureDb(env);
         const who = await adminOk(req, env).catch(() => null);
         if (who) {
-          const rows = await env.DB.prepare("SELECT id, domain, period_start, period_end, recipients, subject, sent_at FROM reports ORDER BY id DESC LIMIT 200").all();
+          const rows = await env.DB.prepare("SELECT id, token, domain, period_start, period_end, recipients, subject, sent_at FROM reports ORDER BY id DESC LIMIT 200").all();
           return json({ ok: true, reports: (rows && rows.results) || [] });
         }
         let email = null;
@@ -438,15 +442,18 @@ export default {
           if (sess && sess.user) email = String(sess.user.email || "").toLowerCase();
         }
         if (!email) return json({ error: "unauthorized" }, 401);
-        const rows = await env.DB.prepare("SELECT r.id, r.domain, r.period_start, r.period_end, r.recipients, r.subject, r.sent_at FROM reports r WHERE lower(r.recipients) LIKE '%' || ? || '%' OR r.domain IN (SELECT domain FROM sites WHERE lower(email) = ?) ORDER BY r.id DESC LIMIT 100").bind(email, email).all();
+        const rows = await env.DB.prepare("SELECT r.id, r.token, r.domain, r.period_start, r.period_end, r.recipients, r.subject, r.sent_at FROM reports r WHERE lower(r.recipients) LIKE '%' || ? || '%' OR r.domain IN (SELECT domain FROM sites WHERE lower(email) = ?) ORDER BY r.id DESC LIMIT 100").bind(email, email).all();
         return json({ ok: true, reports: (rows && rows.results) || [] });
       }
       if (url.pathname.startsWith("/reports/") && req.method === "GET") {
         if (!env.FILES) return json({ error: "storage not ready" }, 503);
-        const rid = parseInt(url.pathname.slice("/reports/".length), 10);
-        if (!Number.isInteger(rid)) return json({ error: "not found" }, 404);
+        const keyParam = decodeURIComponent(url.pathname.slice("/reports/".length));
+        if (!/^[a-z0-9-]{1,64}$/i.test(keyParam)) return json({ error: "not found" }, 404);
         await ensureDb(env);
-        const row = await env.DB.prepare("SELECT id, domain, recipients, r2_key FROM reports WHERE id = ?").bind(rid).first();
+        let row = await env.DB.prepare("SELECT id, domain, recipients, r2_key FROM reports WHERE token = ?").bind(keyParam).first();
+        if (!row && /^\d+$/.test(keyParam)) {
+          row = await env.DB.prepare("SELECT id, domain, recipients, r2_key FROM reports WHERE id = ?").bind(Number(keyParam)).first();
+        }
         if (!row) return json({ error: "not found" }, 404);
         const who = await adminOk(req, env).catch(() => null);
         let allowed = !!who;

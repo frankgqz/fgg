@@ -258,10 +258,10 @@
       $('repSection').hidden = false;
       $('repList').innerHTML = r.reports.map((x) => {
         const when = String(x.sent_at || '').slice(0, 10);
-        const id = parseInt(x.id, 10) || 0;
+        const key = escR(x.token || x.id);
         return '<div class="pay-row"><b>' + escR(x.domain) + '</b>' +
           '<span>' + escR(x.period_start) + ' → ' + escR(x.period_end) + '</span>' +
-          '<a class="button small" href="/reports/' + id + '">View</a>' +
+          '<a class="button small" href="/reports/' + key + '">View</a>' +
           '<span>sent ' + escR(when) + '</span></div>';
       }).join('');
     }
