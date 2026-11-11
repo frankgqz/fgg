@@ -396,9 +396,19 @@ export default {
         const subject = String(d.subject || ("Your quarterly site report — " + domain));
         const key = "reports/" + domain + "/" + periodEnd + ".html";
         if (env.FILES) await env.FILES.put(key, html, { httpMetadata: { contentType: "text/html; charset=utf-8" } });
-        const info = await env.DB.prepare("INSERT INTO reports (domain, period_start, period_end, recipients, subject, r2_key) VALUES (?, ?, ?, ?, ?, ?)")
-          .bind(domain, periodStart, periodEnd, recipients.join(","), subject, key).run();
-        const id = (info && info.meta && Number(info.meta.last_row_id)) || null;
+        // one row per site-period: re-archiving the same period replaces it
+        const existing = await env.DB.prepare("SELECT id FROM reports WHERE domain = ? AND period_end = ?")
+          .bind(domain, periodEnd).first();
+        let id;
+        if (existing && existing.id) {
+          id = existing.id;
+          await env.DB.prepare("UPDATE reports SET period_start = ?, recipients = ?, subject = ?, r2_key = ?, sent_at = datetime('now') WHERE id = ?")
+            .bind(periodStart, recipients.join(","), subject, key, id).run();
+        } else {
+          const info = await env.DB.prepare("INSERT INTO reports (domain, period_start, period_end, recipients, subject, r2_key) VALUES (?, ?, ?, ?, ?, ?)")
+            .bind(domain, periodStart, periodEnd, recipients.join(","), subject, key).run();
+          id = (info && info.meta && Number(info.meta.last_row_id)) || null;
+        }
         let emailed = false;
         if (d.send && recipients.length && env.RESEND_API_KEY) {
           const link = url.origin + "/reports/" + id;
