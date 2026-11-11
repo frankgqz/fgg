@@ -43,6 +43,13 @@ async function dashOk(req, env) {
   return safeEq(m[1], await dashToken(env.AUTH_KEY));
 }
 
+async function keyOk(req, env) {
+  if (!env.AUTH_KEY) return false;
+  const k = req.headers.get("x-fgg-key") || "";
+  if (!k) return false;
+  return safeEq(k, env.AUTH_KEY);
+}
+
 let authInst = null;
 function getAuth(env) {
   if (!authInst) {
@@ -126,6 +133,7 @@ function ensureDb(env) {
       await env.DB.exec("CREATE TABLE IF NOT EXISTS upload_counts (day TEXT PRIMARY KEY, n INTEGER NOT NULL DEFAULT 0)");
       await env.DB.exec("CREATE TABLE IF NOT EXISTS payments (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL DEFAULT '', name TEXT NOT NULL DEFAULT '', note TEXT NOT NULL DEFAULT '', amount INTEGER NOT NULL, mode TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', session_id TEXT NOT NULL DEFAULT '', created_at TEXT DEFAULT (datetime('now')), paid_at TEXT)");
       await env.DB.exec("CREATE TABLE IF NOT EXISTS sites (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL, domain TEXT NOT NULL UNIQUE, build_amount INTEGER NOT NULL DEFAULT 200, build_paid_at TEXT, care_amount INTEGER NOT NULL DEFAULT 200, care_from TEXT, created_at TEXT DEFAULT (datetime('now')))");
+      await env.DB.exec("CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY AUTOINCREMENT, domain TEXT NOT NULL, period_start TEXT NOT NULL, period_end TEXT NOT NULL, recipients TEXT NOT NULL DEFAULT '', subject TEXT NOT NULL DEFAULT '', r2_key TEXT NOT NULL DEFAULT '', sent_at TEXT DEFAULT (datetime('now')))");
       await env.DB.prepare("INSERT OR IGNORE INTO sites (email, domain, build_amount, build_paid_at, care_amount, care_from) VALUES (?, ?, 200, '2026-08-30', 200, '2026-08-30')").bind("haylee.trinh@gmail.com", "ggagency.com.au").run().catch(() => {});
       await env.DB.prepare("INSERT OR IGNORE INTO sites (email, domain, build_amount, build_paid_at, care_amount, care_from) VALUES (?, ?, 200, '2026-10-27', 200, '2026-10-27')").bind("haylee.trinh@gmail.com", "lumidance.com.au").run().catch(() => {});
       await env.DB.exec("create table if not exists \"user\" (\"id\" text not null primary key, \"name\" text not null, \"email\" text not null unique, \"emailVerified\" integer not null, \"image\" text, \"createdAt\" date not null, \"updatedAt\" date not null, \"role\" text not null default 'client')");
@@ -367,6 +375,90 @@ export default {
           };
         });
         return json({ ok: true, clients, intakes: clients.length, now: new Date().toISOString().slice(0, 10), user: { email: who.email, name: who.name } });
+      }
+      if (url.pathname === "/api/reports/roster" && req.method === "GET") {
+        if (!(await keyOk(req, env))) return json({ error: "unauthorized" }, 401);
+        await ensureDb(env);
+        const rows = await env.DB.prepare("SELECT email, domain FROM sites WHERE care_from IS NOT NULL AND care_from != '' ORDER BY domain").all();
+        return json({ ok: true, sites: (rows && rows.results) || [] });
+      }
+      if (url.pathname === "/api/reports/archive" && req.method === "POST") {
+        const isAdmin = !!(await adminOk(req, env).catch(() => null));
+        if (!isAdmin && !(await keyOk(req, env))) return json({ error: "unauthorized" }, 401);
+        await ensureDb(env);
+        const d = await req.json().catch(() => ({}));
+        const domain = String(d.domain || "").trim().toLowerCase();
+        const html = String(d.html || "");
+        const periodStart = String(d.period_start || "");
+        const periodEnd = String(d.period_end || "");
+        if (!domain || !html || !periodStart || !periodEnd) return json({ error: "bad request" }, 400);
+        const recipients = Array.isArray(d.recipients) ? d.recipients.map(String).filter(Boolean) : [];
+        const subject = String(d.subject || ("Your quarterly site report — " + domain));
+        const key = "reports/" + domain + "/" + periodEnd + ".html";
+        if (env.FILES) await env.FILES.put(key, html, { httpMetadata: { contentType: "text/html; charset=utf-8" } });
+        const info = await env.DB.prepare("INSERT INTO reports (domain, period_start, period_end, recipients, subject, r2_key) VALUES (?, ?, ?, ?, ?, ?)")
+          .bind(domain, periodStart, periodEnd, recipients.join(","), subject, key).run();
+        const id = (info && info.meta && Number(info.meta.last_row_id)) || null;
+        let emailed = false;
+        if (d.send && recipients.length && env.RESEND_API_KEY) {
+          const link = url.origin + "/reports/" + id;
+          const wrap = '<div style="font-family:Helvetica,Arial,sans-serif">' + html + '</div>' +
+            '<p style="font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#666">Saved on your FGG dashboard: <a href="' + link + '">' + link + '</a></p>';
+          try {
+            const r2 = await fetch("https://api.resend.com/emails", { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + env.RESEND_API_KEY }, body: JSON.stringify({
+              from: "Frank Gao <frank@frankg.com.au>", to: recipients, subject,
+              text: "Your site report for " + domain + " (" + periodStart + " to " + periodEnd + ") is ready. View it on your dashboard: " + link,
+              html: wrap,
+            }) });
+            emailed = r2.ok;
+          } catch {}
+        }
+        return json({ ok: true, id, emailed });
+      }
+      if (url.pathname === "/api/reports" && req.method === "GET") {
+        await ensureDb(env);
+        const who = await adminOk(req, env).catch(() => null);
+        if (who) {
+          const rows = await env.DB.prepare("SELECT id, domain, period_start, period_end, recipients, subject, sent_at FROM reports ORDER BY id DESC LIMIT 200").all();
+          return json({ ok: true, reports: (rows && rows.results) || [] });
+        }
+        let email = null;
+        if (env.BETTER_AUTH_SECRET && env.GOOGLE_CLIENT_ID) {
+          const sess = await getAuth(env).api.getSession({ headers: req.headers }).catch(() => null);
+          if (sess && sess.user) email = String(sess.user.email || "").toLowerCase();
+        }
+        if (!email) return json({ error: "unauthorized" }, 401);
+        const rows = await env.DB.prepare("SELECT r.id, r.domain, r.period_start, r.period_end, r.recipients, r.subject, r.sent_at FROM reports r WHERE lower(r.recipients) LIKE '%' || ? || '%' OR r.domain IN (SELECT domain FROM sites WHERE lower(email) = ?) ORDER BY r.id DESC LIMIT 100").bind(email, email).all();
+        return json({ ok: true, reports: (rows && rows.results) || [] });
+      }
+      if (url.pathname.startsWith("/reports/") && req.method === "GET") {
+        if (!env.FILES) return json({ error: "storage not ready" }, 503);
+        const rid = parseInt(url.pathname.slice("/reports/".length), 10);
+        if (!Number.isInteger(rid)) return json({ error: "not found" }, 404);
+        await ensureDb(env);
+        const row = await env.DB.prepare("SELECT id, domain, recipients, r2_key FROM reports WHERE id = ?").bind(rid).first();
+        if (!row) return json({ error: "not found" }, 404);
+        const who = await adminOk(req, env).catch(() => null);
+        let allowed = !!who;
+        if (!allowed) {
+          let email = null;
+          if (env.BETTER_AUTH_SECRET && env.GOOGLE_CLIENT_ID) {
+            const sess = await getAuth(env).api.getSession({ headers: req.headers }).catch(() => null);
+            if (sess && sess.user) email = String(sess.user.email || "").toLowerCase();
+          }
+          if (email) {
+            const mine = await env.DB.prepare("SELECT count(*) AS n FROM sites WHERE lower(email) = ? AND domain = ?").bind(email, row.domain).first().catch(() => null);
+            const inRecipients = String(row.recipients || "").toLowerCase().split(",").includes(email);
+            allowed = !!((mine && mine.n > 0) || inRecipients);
+          }
+        }
+        if (!allowed) return json({ error: "unauthorized" }, 401);
+        const obj = await env.FILES.get(row.r2_key);
+        if (!obj) return json({ error: "not found" }, 404);
+        return new Response(obj.body, { headers: {
+          "content-type": "text/html; charset=utf-8",
+          "cache-control": "private, max-age=3600",
+        } });
       }
       if (url.pathname.startsWith("/files/") && req.method === "GET") {
         if (!env.FILES) return json({ error: "storage not ready" }, 503);

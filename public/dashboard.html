@@ -140,6 +140,13 @@
         <p class="empty" id="genOut"></p>
       </div>
     </section>
+
+    <section class="dash-section pay-section" id="repSection" hidden>
+      <h3>Reports</h3>
+      <div class="strip">
+        <div class="strip-body" id="repList"><p class="empty">no reports yet</p></div>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -219,6 +226,7 @@
           $('loginCard').hidden = true;
           $('loading').textContent = 'signed in as ' + String(me.user.email || '').replace(/[<>&"]/g, '') + ' — orders, invoices and revisions will show up here';
           $('loading').hidden = false;
+          loadReports();
         } else {
           setAuthLabel('Log in', null);
           $('loginCard').hidden = false;
@@ -240,6 +248,22 @@
         '<span>updated ' + esc(j.now) + '</span>' +
         '<span>via ' + esc((j.user && j.user.email) === 'key' ? 'backup key' : ((j.user && j.user.email) || '—')) + '</span>';
       $('clients').innerHTML = j.clients.map(clientStrip).join('') || '<p class="empty">no clients yet</p>';
+      loadReports();
+    }
+
+    async function loadReports() {
+      const r = await fetch('/api/reports').then((x) => x.json()).catch(() => null);
+      if (!r || !r.ok || !Array.isArray(r.reports) || !r.reports.length) return;
+      const escR = (x) => String(x || '').replace(/[<>&"]/g, '');
+      $('repSection').hidden = false;
+      $('repList').innerHTML = r.reports.map((x) => {
+        const when = String(x.sent_at || '').slice(0, 10);
+        const id = parseInt(x.id, 10) || 0;
+        return '<div class="pay-row"><b>' + escR(x.domain) + '</b>' +
+          '<span>' + escR(x.period_start) + ' → ' + escR(x.period_end) + '</span>' +
+          '<a class="button small" href="/reports/' + id + '">View</a>' +
+          '<span>sent ' + escR(when) + '</span></div>';
+      }).join('');
     }
 
     const authCtl = $('authCtl');
