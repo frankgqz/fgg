@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FGG — Frank Gao, web developer</title>
-  <meta name="description" content="Small websites, built and looked after. Frank Gao, web developer in Melbourne. $200 to build, $200 a year to keep running. Try the live demos — build your own package.">
+  <meta name="description" content="Small websites, built and looked after. Frank Gao, web developer in Melbourne. $200 to build, $100 every 6 months to keep running. Try the live demos — build your own package.">
   <link rel="canonical" href="https://frankg.com.au/">
   <meta property="og:title" content="FGG — Frank Gao, web developer">
-  <meta property="og:description" content="Small websites, built and looked after. $200 to build, $200 a year to keep running.">
+  <meta property="og:description" content="Small websites, built and looked after. $200 to build, $100 every 6 months to keep running.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://frankg.com.au/">
   <meta property="og:image" content="https://frankg.com.au/og.png">
@@ -31,7 +31,7 @@
     "priceRange": "$200",
     "makesOffer": [
       { "@type": "Offer", "name": "Standard website", "price": "200", "priceCurrency": "AUD" },
-      { "@type": "Offer", "name": "Care plan", "price": "200", "priceCurrency": "AUD", "description": "per year" }
+      { "@type": "Offer", "name": "Care plan", "price": "100", "priceCurrency": "AUD", "description": "per 6 months" }
     ]
   }
   </script>
@@ -48,7 +48,7 @@
 
   <aside class="price-widget">
     <p class="pw-line">Build <b id="pwTotal">$200</b></p>
-    <p class="pw-line care"><span class="pw-sep">·</span> <span class="care-word">Care </span>$200/y</p>
+    <p class="pw-line care"><span class="pw-sep">·</span> <span class="care-word">Care </span>$100 / 6 mo</p>
     <div class="pw-actions">
       <a class="button" href="/preferences" id="pwPrefs">Preferences</a>
       <a class="button" id="pwStart" href="/payment">Start</a>
@@ -80,8 +80,8 @@
         </div>
 
         <div class="feature locked">
-          <span class="feature-head"><b>Care</b><em>$200 / y</em></span>
-          <div class="plain-ex">Domain · Hosting · Backups · Security · Quarterly Traffic Reports · Code access · Yearly revision</div>
+          <span class="feature-head"><b>Care</b><em>$100 / 6 mo</em></span>
+          <div class="plain-ex">Domain · Hosting · Backups · Security · Quarterly Traffic Reports · Code access · Half-yearly revision included</div>
         </div>
 
         <div class="feature selected default-on">
@@ -93,8 +93,8 @@
           </div>
         </div>
         <div class="feature selected default-on">
-          <span class="feature-head"><b>Revision</b><em>$75</em></span>
-          <span class="feature-desc"><b id="revCount">2</b> included, draft design edit process. ~60-90 mins a session.</span>
+          <span class="feature-head"><b>Revision</b><em>$50</em></span>
+          <span class="feature-desc"><b id="revCount">2</b> included, draft design edit process. ~1hr a session.</span>
           <div class="rev-row" onclick="event.stopPropagation()">
             <button class="rev-btn" id="revMinus" type="button">−</button>
             <span class="rev-hours"><b id="revSessions">2</b> sessions</span>
@@ -124,7 +124,7 @@
         </div>
 
         <div class="feature t11" data-feature="fancy">
-          <span class="feature-head"><b>Fancy design</b><em>+$100</em></span>
+          <span class="feature-head"><b>Fancy design</b><em>+$200</em></span>
           <span class="feature-desc">3d objects, designer site, +1 revision.</span>
           <div class="piano-panel" id="pianoPanel" onclick="event.stopPropagation()" hidden>
             <canvas id="piano3d"></canvas>
@@ -134,12 +134,12 @@
         </div>
 
         <div class="feature t11" data-feature="math">
-          <span class="feature-head"><b>Logic</b><em>+$100</em></span>
+          <span class="feature-head"><b>Logic</b><em>+$50</em></span>
           <span class="feature-desc">Math, Calculations. Quote estimators.</span>
         </div>
 
         <div class="feature t11" data-feature="login">
-          <span class="feature-head"><b>Login</b><button type="button" class="info-i" onclick="event.stopPropagation();const p=this.closest('.feature').querySelector('.info-pop');document.querySelectorAll('.info-pop').forEach(q=>{if(q!==p)q.hidden=true});p.hidden=!p.hidden" aria-label="Why a database?">i</button><em>$0</em></span>
+          <span class="feature-head"><b>Login</b><button type="button" class="info-i" onclick="event.stopPropagation();const p=this.closest('.feature').querySelector('.info-pop');document.querySelectorAll('.info-pop').forEach(q=>{if(q!==p)q.hidden=true});p.hidden=!p.hidden" aria-label="Why a database?">i</button><em>+$150</em></span>
           <div class="info-pop" hidden>Accounts need somewhere to live — usernames, passwords, sessions. That’s the Database, and it comes with this.</div>
           <div class="plain-ex">User Information · Order history · Gated content</div>
           <div class="login-demo" onclick="event.stopPropagation()">
@@ -148,7 +148,7 @@
         </div>
 
         <div class="feature t22" data-feature="db">
-          <span class="feature-head"><b>Database</b><em>+$100</em></span>
+          <span class="feature-head"><b>Database</b><em>+$50</em></span>
           <span class="feature-desc">Persistent info. Submissions · Listings · RSVPs · Inventory · Search · Match History · Comments · Settings.</span>
           <div class="wall" onclick="event.stopPropagation()">
             <div class="wall-top">
@@ -172,7 +172,7 @@
         </div>
 
         <div class="feature t22" data-feature="shop">
-          <span class="feature-head"><b>Payment</b><button type="button" class="info-i" onclick="event.stopPropagation();const p=this.closest('.feature').querySelector('.info-pop');document.querySelectorAll('.info-pop').forEach(q=>{if(q!==p)q.hidden=true});p.hidden=!p.hidden" aria-label="Why a database?">i</button><em>+$200</em></span>
+          <span class="feature-head"><b>Payment</b><button type="button" class="info-i" onclick="event.stopPropagation();const p=this.closest('.feature').querySelector('.info-pop');document.querySelectorAll('.info-pop').forEach(q=>{if(q!==p)q.hidden=true});p.hidden=!p.hidden" aria-label="Why a database?">i</button><em>+$350</em></span>
           <div class="info-pop" hidden>Orders need somewhere to live — carts, receipts, history. That’s the Database, and it comes with this.</div>
           <span class="feature-desc">Stripe, saved credit cards, custom products, cart and checkout pages, sort, filter by tags.</span>
           <div class="shop-kinds" onclick="event.stopPropagation()">
@@ -267,7 +267,7 @@
   <script>
   (() => {
     const $ = (id) => document.getElementById(id);
-    const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 100, login: 100 };
+    const PRICES = { fancy: 200, math: 50, db: 50, cms: 100, shop: 100, login: 100 };
     const BASE = 200, INCLUDED_PAGES = 5, PAGE_PRICE = 50;
 
     const state = { fancy: false, math: false, db: false, cms: false, shop: false, login: false };
@@ -351,15 +351,20 @@
       const p = Math.max(1, parseInt(pages.value || '1', 10));
       pages.value = p;
       total += Math.max(0, p - INCLUDED_PAGES) * PAGE_PRICE;
-      total += Math.max(0, revSessions - (state.fancy ? 3 : 2)) * 75;
+      total += Math.max(0, revSessions - (state.fancy ? 3 : 2)) * 50;
       setTotal(total);
 
-      // panel prices: flat and constant; pulled-in tiles show "included"
-      const STATIC_LABELS = { fancy: '+$200', math: '+$100', db: '+$100', cms: '+$100', shop: '+$100', login: '+$100' };
+      // panel prices: plain tiles stay fixed; Login + Payment show the true
+      // change-in price = the whole mandatory bundle minus what is already on
+      const STATIC_LABELS = { fancy: '+$200', math: '+$50', db: '+$50', cms: '+$100' };
+      const BUNDLES = { login: ['login', 'db'], shop: ['shop', 'login', 'cms', 'db'] };
       for (const id of Object.keys(PRICES)) {
         const em = document.querySelector('[data-feature="' + id + '"] .feature-head em');
         if (!em) continue;
-        em.textContent = (state[id] && auto.has(id)) ? 'included' : STATIC_LABELS[id];
+        if (state[id] && auto.has(id)) { em.textContent = 'included'; continue; }
+        const bundle = BUNDLES[id] || [id];
+        const add = bundle.reduce((s2, d) => s2 + ((state[d] && d !== id) ? 0 : PRICES[d]), 0);
+        em.textContent = BUNDLES[id] ? ('+$' + add) : STATIC_LABELS[id];
       }
       $('revCount').textContent = state.fancy ? 3 : 2;
       syncLogin();
@@ -410,6 +415,7 @@
             for (const dep of ['cms', 'login']) if (!state[dep]) { state[dep] = true; auto.add(dep); }
           } else {
             for (const dep of ['cms', 'login']) if (auto.has(dep)) { state[dep] = false; auto.delete(dep); }
+            if (auto.has('db') && !state.shop && !state.login) { state.db = false; auto.delete('db'); }
           }
         }
         if ((id === 'shop' || id === 'login') && !state.shop && !state.login) state.db = false;
@@ -689,13 +695,13 @@
       "Standard": "Tiêu chuẩn",
       "Custom design · Media · Gallery · Draft + Revision process · Receiving emails · Desktop and Mobile optimized · Fast & secure · SEO setup · Form · Dynamic page elements · UI polish · Favicon": "Thiết kế riêng · Media · Thư viện ảnh · Quy trình nháp + hiệu chỉnh · Nhận email · Tối ưu máy tính & điện thoại · Nhanh & bảo mật · SEO setup · Form · Thành phần động · Tinh chỉnh giao diện · Favicon",
       "Care": "Chăm sóc",
-      "Domain · Hosting · Backups · Security · Quarterly Traffic Reports · Code access · Yearly revision": "Tên miền · Hosting · Sao lưu · Bảo mật · Báo cáo lưu lượng hằng quý · Mã nguồn · Hiệu chỉnh hằng năm",
+      "Domain · Hosting · Backups · Security · Quarterly Traffic Reports · Code access · Half-yearly revision included": "Tên miền · Hosting · Sao lưu · Bảo mật · Báo cáo lưu lượng hằng quý · Mã nguồn · Hiệu chỉnh mỗi 6 tháng (bao gồm)",
       "Revision": "Hiệu chỉnh",
-      "included, draft design edit process. ~60-90 mins a session.": "bao gồm, quy trình nháp – thiết kế – sửa. ~60–90 phút mỗi buổi.",
+      "included, draft design edit process. ~1hr a session.": "bao gồm, quy trình nháp – thiết kế – sửa. ~1 giờ mỗi buổi.",
       "sessions": "buổi",
       "Pages": "Trang",
       "$50 over 5": "$50 vượt 5 trang",
-      "$200 / y": "$200 / năm",
+      "$100 / 6 mo": "$100 / 6 tháng",
       "Logic": "Tính toán",
       "Math, Calculations. Quote estimators.": "Toán, Tính toán. Ước tính báo giá.",
       "Fancy design": "Thiết kế cao cấp",
