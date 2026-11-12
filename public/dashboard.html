@@ -355,14 +355,14 @@
       const careRenews = (from) => {
         if (!from) return '—';
         const d = new Date(from);
-        d.setFullYear(d.getFullYear() + 1);
+        d.setMonth(d.getMonth() + 6);
         return 'renews ' + d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
       };
       const siteRow = (x) => {
         const esc = (v) => String(v || '—').replace(/[<>&"]/g, '');
         return '<div class="pay-row"><b>' + esc(x.domain) + '</b>' +
           '<span>build $' + (x.build_amount || 0) + ' · paid ' + esc(x.build_paid_at || '—') + '</span>' +
-          '<span class="st paid">care $' + (x.care_amount || 0) + '/y · ' + careRenews(x.care_from) + '</span></div>';
+          '<span class="st paid">care $' + (x.care_amount || 0) + '/6mo · ' + careRenews(x.care_from) + '</span></div>';
       };
       const renderAdminSites = (rows) => {
         const by = {};

@@ -136,6 +136,7 @@ function ensureDb(env) {
       await env.DB.exec("CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY AUTOINCREMENT, domain TEXT NOT NULL, period_start TEXT NOT NULL, period_end TEXT NOT NULL, recipients TEXT NOT NULL DEFAULT '', subject TEXT NOT NULL DEFAULT '', r2_key TEXT NOT NULL DEFAULT '', sent_at TEXT DEFAULT (datetime('now')))");
       await env.DB.exec("ALTER TABLE reports ADD COLUMN token TEXT NOT NULL DEFAULT ''").catch(() => {});
       await env.DB.exec("UPDATE reports SET token = lower(hex(randomblob(8))) WHERE token = ''").catch(() => {});
+      await env.DB.exec("UPDATE sites SET care_amount = 100 WHERE care_amount = 200 AND domain IN ('ggagency.com.au', 'lumidance.com.au')").catch(() => {});
       await env.DB.prepare("INSERT OR IGNORE INTO sites (email, domain, build_amount, build_paid_at, care_amount, care_from) VALUES (?, ?, 200, '2026-08-30', 200, '2026-08-30')").bind("haylee.trinh@gmail.com", "ggagency.com.au").run().catch(() => {});
       await env.DB.prepare("INSERT OR IGNORE INTO sites (email, domain, build_amount, build_paid_at, care_amount, care_from) VALUES (?, ?, 200, '2026-10-27', 200, '2026-10-27')").bind("haylee.trinh@gmail.com", "lumidance.com.au").run().catch(() => {});
       await env.DB.exec("create table if not exists \"user\" (\"id\" text not null primary key, \"name\" text not null, \"email\" text not null unique, \"emailVerified\" integer not null, \"image\" text, \"createdAt\" date not null, \"updatedAt\" date not null, \"role\" text not null default 'client')");
@@ -219,17 +220,17 @@ export default {
         const email = String(url.searchParams.get("email") || "").slice(0, 160);
         const name = String(url.searchParams.get("name") || "").slice(0, 120);
         const note = String(url.searchParams.get("note") || "").slice(0, 120);
-        const PRICES = { fancy: 200, math: 100, db: 100, cms: 100, shop: 100, login: 100 };
+        const PRICES = { fancy: 200, math: 50, db: 50, cms: 100, shop: 100, login: 100 };
         const ids = String(url.searchParams.get("ids") || "").split(",").map((x) => x.trim()).filter(Boolean);
         const rev = Math.max(0, parseInt(url.searchParams.get("rev") || "2", 10) || 0);
         const pages = Math.max(1, parseInt(url.searchParams.get("pages") || "1", 10) || 1);
         let full = 200;
         for (const id of ids) if (PRICES[id]) full += PRICES[id];
-        full += Math.max(0, rev - (ids.includes("fancy") ? 3 : 2)) * 75;
+        full += Math.max(0, rev - (ids.includes("fancy") ? 3 : 2)) * 50;
         full += Math.max(0, pages - 5) * 50;
         if (url.searchParams.get("rush") === "1") full += 100;
         let amount, what;
-        if (mode === "care") { amount = 200; what = "care \u2014 billed yearly"; }
+        if (mode === "care") { amount = 100; what = "care \u2014 billed every 6 months"; }
         else if (mode === "full") { amount = full; what = "website build \u2014 paid in full"; }
         else if (mode === "custom") {
           const n = Math.round(Number(url.searchParams.get("amount") || "0"));
@@ -253,7 +254,7 @@ export default {
           success_url: origin + "/paid?session={CHECKOUT_SESSION_ID}",
           cancel_url: origin + "/payment?pay=cancelled",
         });
-        if (mode === "care") body.set("line_items[0][price_data][recurring][interval]", "year");
+        if (mode === "care") { body.set("line_items[0][price_data][recurring][interval]", "month"); body.set("line_items[0][price_data][recurring][interval_count]", "6"); }
         if (email) body.set("customer_email", email);
         const r = await fetch("https://api.stripe.com/v1/checkout/sessions", {
           method: "POST",
