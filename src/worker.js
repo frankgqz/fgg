@@ -190,22 +190,25 @@ export default {
         return json({ likes });
       }
       if (url.pathname === "/preferences" || url.pathname === "/preferences/") {
-        return noStore(await env.ASSETS.fetch(new Request(new URL("/preferences.html", url.origin), req)));
+        return Response.redirect(url.origin + "/picks" + url.search, 301);
+      }
+      if (url.pathname === "/picks" || url.pathname === "/picks/") {
+        return noStore(await env.ASSETS.fetch(new Request(new URL("picks.html", url.origin), req)));
       }
       if (url.pathname === "/intake" || url.pathname === "/intake/") {
-        return Response.redirect(url.origin + "/preferences" + url.search, 301);
+        return Response.redirect(url.origin + "/picks" + url.search, 301);
       }
       if (url.pathname === "/pay" || url.pathname === "/pay/") {
         return Response.redirect(url.origin + "/payment" + url.search, 301);
       }
       if (url.pathname === "/intake.html") {
-        return Response.redirect(url.origin + "/preferences" + url.search, 301);
+        return Response.redirect(url.origin + "/picks" + url.search, 301);
       }
       if (url.pathname === "/favicon.ico") {
         return Response.redirect(url.origin + "/favicon.png", 301);
       }
       if (url.pathname === "/sitemap.xml") {
-        const pages = ["/", "/preferences", "/payment", "/legal"];
+        const pages = ["/", "/picks", "/payment", "/legal"];
         const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
           + pages.map((p) => "  <url><loc>" + url.origin + p + "</loc></url>").join("\n")
           + "\n</urlset>\n";

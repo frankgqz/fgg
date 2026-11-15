@@ -79,7 +79,7 @@
   <a class="login-link" id="authCtl" href="/dashboard"></a>
   <nav class="dots" aria-label="journey">
     <a class="dot" href="/"></a>
-    <a class="dot" href="/preferences"></a>
+    <a class="dot" href="/picks"></a>
     <a class="dot" href="/payment"></a>
     <a class="dot on" href="/dashboard"></a>
   </nav>
@@ -188,7 +188,7 @@
             '<div class="kv"><b>phase</b>' + esc((c.phase || '').replace('_', ' ')) + '</div>' +
             '<div class="kv"><b>received</b>' + esc(c.created) + '</div>' +
             '<div class="kv"><b>heard via</b>' + esc(c.heard || '—') + '</div>' +
-            '<p class="qs-label" style="margin-top:0.95rem">Preferences / brief</p>' +
+            '<p class="qs-label" style="margin-top:0.95rem">Picks / brief</p>' +
             (qa || '<p class="empty">no answers yet</p>') +
             '<p class="qs-label" style="margin-top:0.95rem">Files</p>' +
             '<div class="files-row">' + (files || '<span class="empty">no uploads</span>') + '</div>' +
